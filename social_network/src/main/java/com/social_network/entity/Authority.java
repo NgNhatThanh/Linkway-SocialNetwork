@@ -24,7 +24,7 @@ public class Authority {
     private String apiPath;
 
     @Column(name = "http_method")
-    private HttpMethod httpMethod;
+    private String httpMethod;
 
     @ManyToMany
     @JoinTable(name = "roles_authorities",
