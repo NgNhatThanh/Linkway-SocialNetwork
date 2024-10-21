@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "posts")
@@ -30,5 +31,13 @@ public class Post {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToMany(mappedBy = "posts")
+    private ArrayList<Tag> tags = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post"
+            , cascade = CascadeType.REMOVE
+            , fetch = FetchType.LAZY)
+    private ArrayList<Comment> comments = new ArrayList<>();
 
 }

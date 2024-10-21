@@ -26,7 +26,7 @@ public class Authority {
     @Column(name = "http_method")
     private HttpMethod httpMethod;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "roles_authorities",
             joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
