@@ -3,6 +3,8 @@ package com.social_network.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.time.LocalDateTime;
 
 @Entity

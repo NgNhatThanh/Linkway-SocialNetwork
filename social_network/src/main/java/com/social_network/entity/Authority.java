@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpMethod;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "authorities")
@@ -24,13 +24,9 @@ public class Authority {
     private String apiPath;
 
     @Column(name = "http_method")
-    private HttpMethod httpMethod;
+    private String httpMethod;
 
-    @ManyToMany
-    @JoinTable(name = "roles_authorities",
-            joinColumns = @JoinColumn(name = "authority_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
-    private ArrayList<Role> roles = new ArrayList<>();
+    @Column(name = "module")
+    private String module;
 
 }

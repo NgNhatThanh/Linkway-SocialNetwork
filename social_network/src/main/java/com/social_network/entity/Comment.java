@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comments")
@@ -37,7 +37,7 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment"
             , cascade = CascadeType.REMOVE
             , fetch = FetchType.LAZY)
-    private ArrayList<Comment> replies = new ArrayList<>();
+    private Set<Comment> replies = new HashSet<>();
 
     @Column(name = "has_child")
     private boolean has_child;

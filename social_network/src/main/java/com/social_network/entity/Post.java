@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "posts")
@@ -33,11 +35,11 @@ public class Post {
     private LocalDateTime updatedAt;
 
     @ManyToMany(mappedBy = "posts")
-    private ArrayList<Tag> tags = new ArrayList<>();
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "post"
             , cascade = CascadeType.REMOVE
             , fetch = FetchType.LAZY)
-    private ArrayList<Comment> comments = new ArrayList<>();
+    private Set<Comment> comments = new HashSet<>();
 
 }
