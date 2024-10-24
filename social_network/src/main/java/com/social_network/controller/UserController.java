@@ -3,8 +3,10 @@ package com.social_network.controller;
 import com.social_network.dao.UserRepository;
 import com.social_network.dto.request.UserCreationDTO;
 import com.social_network.dto.response.UserResponseDTO;
+import com.social_network.entity.User;
 import com.social_network.exception.DataNotFoundException;
 import com.social_network.service.UserService;
+import com.social_network.util.ModelMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,26 +20,36 @@ public class UserController {
 
     private UserService userService;
 
-    private UserRepository userRepository;
-
     @PostMapping("/user/register")
-    public UserResponseDTO addUser(@RequestBody UserCreationDTO user){
-        return userService.addUser(user);
+    public ResponseEntity<UserResponseDTO> addUser(@RequestBody @Valid UserCreationDTO newUser){
+        User user = userService.addUser(newUser);
+        return ResponseEntity
+                .ok()
+                .body(userService.convertToUserResponseDTO(user)) ;
     }
 
     @GetMapping("/user/id={id}")
-    public ResponseEntity<Object> getUserById(@PathVariable int id){
-        try {
-            return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
-        }
-        catch (DataNotFoundException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable int id){
+        User user = userService.findById(id);
+        return ResponseEntity
+                .ok()
+                .body(userService.convertToUserResponseDTO(user));
     }
 
     @GetMapping("/user/username={username}")
-    public UserResponseDTO getUserByUsername(@PathVariable String username){
-        return userService.findByUsername(username);
+    public ResponseEntity<UserResponseDTO> getUserByUsername(@PathVariable String username){
+        User user = userService.findByUsername(username);
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(userService.convertToUserResponseDTO(user));
+    }
+
+    @PutMapping("/user/update")
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserCreationDTO updatedUser){
+        User user = userService.updateUser(updatedUser);
+        return ResponseEntity
+                .status(HttpStatus.ACCEPTED)
+                .body(userService.convertToUserResponseDTO(user));
     }
 
 }

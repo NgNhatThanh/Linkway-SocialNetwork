@@ -3,7 +3,6 @@ package com.social_network.dto.request;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +16,9 @@ public class UserCreationDTO {
 
     private String displayName;
 
+    private String avatarImagePath;
+
+    @Email
     private String email;
 
     private String introduction;
