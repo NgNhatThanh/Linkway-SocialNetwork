@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,6 @@ public class Role {
     @JoinTable(name = "roles_authorities",
             joinColumns = @JoinColumn(name = "authority_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Authority> authorities = new HashSet<>();
+    private List<Authority> authorities;
 
 }

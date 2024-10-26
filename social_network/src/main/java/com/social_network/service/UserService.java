@@ -1,6 +1,7 @@
 package com.social_network.service;
 
 import com.social_network.dao.UserRepository;
+import com.social_network.dto.PageResponse;
 import com.social_network.dto.request.UserCreationDTO;
 import com.social_network.dto.response.UserResponseDTO;
 import com.social_network.entity.Role;
@@ -11,8 +12,13 @@ import com.social_network.util.BCryptEncoder;
 import com.social_network.util.ModelMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -62,6 +68,25 @@ public class UserService {
     public UserResponseDTO convertToUserResponseDTO(User user){
         return ModelMapper.getInstance()
                 .map(user, UserResponseDTO.class);
+    }
+
+    public PageResponse<UserResponseDTO> getAll(int page, int size){
+        Sort sort = Sort.by("id").ascending();
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+        var pageData = userRepository.findAll(pageable);
+        return PageResponse.<UserResponseDTO>builder()
+                .currentPage(page)
+                .pageSize(pageData.getSize())
+                .totalPage(pageData.getTotalPages())
+                .totalElement(pageData.getTotalElements())
+                .data(pageData.getContent().stream().map(user -> convertToUserResponseDTO(user)).toList())
+                .build();
+    }
+
+    public User findByUsernameOrEmail(String keyw){
+        User user = userRepository.findByUsername(keyw);
+        if(user == null) return userRepository.findByEmail(keyw);
+        return user;
     }
 
 }

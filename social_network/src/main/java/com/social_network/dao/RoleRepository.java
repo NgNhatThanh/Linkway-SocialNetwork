@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Set;
+import java.util.List;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
@@ -26,6 +26,6 @@ public interface RoleRepository extends JpaRepository<Role, Integer> {
             "on r.id = a.authority_id\n" +
             ") as t\n" +
             "on ro.id = t.role_id ")
-    Set<Role> findAllByAuthority(String authority);
+    List<Role> findAllByAuthority(String authority);
 
 }

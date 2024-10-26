@@ -1,13 +1,16 @@
 package com.social_network.service;
 
 import com.social_network.dao.AuthorityRepository;
+import com.social_network.dto.PageResponse;
 import com.social_network.entity.Authority;
 import com.social_network.exception.DataNotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -23,18 +26,55 @@ public class AuthoritySevice {
         return authority;
     }
 
-    public Set<Authority> findAllByMethod(String method){
+    public PageResponse<Authority> findAllByMethod(String method, int page, int size){
         method = method.toUpperCase();
-        return authorityRepository.findAllByHttpMethod(method);
+
+        Sort sort = Sort.by("id").ascending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        var pageData = authorityRepository.findAllByHttpMethod(method, pageable);
+
+        return PageResponse.<Authority>builder()
+                .currentPage(page)
+                .pageSize(pageData.getSize())
+                .totalPage(pageData.getTotalPages())
+                .totalElement(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
     }
 
-    public Set<Authority> findAllByModule(String module){
+    public PageResponse<Authority> findAllByModule(String module, int page, int size){
         module = module.toLowerCase();
-        return authorityRepository.findAllByModule(module);
+        Sort sort = Sort.by("id").ascending();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        var pageData = authorityRepository.findAllByModule(module, pageable);
+
+        return PageResponse.<Authority>builder()
+                .currentPage(page)
+                .pageSize(pageData.getSize())
+                .totalPage(pageData.getTotalPages())
+                .totalElement(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
     }
 
-    public Set<Authority> findAll(){
-        return new HashSet<>(authorityRepository.findAll());
+    public PageResponse<Authority> getAll(int page, int size){
+
+        Sort sort = Sort.by("id").ascending();
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+        var pageData = authorityRepository.findAll(pageable);
+
+        return PageResponse.<Authority>builder()
+                .currentPage(page)
+                .pageSize(pageData.getSize())
+                .totalPage(pageData.getTotalPages())
+                .totalElement(pageData.getTotalElements())
+                .data(pageData.getContent())
+                .build();
     }
 
 }

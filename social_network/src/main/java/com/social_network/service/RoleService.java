@@ -8,6 +8,7 @@ import com.social_network.exception.DataNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -33,7 +34,7 @@ public class RoleService {
         return role;
     }
 
-    public Set<Role> findAllByAuthority(String authorityName){
+    public List<Role> findAllByAuthority(String authorityName){
         Authority authority = authoritySevice.findByName(authorityName);
         return roleRepository.findAllByAuthority(authorityName);
     }
