@@ -2,7 +2,7 @@ package com.social_network.service;
 
 import com.social_network.dao.UserRepository;
 import com.social_network.dto.PageResponse;
-import com.social_network.dto.request.UserCreationDTO;
+import com.social_network.dto.request.RegisterDTO;
 import com.social_network.dto.response.UserResponseDTO;
 import com.social_network.entity.Role;
 import com.social_network.entity.User;
@@ -15,10 +15,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 @AllArgsConstructor
@@ -29,20 +29,22 @@ public class UserService {
     private RoleService roleService;
 
     @Transactional
-    public User addUser(UserCreationDTO newUser){
+    public User addUser(RegisterDTO newUser){
         User user = ModelMapper.getInstance()
                     .map(newUser, User.class);
 
-        if(userRepository.existsByEmail(user.getEmail()))
-            throw new DataExistedException("Email has been taken");
-
-        if(userRepository.existsByUsername(user.getUsername()))
-            throw new DataExistedException("Username has been taken");
+//        if(userRepository.existsByEmail(user.getEmail()))
+//            throw new DataExistedException("Email has been taken");
+//
+//        if(userRepository.existsByUsername(user.getUsername()))
+//            throw new DataExistedException("Username has been taken");
 
         String encodedPassword = BCryptEncoder.getInstance().encode(user.getPassword());
         user.setPassword(encodedPassword);
-        Role role = roleService.findByName("user");
+        Role role = roleService.findByName("USER");
         user.setRole(role);
+        user.setAvatarImagePath("path to default profile picture");
+        user.setCreatedAt(LocalDateTime.now());
         this.userRepository.save(user);
         return user;
     }
@@ -52,12 +54,12 @@ public class UserService {
         if(user == null) throw new DataNotFoundException("Could not find user with id: " + id);
         return user;
     }
-
-    public User updateUser(UserCreationDTO updatedUser){
-        User user = findByUsername(updatedUser.getUsername());
-
-        return userRepository.save(user);
-    }
+//
+//    public User updateUser(UserCreationDTO updatedUser){
+//        User user = findByUsername(updatedUser.getUsername());
+//
+//        return userRepository.save(user);
+//    }
 
     public User findByUsername(String username){
         User user = userRepository.findByUsername(username);
@@ -83,10 +85,9 @@ public class UserService {
                 .build();
     }
 
-    public User findByUsernameOrEmail(String keyw){
-        User user = userRepository.findByUsername(keyw);
-        if(user == null) return userRepository.findByEmail(keyw);
-        return user;
+    public void updateUserToken(String username, String token){
+        User user = findByUsername(username);
+        user.setRefreshToken(token);
+        userRepository.save(user);
     }
-
 }

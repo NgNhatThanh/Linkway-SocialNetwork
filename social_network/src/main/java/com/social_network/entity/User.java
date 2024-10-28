@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.hibernate.validator.constraints.UniqueElements;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 

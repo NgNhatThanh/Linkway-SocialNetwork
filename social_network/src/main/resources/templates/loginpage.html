@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2> Đăng nhập </h2>
+    <form th:action="@{/login}" th:object="${loginUser}" method="POST">
+
+        <div th:if="${param.error}">
+            Invalid username and password.
+        </div>
+
+        <div th:if="${registrationSuccess != null}">
+            <p th:text="${registrationSuccess}"> </p>
+        </div>
+
+        <label>
+            Username
+            <input type="text" th:field="*{username}" placeholder="Username">
+        </label>
+
+        <label>
+            Password
+            <input type="password" th:field="*{password}" placeholder="Password">
+        </label>
+
+        <input type="hidden" th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}" />
+
+        <button type="submit"> Login </button>
+    </form>
+
+    <a th:href="@{/register}"> Chưa có tài khoản ? Đăng ký ngay </a>
+
+    <a></a>
+</body>
+</html>
