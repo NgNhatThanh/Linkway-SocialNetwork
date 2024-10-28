@@ -52,7 +52,7 @@ public class AuthController {
             return "registerpage";
         }
         userService.addUser(registerDTO);
-        redirectAttributes.addFlashAttribute("registrationSuccess", "Đăng ký thành công");
+        redirectAttributes.addFlashAttribute("redirectParam", "Đăng ký thành công");
         return "redirect:/login";
     }
 

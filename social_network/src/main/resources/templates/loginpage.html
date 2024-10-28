@@ -12,8 +12,8 @@
             Invalid username and password.
         </div>
 
-        <div th:if="${registrationSuccess != null}">
-            <p th:text="${registrationSuccess}"> </p>
+        <div th:if="${redirectParam != null}">
+            <p th:text="${redirectParam}"> </p>
         </div>
 
         <label>
