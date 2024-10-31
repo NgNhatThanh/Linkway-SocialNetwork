@@ -7,6 +7,25 @@
 <body>
     <div th:fragment="navbar">
         <a th:href="@{/}"> Home </a>
+
+        <form th:action="@{#}" method="get" class="search-bar">
+            <input type="text" name="query" placeholder="Search" th:value="${query}" />
+            <button type="submit">Search</button>
+        </form>
+
+        <div th:if="${session.username != null}">
+<!--            Direct to create post page-->
+            <form th:action="@{#}">
+                <button> Create </button>
+            </form>
+
+
+        </div>
+
+        <div th:if="${session.username == null}">
+            <a th:href="@{/login}"> Đăng nhập / Đăng ký </a>
+        </div>
+
     </div>
 </body>
 </html>
