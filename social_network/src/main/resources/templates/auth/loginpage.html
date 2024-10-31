@@ -12,6 +12,10 @@
             Invalid username and password.
         </div>
 
+        <div th:if="${param.logout}">
+            Logout successfully!
+        </div>
+
         <div th:if="${redirectParam != null}">
             <p th:text="${redirectParam}"> </p>
         </div>

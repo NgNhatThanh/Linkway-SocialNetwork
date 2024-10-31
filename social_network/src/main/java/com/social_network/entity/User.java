@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -46,5 +47,11 @@ public class User {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @ManyToMany
+    @JoinTable(name = "users_tags",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> followingTags;
 
 }

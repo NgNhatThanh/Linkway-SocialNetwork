@@ -1,3 +1,25 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th = "https://www.thymeleaf.org/">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1> This is homepage </h1>-->
+
+<!--    <form th:if="${session.username != null}" th:action="@{/logout}" method="POST">-->
+<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+<!--        <button type="submit"> Logout </button>-->
+<!--    </form>-->
+
+<!--    <div th:if="${session.username == null}">-->
+<!--        <form action="/login">-->
+<!--            <button type="submit"> Login </button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
 <head>
@@ -5,7 +27,22 @@
     <title>Title</title>
 </head>
 <body>
-    <h1> Something here </h1>
-    <a th:href="@{/loginpage.html}"> Login </a>
+
+    <div th:insert="navbar.html :: navbar"></div>
+
+    <div th:insert="sidebar.html :: sidebar(${followingTags})">
+    </div>
+
+    <form th:if="${session.username != null}" th:action="@{/logout}" method="POST">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit"> Logout </button>
+    </form>
+
+    <div th:if="${session.username == null}">
+        <form action="/login">
+            <button type="submit"> Login </button>
+        </form>
+    </div>
+
 </body>
 </html>
