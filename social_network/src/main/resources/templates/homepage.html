@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <div th:insert="navbar.html :: navbar">
+    </div>
+
+    <div th:insert="sidebar.html :: sidebar(${followingTags})">
+    </div>
+
+</body>
+</html>

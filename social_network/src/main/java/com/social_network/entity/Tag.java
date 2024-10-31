@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tags")
@@ -23,6 +25,6 @@ public class Tag {
     @JoinTable(name = "posts_tags"
                 , joinColumns = @JoinColumn(name = "tag_id")
                 , inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private ArrayList<Post> posts = new ArrayList<>();
+    private Set<Post> posts = new HashSet<>();
 
 }

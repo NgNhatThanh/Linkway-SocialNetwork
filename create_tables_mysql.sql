@@ -83,6 +83,14 @@ CREATE TABLE `roles_authorities` (
   PRIMARY KEY (`role_id`, `authority_id`)
 );
 
+create table users_tags(
+    user_id int,
+    tag_id int,
+    primary key (user_id, tag_id),
+    foreign key (user_id) references users(id),
+    foreign key (tag_id) references tags(id)
+)
+
 ALTER TABLE `follows` ADD FOREIGN KEY (`followed_id`) REFERENCES `users` (`id`);
 
 ALTER TABLE `follows` ADD FOREIGN KEY (`following_id`) REFERENCES `users` (`id`);

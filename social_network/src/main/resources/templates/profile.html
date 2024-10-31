@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1> Profile </h1>
+  <p th:text="${user.getUsername()}"></p>
+  <p th:text="${user.getDisplayName()}"></p>
+  <p th:text="${user.getIntroduction()}"></p>
+</body>
+</html>

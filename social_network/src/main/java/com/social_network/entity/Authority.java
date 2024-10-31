@@ -3,14 +3,15 @@ package com.social_network.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.http.HttpMethod;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "authorities")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Authority {
 
     @Id
@@ -26,11 +27,17 @@ public class Authority {
     @Column(name = "http_method")
     private String httpMethod;
 
-    @ManyToMany
-    @JoinTable(name = "roles_authorities",
-            joinColumns = @JoinColumn(name = "authority_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonIgnore
-    private ArrayList<Role> roles = new ArrayList<>();
+    @Column(name = "module")
+    private String module;
 
+    @ManyToMany(mappedBy = "authorities", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Role> roles;
+
+    public Authority(String name, String apiPath, String httpMethod, String module) {
+        this.name = name;
+        this.apiPath = apiPath;
+        this.httpMethod = httpMethod;
+        this.module = module;
+    }
 }
