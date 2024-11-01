@@ -1,8 +1,12 @@
 package com.social_network.controller;
 
+import com.social_network.dao.UserRepository;
+import com.social_network.dto.request.ChangePasswordDTO;
 import com.social_network.dto.request.LoginRequestDTO;
 import com.social_network.dto.request.RegisterDTO;
+import com.social_network.entity.User;
 import com.social_network.service.UserService;
+import com.social_network.util.BCryptEncoder;
 import com.social_network.util.SecurityUtil;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -16,9 +20,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @AllArgsConstructor
 public class AuthController {
 
-    UserService userService;
-
-    SecurityUtil securityUtil;
+    private final UserRepository userRepository;
+    private UserService userService;
+    private SecurityUtil securityUtil;
 
     @GetMapping("/login")
     public String showLoginPage(Model model){
@@ -45,5 +49,6 @@ public class AuthController {
         redirectAttributes.addFlashAttribute("redirectParam", "Đăng ký thành công");
         return "redirect:/login";
     }
+
 
 }

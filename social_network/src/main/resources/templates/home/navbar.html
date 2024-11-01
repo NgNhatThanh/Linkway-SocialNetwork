@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Network</title>
+</head>
+<body>
+    <div th:fragment="navbar" th:class="nav-bar">
+        <link rel="stylesheet" th:href="@{/css/navbar.css}">
+        <div class="home-div">
+            <a th:href="@{/}"> Home </a>
+        </div>
+
+
+        <div class="search-div">
+            <form th:action="@{/}" method="get" class="search-bar">
+                <input type="text" name="query" placeholder="Search" th:value="${query}" />
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="user-div">
+            <div th:if="${session.username != null}" class="logged-in">
+                <!-- Direct to create post page-->
+                <div>
+                    <form th:action="@{/}">
+                        <button> Create </button>
+                    </form>
+                </div>
+
+                <div class="avatar-container">
+                    <img th:src="@{/img/avatar.png}" alt="Avatar" class="avatar" id="avatar-icon">
+                    <div class="dropdown-menu" id="dropdown-menu">
+                        <a th:href="@{/}" class="dropdown-item">Profile Page</a>
+                        <a th:href="@{/}" class="dropdown-item">Settings</a>
+                        <form th:action="@{/logout}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button class="dropdown-item" type="submit">Đăng xuất</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${session.username == null}">
+                <a th:href="@{/login}"> Đăng nhập </a>
+                <a th:href="@{/register}"> Đăng ký </a>
+            </div>
+        </div>
+
+        <script th:src="@{/js/navbar.js}"></script>
+    </div>
+
+</body>
+</html>

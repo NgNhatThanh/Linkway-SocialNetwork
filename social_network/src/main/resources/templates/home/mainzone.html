@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <main class="main-zone">
+        <link rel="stylesheet" th:href="@{css/mainzone.css}">
+
+        <div th:each="post : ${postList}" class="post">
+            <h3 th:text="*{post.getTitle()}"></h3>
+            <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></p>
+            <p th:text="*{post.getContent()}"></p>
+            <p th:text="*{post.getComments().size() + ' comments'}"></p>
+        </div>
+
+        <div class="pagination">
+            <ul th:each="i : ${#numbers.sequence(1, totalPages)}">
+                <li th:classappend="${currentPage == i ? 'active' : ''}">
+                    <a th:href="@{'?page='+${i}}" th:text="${i}"></a>
+                </li>
+            </ul>
+        </div>
+
+    </main>
+
+</body>
+</html>

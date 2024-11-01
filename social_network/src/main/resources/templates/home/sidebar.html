@@ -5,24 +5,26 @@
     <title>Title</title>
 </head>
 <body>
-    <div th:fragment="sidebar (followingTags)">
+    <div th:fragment="sidebar (followingTags)" class="side-bar">
+        <link rel="stylesheet" th:href="@{css/sidebar.css}">
+
         <form th:action="@{/}">
             <button type="submit"> Home </button>
         </form>
 
 <!--        Hiện các post có nhiều upvote-->
-        <form th:action="@{#}">
+        <form th:action="@{/}">
             <button type="submit"> Popular </button>
         </form>
 
 <!--        Hiện tất cả tag (phân trang) -->
-        <form th:action="@{#}">
+        <form th:action="@{/}">
             <button type="submit"> Tags </button>
         </form>
 
 <!--        Hiện các tag đang follow-->
         <div th:if="${session.username != null}">
-            <label> Following Tags </label>
+            <h3> Following Tags </h3>
             <ul th:each="tag : ${followingTags}">
                 <li th:text="${tag.getName()}"></li>
             </ul>
