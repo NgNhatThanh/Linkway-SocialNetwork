@@ -5,10 +5,74 @@
     justify-content: center;
 }
 
-.post{
-    margin: 50px 10px;
+.post-item{
+    display: flex;
+    margin: 20px;
+}
+
+.author-avatar{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+}
+
+.post-info{
+    /*margin: 50px 10px;*/
     justify-content: center;
     align-content: center;
+}
+
+.post-item:hover {
+    background-color: lightgray;
+}
+
+.post-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.author-link:hover{
+    text-decoration: underline;
+    /*font-weight: lighter;*/
+}
+
+.post-date{
+    opacity: 0.5;
+}
+
+.post-title{
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.post-title:hover{
+    color: rgb(84, 136, 99);
+}
+
+.post-tags{
+    display: flex;
+}
+
+.post-tag{
+    display: inline-block;           /* Allows padding around the text */
+    margin: 0 5px 5px 0;             /* Spacing between tags */
+    padding: 5px 10px;               /* Padding inside the tag */
+    color: #ffffff;                  /* Text color */
+    /*background-color: #007bff;       !* Background color *!*/
+    border-radius: 12px;             /* Rounded corners */
+    border-style: solid;
+    border-color: darkgrey;
+    font-size: 0.9em;                /* Adjust font size */
+    text-decoration: none;           /* Remove underline */
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover transition */
+}
+
+.post-tag:hover {
+    background-color: darkgrey;       /* Darker shade on hover */
+    color: #ffffff;                  /* Keep text color white */
+    cursor: pointer;                 /* Pointer cursor on hover */
 }
 
 .pagination {

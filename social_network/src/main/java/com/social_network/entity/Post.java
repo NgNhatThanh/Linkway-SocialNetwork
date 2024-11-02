@@ -41,6 +41,13 @@ public class Post {
     @ManyToMany(mappedBy = "posts")
     private Set<Tag> tags = new HashSet<>();
 
+    @Column(name = "views")
+    private int views;
+
+    private int upvotes;
+
+    private int downvotes;
+
     @OneToMany(mappedBy = "post"
             , cascade = CascadeType.REMOVE
             , fetch = FetchType.LAZY)

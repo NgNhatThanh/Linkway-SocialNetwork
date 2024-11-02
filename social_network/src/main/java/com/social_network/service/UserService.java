@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -44,7 +45,7 @@ public class UserService {
         Role role = roleService.findByName("USER");
         user.setRole(role);
         user.setAvatarImagePath("path to default profile picture");
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(Date.from(Instant.now()));
         this.userRepository.save(user);
         return user;
     }

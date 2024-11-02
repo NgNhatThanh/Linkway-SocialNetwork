@@ -9,11 +9,28 @@
     <main class="main-zone">
         <link rel="stylesheet" th:href="@{css/mainzone.css}">
 
-        <div th:each="post : ${postList}" class="post">
-            <h3 th:text="*{post.getTitle()}"></h3>
-            <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></p>
-            <p th:text="*{post.getContent()}"></p>
-            <p th:text="*{post.getComments().size() + ' comments'}"></p>
+        <div th:each="post : ${postList}" class="post-item">
+
+            <a th:href="@{#}">
+                <img th:src="@{*{post.getAuthor().getAvatarImagePath()}}" class="author-avatar">
+            </a>
+
+            <div class="post-info">
+                <div style="display: flex">
+                    <a th:href="@{#}" th:text="*{post.getAuthor().getDisplayName()}" class="author-link"></a>
+                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                </div>
+
+                <a th:href="@{#}" th:text="*{post.getTitle()}" class="post-title"></a>
+
+                <div class="post-tags">
+                    <a th:href="@{#}" th:each="tag : ${post.getTags()}" class="post-tag" th:text="*{tag.getName()}">
+                    </a>
+                </div>
+                <p th:text="*{post.getViews() + ' views'}"></p>
+                <p th:text="*{post.getUpvotes() + post.getDownvotes() + ' votes'}"></p>
+                <p th:text="*{post.getComments().size() + ' comments'}"></p>
+            </div>
         </div>
 
         <div class="pagination">

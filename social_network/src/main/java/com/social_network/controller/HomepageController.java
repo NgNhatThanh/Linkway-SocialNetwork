@@ -3,7 +3,10 @@ package com.social_network.controller;
 import com.social_network.dao.TagRepository;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
+import com.social_network.entity.User;
 import com.social_network.service.PostService;
+import com.social_network.service.UserService;
+import com.social_network.util.SecurityUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class HomepageController {
 
+    private final UserService userService;
     private TagRepository tagRepository;
 
     private PostService postService;
@@ -33,9 +37,14 @@ public class HomepageController {
 
         Page<Post> postList = postService.getAll(page);
 
+        String username = SecurityUtil.getCurrentUser().getUsername();
+
+        User user = userService.findByUsername(username);
+
         model.addAttribute("totalPages", postList.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("postList", postList);
+        model.addAttribute("user", user);
         return "home/mainzone";
     }
 

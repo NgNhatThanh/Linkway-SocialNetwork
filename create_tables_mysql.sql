@@ -25,6 +25,7 @@ CREATE TABLE `posts` (
   `title` nvarchar(200),
   `content` longtext,
   `author_id` int,
+    views int default 0,
   `created_at` datetime,
   `updated_at` datetime
 );
@@ -89,7 +90,7 @@ create table users_tags(
     primary key (user_id, tag_id),
     foreign key (user_id) references users(id),
     foreign key (tag_id) references tags(id)
-)
+);
 
 ALTER TABLE `follows` ADD FOREIGN KEY (`followed_id`) REFERENCES `users` (`id`);
 
