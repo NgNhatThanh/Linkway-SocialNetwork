@@ -1,16 +1,38 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Homepage Title</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
 </head>
+
 <body>
 
-    <div th:insert="navbar.html :: navbar">
+    <!-- Navbar -->
+    <div th:replace="navbar :: navbar"></div>
+
+    <!-- Sidebar with following tags -->
+    <div th:replace="sidebar :: sidebar(followingTags=${followingTags})"></div>
+
+    <!-- Error Message Display -->
+    <div th:if="${error}" class="error-message" style="color: red;">
+        <p th:text="${error}"></p>
     </div>
 
-    <div th:insert="sidebar.html :: sidebar(${followingTags})">
+    <!-- Success Message Display -->
+    <div th:if="${message}" class="success-message" style="color: green;">
+        <p th:text="${message}"></p>
+    </div>
+
+    <!-- Logout Form -->
+    <div class="logout-container">
+        <form th:action="@{/logout}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit">Logout</button>
+        </form>
     </div>
 
 </body>
+
 </html>

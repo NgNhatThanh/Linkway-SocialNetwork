@@ -1,13 +1,72 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title th:text="${user.displayName} + ' - Profile'">User Profile</title>
+  <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
 </head>
+
 <body>
-  <h1> Profile </h1>
-  <p th:text="${user.getUsername()}"></p>
-  <p th:text="${user.getDisplayName()}"></p>
-  <p th:text="${user.getIntroduction()}"></p>
+
+  <div>
+    <!-- Navbar -->
+    <div th:replace="navbar :: navbar"></div>
+  </div>
+  <h1 th:text="${user.displayName}">User Name</h1>
+  <h2 th:text="${user.email}">User Email</h2>
+
+  <!-- Display Avatar -->
+  <div>
+    <img th:src="@{${user.avatarImagePath}}" th:alt="'Avatar of ' + ${user.displayName}" alt="User Avatar" width="150"
+      height="150" />
+  </div>
+
+  <!-- Follower and Following Counts -->
+  <div>
+    <p>
+      Followers:
+      <a th:href="@{/followers/{username}(username=${user.username})}" th:text="${followersCount}"></a>
+    </p>
+    <p>
+      Following:
+      <a th:href="@{/followings/{username}(username=${user.username})}" th:text="${followingsCount}"></a>
+    </p>
+  </div>
+
+  <!-- Conditionally display "Edit Profile" button for the current user -->
+  <div th:if="${isCurrentUser}">
+    <a th:href="@{/updateProfile}" class="btn">Edit Profile</a>
+  </div>
+
+  <!-- Conditionally display "Follow" or "Unfollow" button if viewing another user's profile -->
+  <div th:if="${not isCurrentUser}">
+    <form th:action="@{/profile/{username}/follow(username=${user.username})}" method="post">
+      <input type="hidden" name="username" th:value="${user.username}" />
+      <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+    </form>
+  </div>
+
+  <!-- User's Posts -->
+  <h2 th:if="${posts.size() > 0}">Your Posts:</h2>
+  <ul th:if="${posts.size() > 0}">
+    <li th:each="post : ${posts}">
+      <h3 th:text="${post.title}">Post Title</h3>
+      <p th:text="${post.content}">Post Content</p>
+    </li>
+  </ul>
+  <p th:if="${posts.size() == 0}">No posts to display.</p>
+
+  <!-- Error Message Display -->
+  <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+
+  <!-- Logout Form -->
+  <div class="logout-container">
+    <form th:action="@{/logout}" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <button class="dropdown-item" type="submit" style="color: red;">Logout</button>
+    </form>
+  </div>
 </body>
+
 </html>

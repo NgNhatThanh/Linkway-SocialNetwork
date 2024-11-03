@@ -21,7 +21,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        com.social_network.entity.User user = userService.findByUsername(username);
+        com.social_network.entity.User user = userService.findByUsername(username).get();
         if (user == null) {
             throw new UsernameNotFoundException("Username/password không hợp lệ");
         }

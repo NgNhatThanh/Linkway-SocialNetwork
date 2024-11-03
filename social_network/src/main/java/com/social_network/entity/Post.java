@@ -37,9 +37,7 @@ public class Post {
     @ManyToMany(mappedBy = "posts")
     private Set<Tag> tags = new HashSet<>();
 
-    @OneToMany(mappedBy = "post"
-            , cascade = CascadeType.REMOVE
-            , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Comment> comments = new HashSet<>();
 
 }
