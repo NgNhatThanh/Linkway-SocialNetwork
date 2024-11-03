@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class PostService {
 
+    private final int POST_PER_PAGE = 10;
+
     private PostRepository postRepository;
 
     public Page<Post> getAll(int page){
-        Pageable pageable = PageRequest.of(page - 1, 2);
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
         return postRepository.findAll(pageable);
     }
 

@@ -5,8 +5,10 @@ import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import com.social_network.service.PostService;
+import com.social_network.service.TagService;
 import com.social_network.service.UserService;
 import com.social_network.util.SecurityUtil;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,19 +18,28 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
 public class HomepageController {
 
     private final UserService userService;
-    private TagRepository tagRepository;
+
+    private final TagService tagService;
 
     private PostService postService;
 
     @ModelAttribute("followingTags")
     public List<Tag> getAllTags(){
-        return tagRepository.findAll();
+        List<Tag> followingTags = null;
+        try{
+            String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
+            User user = userService.findByUsername(username);
+            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+        }
+        catch (NullPointerException ignored){}
+        return followingTags;
     }
 
     @GetMapping("/")
@@ -37,14 +48,16 @@ public class HomepageController {
 
         Page<Post> postList = postService.getAll(page);
 
-        String username = SecurityUtil.getCurrentUser().getUsername();
-
-        User user = userService.findByUsername(username);
+        try{
+            String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
+            User user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        catch (NullPointerException ignored){}
 
         model.addAttribute("totalPages", postList.getTotalPages());
         model.addAttribute("currentPage", page);
         model.addAttribute("postList", postList);
-        model.addAttribute("user", user);
         return "home/mainzone";
     }
 
