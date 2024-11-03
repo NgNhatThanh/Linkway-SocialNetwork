@@ -9,6 +9,7 @@
 <body>
     <div class="wrapper">
         <form th:action="@{/login}" th:object="${loginUser}" method="POST" class="login-box">
+            <a th:href="@{/}" class="backhome"><i class='bx bxl-reddit'></i></a>
 
             <div th:if="${param.error}" class="login-fail">
                 Invalid username and password.

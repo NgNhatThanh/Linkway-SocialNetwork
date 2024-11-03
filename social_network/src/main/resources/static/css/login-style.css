@@ -33,14 +33,23 @@ body{
     transform: translateY(-50%);
 }
 
+.backhome{
+    position: absolute;
+    font-size: 40px;
+    top: 2%;
+    left: 2%;
+    color: black;
+}
 .login-header {
     position: absolute;
     font-size: 30px;
     color: black;
-    top: 10%;
+    top: 14%;
 }
+
 .login-fail{
     color: red;
+    font-size: 13px;
 }
 .input-box{
     position: relative;

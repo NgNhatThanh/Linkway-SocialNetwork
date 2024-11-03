@@ -33,6 +33,13 @@ body{
     transform: translateY(-50%);
 }
 
+.backhome{
+    position: absolute;
+    font-size: 40px;
+    top: 2%;
+    left: 2%;
+    color: black;
+}
 .register-header {
     position: absolute;
     font-size: 30px;
@@ -101,6 +108,10 @@ body{
     margin-top: 20px;
     cursor: pointer;
     transition: .3s;
+}
+.invalid-feedback{
+    color: red;
+    font-size: 13px;
 }
 
 .register{
