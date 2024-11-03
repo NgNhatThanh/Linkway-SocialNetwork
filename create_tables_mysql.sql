@@ -89,7 +89,7 @@ create table users_tags(
     primary key (user_id, tag_id),
     foreign key (user_id) references users(id),
     foreign key (tag_id) references tags(id)
-)
+);
 
 ALTER TABLE `follows` ADD FOREIGN KEY (`followed_id`) REFERENCES `users` (`id`);
 
