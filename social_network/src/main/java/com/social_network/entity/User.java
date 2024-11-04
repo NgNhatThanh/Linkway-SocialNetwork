@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -39,19 +40,14 @@ public class User {
     private String avatarImagePath;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "refresh_token")
-    private String refreshToken;
+    private Date createdAt;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
     private Role role;
 
     @ManyToMany
-    @JoinTable(name = "users_tags",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @JoinTable(name = "users_tags", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> followingTags;
 
 }

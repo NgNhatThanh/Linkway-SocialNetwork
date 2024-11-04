@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -47,7 +48,7 @@ public class UserService {
         Role role = roleService.findByName("USER");
         user.setRole(role);
         user.setAvatarImagePath("path to default profile picture");
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(Date.from(Instant.now()));
         this.userRepository.save(user);
         return user;
     }
@@ -107,7 +108,6 @@ public class UserService {
 
     public void updateUserToken(String username, String token) {
         User user = findByUsername(username).get();
-        user.setRefreshToken(token);
         userRepository.save(user);
     }
 }

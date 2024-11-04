@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
 
 <head>
     <meta charset="UTF-8">
@@ -7,53 +7,55 @@
 </head>
 
 <body>
-    <h1>Update Profile</h1>
+    <main class="updateProfile">
+        <h1>Update Profile</h1>
 
-    <!-- Display error message if any -->
-    <div th:if="${error}" class="error-message">
-        <p th:text="${error}"></p>
-    </div>
-
-    <!-- Profile Update Form -->
-    <form th:action="@{/updateProfile}" th:object="${user}" method="post" enctype="multipart/form-data">
-        <!-- Display Name -->
-        <div>
-            <label for="displayName">Display Name:</label>
-            <input type="text" id="displayName" th:field="*{displayName}" required />
-            <p th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}">Invalid display name</p>
+        <!-- Display error message if any -->
+        <div th:if="${error}" class="error-message">
+            <p th:text="${error}"></p>
         </div>
 
-        <!-- Introduction -->
-        <div>
-            <label for="introduction">Introduction:</label>
-            <textarea id="introduction" th:field="*{introduction}" rows="4"></textarea>
-            <p th:if="${#fields.hasErrors('introduction')}" th:errors="*{introduction}">Invalid introduction</p>
-        </div>
-
-        <!-- Email -->
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" th:field="*{email}" required />
-            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid email</p>
-        </div>
-
-        <!-- Avatar Upload -->
-        <div>
-            <label for="avatar">Avatar:</label>
-            <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" />
-            <!-- Display current avatar if available -->
-            <div th:if="${user.avatarImagePath}">
-                <img th:src="@{${user.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
+        <!-- Profile Update Form -->
+        <form th:action="@{/updateProfile}" th:object="${user}" method="post" enctype="multipart/form-data">
+            <!-- Display Name -->
+            <div>
+                <label for="displayName">Display Name:</label>
+                <input type="text" id="displayName" th:field="*{displayName}" required />
+                <p th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}">Invalid display name</p>
             </div>
-        </div>
 
-        <!-- Submit Button -->
-        <div>
-            <button type="submit">Update Profile</button>
-        </div>
-    </form>
+            <!-- Introduction -->
+            <div>
+                <label for="introduction">Introduction:</label>
+                <textarea id="introduction" th:field="*{introduction}" rows="4"></textarea>
+                <p th:if="${#fields.hasErrors('introduction')}" th:errors="*{introduction}">Invalid introduction</p>
+            </div>
 
-    <a href="/profile">Back to Profile</a>
+            <!-- Email -->
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" id="email" th:field="*{email}" required />
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid email</p>
+            </div>
+
+            <!-- Avatar Upload -->
+            <div>
+                <label for="avatar">Avatar:</label>
+                <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" />
+                <!-- Display current avatar if available -->
+                <div th:if="${user.avatarImagePath}">
+                    <img th:src="@{${user.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit">Update Profile</button>
+            </div>
+        </form>
+
+        <a href="/profile">Back to Profile</a>
+    </main>
 </body>
 
 </html>

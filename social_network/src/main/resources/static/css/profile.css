@@ -1,0 +1,131 @@
+/* General page setup */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+.profile {
+    width: 80%;
+    max-width: 600px;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Profile heading */
+.profile h1 {
+    font-size: 24px;
+    margin-top: 0;
+    text-align: center;
+    color: #333;
+}
+
+.profile h2 {
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+}
+
+/* Avatar styling */
+.profile img {
+    display: block;
+    margin: 10px auto;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+/* Followers and following section */
+.profile div p {
+    font-size: 14px;
+    text-align: center;
+}
+
+.profile div p a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.profile div p a:hover {
+    text-decoration: underline;
+}
+
+/* Edit Profile and Follow/Unfollow buttons */
+.btn,
+.profile form button {
+    display: block;
+    margin: 10px auto;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn:hover,
+.profile form button:hover {
+    background-color: #0056b3;
+}
+
+.profile form button {
+    width: 100%;
+}
+
+/* Posts section */
+.profile ul {
+    list-style: none;
+    padding: 0;
+}
+
+.profile ul li {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.profile ul li h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    color: #333;
+}
+
+.profile ul li p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Error message styling */
+.profile .error {
+    color: red;
+    text-align: center;
+}
+
+/* Logout button styling */
+.logout-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.logout-container form button {
+    color: #d9534f;
+    border: none;
+    background: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.logout-container form button:hover {
+    text-decoration: underline;
+}

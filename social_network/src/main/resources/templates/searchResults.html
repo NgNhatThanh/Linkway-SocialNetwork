@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
 
 <head>
     <meta charset="UTF-8">
@@ -8,18 +8,20 @@
 </head>
 
 <body>
-    <h1>Search Results for "<span th:text="${query}"></span>"</h1>
+    <main class="searchResults">
+        <h1>Search Results for "<span th:text="${query}"></span>"</h1>
 
-    <ul>
-        <li th:each="user : ${users}">
-            <a th:href="@{/profile/{username}(username=${user.username})}" th:text="${user.displayName}"></a>
-        </li>
-    </ul>
+        <ul>
+            <li th:each="user : ${users}">
+                <a th:href="@{/profile/{username}(username=${user.username})}" th:text="${user.displayName}"></a>
+            </li>
+        </ul>
 
-    <div th:if="${#lists.isEmpty(users)}">No users found.</div>
+        <div th:if="${#lists.isEmpty(users)}">No users found.</div>
 
-    <!-- Link to go back to profile -->
-    <a href="/profile">Back to Profile</a>
+        <!-- Link to go back to profile -->
+        <a href="/profile">Back to Profile</a>
+    </main>
 </body>
 
 </html>

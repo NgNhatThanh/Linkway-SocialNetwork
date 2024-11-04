@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
 
 <head>
     <meta charset="UTF-8">
@@ -8,11 +8,13 @@
 </head>
 
 <body>
-    <div class="error-container">
-        <h1>Error: <span th:text="${errorCode}">Error Code</span></h1>
-        <p th:text="${errorMessage}">Error Message</p>
-        <a th:href="@{/}" class="btn">Return to Home</a>
-    </div>
+    <main class="error">
+        <div class="error-container">
+            <h1>Error: <span th:text="${errorCode}">Error Code</span></h1>
+            <p th:text="${errorMessage}">Error Message</p>
+            <a th:href="@{/}" class="btn">Return to Home</a>
+        </div>
+    </main>
 </body>
 
 </html>

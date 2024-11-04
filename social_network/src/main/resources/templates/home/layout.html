@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" th:fragment="layout(content)" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>okee</title>
+    <link rel="stylesheet" th:href="@{css/homepage.css}">
+</head>
+<body>
+
+    <div th:insert="~{home/navbar.html :: navbar}" class="nav-bar">
+    </div>
+
+    <div class="content">
+      <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side-bar">
+      </div>
+
+      <div th:replace="${content}" class="main-zone">
+      </div>
+    </div>
+
+
+</body>
+</html>
