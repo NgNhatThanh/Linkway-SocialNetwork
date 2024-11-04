@@ -2,42 +2,53 @@
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Login</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="../static/css/login-style.css" th:href="@{/css/login-style.css}" rel="stylesheet" />
 </head>
 <body>
-    <h2> Đăng nhập </h2>
-    <form th:action="@{/login}" th:object="${loginUser}" method="POST">
+    <div class="wrapper">
+        <form th:action="@{/login}" th:object="${loginUser}" method="POST" class="login-box">
+            <a th:href="@{/}" class="backhome"><i class='bx bxl-reddit'></i></a>
 
-        <div th:if="${param.error}">
-            Invalid username and password.
-        </div>
+            <div th:if="${param.error}" class="login-fail">
+                Invalid username and password.
+            </div>
 
-        <div th:if="${param.logout}">
-            Logout successfully!
-        </div>
+            <div th:if="${param.logout}">
+                Logout successfully!
+            </div>
 
-        <div th:if="${redirectParam != null}">
-            <p th:text="${redirectParam}"> </p>
-        </div>
+            <div th:if="${redirectParam != null}">
+                <p th:text="${redirectParam}"> </p>
+            </div>
 
-        <label>
-            Username
-            <input type="text" th:field="*{username}" placeholder="Username">
-        </label>
+            <h1 class="login-header">Login</h1>
 
-        <label>
-            Password
-            <input type="password" th:field="*{password}" placeholder="Password">
-        </label>
+            <div class="input-box">
+                <input type="text" th:field="*{username}" id="user" class="input-field" required>
+                <label for="user" class="label">Username</label>
+                <i class="bx bx-user icon"></i>
+            </div>
 
-        <input type="hidden" th:name="${_csrf.parameterName}"
-               th:value="${_csrf.token}" />
+            <div class="input-box">
+                <input type="password" th:field="*{password}" id="pass" class="input-field" required>
+                <label for="user" class="label">Password</label>
+                <i class="bx bx-lock-alt icon"></i>
+            </div>
 
-        <button type="submit"> Login </button>
-    </form>
+            <input type="hidden" th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}" />
 
-    <a th:href="@{/register}"> Chưa có tài khoản ? Đăng ký ngay </a>
+            <div class="input-box">
+                <input type="submit" class="input-submit" value="Login">
+            </div>
 
-    <a></a>
+            <div class="register">
+                <p>Don't have account? <a th:href="@{/register}">Register</a></p>
+            </div>
+
+        </form>
+    </div>
 </body>
 </html>
