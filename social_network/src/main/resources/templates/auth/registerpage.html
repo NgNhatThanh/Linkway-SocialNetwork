@@ -27,7 +27,6 @@
             <div class="invalid-feedback"
                  th:if="${#fields.hasErrors('email')}"
                  th:errors="*{email}"></div>
-            <div></div>
             <div class="input-box">
                 <input type="text" th:field="*{email}" id="email" class="input-field" required>
                 <label for="email" class="label">Email</label>
