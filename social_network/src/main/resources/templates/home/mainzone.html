@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th = "https://www.thymeleaf.org/">
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
 
     <main class="main-zone">
-        <link rel="stylesheet" th:href="@{css/mainzone.css}">
+        <link rel="stylesheet" th:href="@{/css/mainzone.css}">
 
         <div th:each="post : ${postList}" class="post-item">
 
@@ -44,4 +46,5 @@
     </main>
 
 </body>
+
 </html>
