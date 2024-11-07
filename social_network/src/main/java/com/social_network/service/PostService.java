@@ -2,8 +2,8 @@ package com.social_network.service;
 
 import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
-import com.social_network.entity.User;
 
+import com.social_network.entity.User;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -26,8 +26,9 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
-    public List<Post> findByUser(User user) {
-        return postRepository.findByAuthor(user);
+    public Page<Post> findByAuthor(User author, int page) {
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
+        return postRepository.findByAuthor(author, pageable);
     }
 
 }

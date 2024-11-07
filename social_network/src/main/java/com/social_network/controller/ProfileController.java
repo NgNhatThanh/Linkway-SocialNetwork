@@ -3,6 +3,8 @@ package com.social_network.controller;
 import java.util.List;
 import java.util.Optional;
 
+import com.social_network.entity.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +17,6 @@ import com.social_network.util.SecurityUtil;
 
 import jakarta.validation.Valid;
 
-import com.social_network.entity.Post;
 import com.social_network.entity.User;
 import com.social_network.service.FollowService;
 import com.social_network.service.PostService;
@@ -23,7 +24,6 @@ import com.social_network.service.UploadService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -54,14 +54,18 @@ public class ProfileController {
 
     // Show the current user's profile page
     @GetMapping("/profile")
-    public String showCurrentUserProfile(Model model) {
+    public String showCurrentUserProfile(Model model,
+                     @RequestParam(value = "page", defaultValue = "1") int page) {
         String username = securityUtil.getCurrentUser().getUsername();
         Optional<User> optionalUser = userService.findByUsername(username);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            Page<Post> posts = postService.findByAuthor(user, page);
             model.addAttribute("user", user);
-            model.addAttribute("posts", postService.findByUser(user));
+            model.addAttribute("postList", posts);
+            model.addAttribute("totalPages", posts.getTotalPages());
+            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followService.getFollowing(user));
             model.addAttribute("followers", followService.getFollowers(user));
             model.addAttribute("isCurrentUser", true); // Indicate that this is the current user's profile
@@ -78,14 +82,19 @@ public class ProfileController {
 
     // Show another user's profile by their username
     @GetMapping("/profile/{username}")
-    public String showUserProfile(@PathVariable("username") String username, Model model) {
+    public String showUserProfile(@PathVariable("username") String username,
+                                  Model model,
+                                  @RequestParam(value = "page", defaultValue = "1") int page) {
         Optional<User> optionalUser = userService.findByUsername(username);
         String currentUsername = securityUtil.getCurrentUser().getUsername();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            Page<Post> posts = postService.findByAuthor(user, page);
             model.addAttribute("user", user);
-            model.addAttribute("posts", postService.findByUser(user));
+            model.addAttribute("postList", posts);
+            model.addAttribute("totalPages", posts.getTotalPages());
+            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followService.getFollowing(user));
             model.addAttribute("followers", followService.getFollowers(user));
             model.addAttribute("isCurrentUser", username.equals(currentUsername)); // Check if this is the current user
