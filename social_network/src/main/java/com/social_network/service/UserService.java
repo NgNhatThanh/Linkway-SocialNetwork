@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -29,50 +33,67 @@ public class UserService {
     private RoleService roleService;
 
     @Transactional
-    public User addUser(RegisterDTO newUser){
+    public User addUser(RegisterDTO newUser) {
         User user = ModelMapper.getInstance()
-                    .map(newUser, User.class);
+                .map(newUser, User.class);
 
-//        if(userRepository.existsByEmail(user.getEmail()))
-//            throw new DataExistedException("Email has been taken");
-//
-//        if(userRepository.existsByUsername(user.getUsername()))
-//            throw new DataExistedException("Username has been taken");
+        // if(userRepository.existsByEmail(user.getEmail()))
+        // throw new DataExistedException("Email has been taken");
+        //
+        // if(userRepository.existsByUsername(user.getUsername()))
+        // throw new DataExistedException("Username has been taken");
 
         String encodedPassword = BCryptEncoder.getInstance().encode(user.getPassword());
         user.setPassword(encodedPassword);
         Role role = roleService.findByName("USER");
         user.setRole(role);
         user.setAvatarImagePath("path to default profile picture");
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(Date.from(Instant.now()));
         this.userRepository.save(user);
         return user;
     }
 
-    public User findById(int id){
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    public User findById(int id) {
         User user = userRepository.findById(id);
-        if(user == null) throw new DataNotFoundException("Could not find user with id: " + id);
+        if (user == null)
+            throw new DataNotFoundException("Could not find user with id: " + id);
         return user;
     }
-//
-//    public User updateUser(UserCreationDTO updatedUser){
-//        User user = findByUsername(updatedUser.getUsername());
-//
-//        return userRepository.save(user);
-//    }
+    //
+    // public User updateUser(UserCreationDTO updatedUser){
+    // User user = findByUsername(updatedUser.getUsername());
+    //
+    // return userRepository.save(user);
+    // }
 
-    public User findByUsername(String username){
-        User user = userRepository.findByUsername(username);
-        if(user == null) throw new DataNotFoundException("Could not find user with username: " + username);
+    public Optional<User> findByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty())
+            throw new DataNotFoundException("Could not find user with username: " + username);
         return user;
     }
 
-    public UserResponseDTO convertToUserResponseDTO(User user){
+    public List<User> findByUsernameOrDisplayName(String query) {
+        List<User> allUsers = userRepository.findAll();
+
+        // Return users whose username or display name contains the query (case
+        // insensitive)
+        return allUsers.stream()
+                .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
+                        user.getDisplayName().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    public UserResponseDTO convertToUserResponseDTO(User user) {
         return ModelMapper.getInstance()
                 .map(user, UserResponseDTO.class);
     }
 
-    public PageResponse<UserResponseDTO> getAll(int page, int size){
+    public PageResponse<UserResponseDTO> getAll(int page, int size) {
         Sort sort = Sort.by("id").ascending();
         Pageable pageable = PageRequest.of(page - 1, size, sort);
         var pageData = userRepository.findAll(pageable);
@@ -85,9 +106,8 @@ public class UserService {
                 .build();
     }
 
-    public void updateUserToken(String username, String token){
-        User user = findByUsername(username);
-        user.setRefreshToken(token);
+    public void updateUserToken(String username, String token) {
+        User user = findByUsername(username).get();
         userRepository.save(user);
     }
 }

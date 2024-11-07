@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file if any -->
+</head>
+
+<body>
+    <main class="error">
+        <div class="error-container">
+            <h1>Error: <span th:text="${errorCode}">Error Code</span></h1>
+            <p th:text="${errorMessage}">Error Message</p>
+            <a th:href="@{/}" class="btn">Return to Home</a>
+        </div>
+    </main>
+</body>
+
+</html>

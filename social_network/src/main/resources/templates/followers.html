@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.displayName} + ' - Followers'">Followers</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <main class="followers">
+        <h1 th:text="${user.displayName}">User Name</h1>
+        <h2>Followers:</h2>
+
+        <ul>
+            <li th:each="follower : ${followers}">
+                <a th:href="@{/profile/{username}(username=${follower.username})}"
+                    th:text="${follower.displayName}"></a>
+            </li>
+        </ul>
+
+        <p th:if="${#lists.isEmpty(followers)}">No followers to display.</p>
+
+        <!-- Back to Profile Link -->
+        <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
+    </main>
+</body>
+
+</html>

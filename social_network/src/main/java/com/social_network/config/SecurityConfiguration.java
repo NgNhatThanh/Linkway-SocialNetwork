@@ -32,7 +32,7 @@ public class SecurityConfiguration {
 
     @Bean
     public DaoAuthenticationProvider authProvider(PasswordEncoder passwordEncoder,
-                                                  UserDetailsService userDetailsService) {
+            UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
@@ -57,7 +57,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
                         .requestMatchers("/", "/login", "/register", "/forgot-password", "/deny",
-                                "/reset-password",
+                                "/reset-password", "/profile",
                                 "/client/**", "/css/**", "/js/**", "/images/**")
                         .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
