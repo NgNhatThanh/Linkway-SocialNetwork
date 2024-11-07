@@ -12,7 +12,7 @@
         <form th:action="@{/register}" th:object="${registerUser}" method="POST" class="register-box">
             <a th:href="@{/}" class="backhome"><i class='bx bxl-reddit'></i></a>
 
-            <h2 class="register-header"> Đăng ký </h2>
+            <h2 class="register-header"> Register </h2>
             <div class="invalid-feedback"
                  th:if="${#fields.hasErrors('username')}"
                  th:errors="*{username}"></div>
@@ -28,7 +28,7 @@
                  th:if="${#fields.hasErrors('email')}"
                  th:errors="*{email}"></div>
             <div class="input-box">
-                <input type="email" th:field="*{email}" id="email" class="input-field" required>
+                <input type="text" th:field="*{email}" id="email" class="input-field" required>
                 <label for="email" class="label">Email</label>
                 <i class='bx bx-envelope icon' ></i>
             </div>
