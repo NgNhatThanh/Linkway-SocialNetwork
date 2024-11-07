@@ -26,6 +26,11 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    public Page<Post> getByUser(User user, int page) {
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
+        return postRepository.findByAuthor(user, pageable);
+    }
+
     public List<Post> findByUser(User user) {
         return postRepository.findByAuthor(user);
     }

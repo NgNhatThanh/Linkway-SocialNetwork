@@ -1,5 +1,8 @@
 package com.social_network.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.social_network.dao.FollowRepository;
@@ -92,6 +95,17 @@ public class FollowService {
                 .map(Follow::getFollower)
                 .toList();
     }
+
+    public Page<Follow> getFollowers(User user, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        return followRepository.findByFollowed(user, pageable);
+    }
+
+    public Page<Follow> getFollowing(User user, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        return followRepository.findByFollower(user, pageable);
+    }
+
 
     public List<User> getFollowing(User user) {
         List<Follow> follows = followRepository.findByFollower(user);

@@ -34,6 +34,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     // ") AS t2 ON p.id = t2.post_id;\n")
     Page<Post> findAll(Pageable pageable);
 
+    Page<Post> findByAuthor(User author, Pageable pageable);
+
     List<Post> findByAuthor(User author);
 
     Post findById(int id);

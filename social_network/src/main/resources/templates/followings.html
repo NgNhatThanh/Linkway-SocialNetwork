@@ -8,22 +8,46 @@
 </head>
 
 <body>
-    <main class="followings">
-        <h1 th:text="${user.displayName}">User Name</h1>
-        <h2>Following:</h2>
+<main class="followings">
+    <h1 th:text="${user.displayName}">User Name</h1>
+    <h2>Following:</h2>
 
-        <ul>
-            <li th:each="following : ${followings}">
-                <a th:href="@{/profile/{username}(username=${following.username})}"
-                    th:text="${following.displayName}"></a>
-            </li>
-        </ul>
+    <ul>
+        <li th:each="following : ${followings}">
+            <a th:href="@{/profile/{username}(username=${following.username})}"
+               th:text="${following.displayName}"></a>
+        </li>
+    </ul>
 
-        <p th:if="${#lists.isEmpty(followings)}">Not following anyone.</p>
+    <p th:if="${#lists.isEmpty(followings)}">Not following anyone.</p>
 
-        <!-- Back to Profile Link -->
-        <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
-    </main>
+    <!-- Pagination for Followings -->
+    <div th:if="${followings.hasContent()}">
+        <nav>
+            <ul class="pagination">
+                <!-- Previous Page Link -->
+                <li class="page-item" th:classappend="${followings.hasPrevious() ? '' : 'disabled'}">
+                    <a class="page-link" th:href="@{/profile/{username}/following(username=${user.username}, page=${followings.number - 1})}"
+                       th:if="${followings.hasPrevious()}">Previous</a>
+                </li>
+
+                <!-- Current Page -->
+                <li class="page-item">
+                    <span class="page-link" th:text="${followings.number + 1}">1</span>
+                </li>
+
+                <!-- Next Page Link -->
+                <li class="page-item" th:classappend="${followings.hasNext() ? '' : 'disabled'}">
+                    <a class="page-link" th:href="@{/profile/{username}/following(username=${user.username}, page=${followings.number + 1})}"
+                       th:if="${followings.hasNext()}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Back to Profile Link -->
+    <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
+</main>
 </body>
 
 </html>
