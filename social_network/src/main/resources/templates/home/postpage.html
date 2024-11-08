@@ -7,6 +7,7 @@
 <body>
     <main class="post-page">
         <link rel="stylesheet" th:href="@{/css/postpage.css}">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
@@ -19,6 +20,7 @@
 
                 <div class="post-author-info">
                     <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                    <p th:text="${post.getViews() + ' views'}"></p>
 
                     <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
                        th:text="*{post.getAuthor().getDisplayName()}"></a>
@@ -26,13 +28,55 @@
             </div>
 
             <div class="post-content">
+                <h1 th:text="${post.getTitle()}"></h1>
                 <div th:utext="${postContent}"></div>
             </div>
         </div>
 
         <div class="side-div">
-            <div class="author-div">
-                
+            <div class="author-card">
+                <img th:src="@{${post.getAuthor().getAvatarImagePath()}}"
+                    class="author-card-avatar">
+                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
+                    th:text="${post.getAuthor().getDisplayName()}"
+                    class="author-card-anchor"></a>
+                <p th:text="${authorFollowers + ' followers'}"></p>
+
+                <div class="author-card-follow">
+                    <!-- Edit Profile Button for Current User -->
+                    <button th:if="${isCurrentUser}">
+                        <a th:href="@{/updateProfile}" class="btn">Edit Profile
+                    </button>
+
+                    <!-- Follow/Unfollow Button for Other Users -->
+                    <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
+                          method="post">
+                        <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
+                        <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="vote-div">
+                <div class="vote-interact">
+                    <form th:action="@{${'/post/' + post.getId() + '/upvote'}}" method="post">
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);transform: ;msFilter:;"><path d="M12.781 2.375c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10zM15 12h-1v8h-4v-8H6.081L12 4.601 17.919 12H15z"></path></svg>
+                        </button>
+                    </form>
+                    <p th:text="${post.getUpvotes()}" class="vote-count"></p>
+                </div>
+
+                <div class="vote-interact">
+                    <form th:action="@{${'/post/' + post.getId() + '/downvote'}}"  method="post">
+                        <button type="submit">
+                            <i class='bx bx-downvote'></i>
+                        </button>
+                    </form>
+                    <p th:text="${post.getDownvotes()}" class="vote-count"></p>
+                </div>
+
+
             </div>
 
             <div class="related-posts-div">

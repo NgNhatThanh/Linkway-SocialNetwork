@@ -4,6 +4,7 @@ import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
 
 import com.social_network.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -33,6 +34,13 @@ public class PostService {
 
     public Post findById(int id){
         return postRepository.findById(id);
+    }
+
+    @Transactional
+    public void increaseView(int postId){
+        Post post = findById(postId);
+        post.setViews(post.getViews() + 1);
+        postRepository.save(post);
     }
 
 }

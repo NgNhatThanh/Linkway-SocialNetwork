@@ -5,14 +5,46 @@
 
 .side-div{
     position: sticky;
-    top: 10%;
+    top: 8%;
     align-self: start;
 }
 
-.author-div{
-    height: 40vh;
+.author-card{
+    height: 30vh;
     border-radius: 10px;
     background-color: gray;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center; /* Center all children horizontally */
+}
+
+.author-card-avatar{
+    width: 40%;
+    height: 40%;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+.author-card-anchor{
+    width: 90%;
+    font-size: x-large;
+}
+
+.vote-div{
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.vote-div > i{
+    width: 48px;
+    height: 48px;
+}
+
+.vote-interact{
+    text-align: center;
 }
 
 .related-posts-div{
