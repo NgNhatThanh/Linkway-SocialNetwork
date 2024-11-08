@@ -90,3 +90,7 @@ create table users_tags(
     foreign key (user_id) references users(id),
     foreign key (tag_id) references tags(id)
 );
+
+insert into roles(name) values 
+('ADMIN'),
+('USER');

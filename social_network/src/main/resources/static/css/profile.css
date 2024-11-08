@@ -1,22 +1,19 @@
-/* General page setup */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 0;
-}
-
 .profile {
     width: 80%;
-    max-width: 600px;
+    /*max-width: 600px;*/
     margin-top: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    /*display: flex;*/
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 }
 
 /* Profile heading */
@@ -82,29 +79,29 @@ body {
 }
 
 /* Posts section */
-.profile ul {
-    list-style: none;
-    padding: 0;
-}
+/*.profile ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*}*/
 
-.profile ul li {
-    background-color: #f1f1f1;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-}
+/*.profile ul li {*/
+/*    background-color: #f1f1f1;*/
+/*    padding: 10px;*/
+/*    border-radius: 4px;*/
+/*    margin-bottom: 10px;*/
+/*}*/
 
-.profile ul li h3 {
-    margin: 0 0 5px;
-    font-size: 18px;
-    color: #333;
-}
+/*.profile ul li h3 {*/
+/*    margin: 0 0 5px;*/
+/*    font-size: 18px;*/
+/*    color: #333;*/
+/*}*/
 
-.profile ul li p {
-    margin: 0;
-    font-size: 14px;
-    color: #555;
-}
+/*.profile ul li p {*/
+/*    margin: 0;*/
+/*    font-size: 14px;*/
+/*    color: #555;*/
+/*}*/
 
 /* Error message styling */
 .profile .error {

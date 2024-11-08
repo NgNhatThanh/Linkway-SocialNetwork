@@ -2,8 +2,8 @@ package com.social_network.service;
 
 import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
-import com.social_network.entity.User;
 
+import com.social_network.entity.User;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -31,8 +32,9 @@ public class PostService {
         return postRepository.findByAuthor(user, pageable);
     }
 
-    public List<Post> findByUser(User user) {
-        return postRepository.findByAuthor(user);
+    public Page<Post> findByAuthor(User author, int page) {
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
+        return postRepository.findByAuthor(author, pageable);
     }
 
 }

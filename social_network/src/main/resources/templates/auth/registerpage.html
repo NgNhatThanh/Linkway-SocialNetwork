@@ -3,53 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="../static/css/register-style.css" th:href="@{/css/register-style.css}" rel="stylesheet" />
+
 </head>
 <body>
-    <h2> Đăng ký </h2>
+    <div class="wrapper">
+        <form th:action="@{/register}" th:object="${registerUser}" method="POST" class="register-box">
+            <a th:href="@{/}" class="backhome"><i class='bx bxl-reddit'></i></a>
 
-    <form th:action="@{/register}" th:object="${registerUser}" method="POST">
+            <h2 class="register-header"> Register </h2>
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('username')}"
+                 th:errors="*{username}"></div>
 
-        <div class="invalid-feedback"
-             th:if="${#fields.hasErrors('username')}"
-             th:errors="*{username}"></div>
-        <label>
-            Username
-            <input th:field="*{username}" placeholder="username">
-        </label>
-
-        <div class="invalid-feedback"
-             th:if="${#fields.hasErrors('email')}"
-             th:errors="*{email}"></div>
-        <label>
-            Email
-            <input type="email" th:field="*{email}" placeholder="email">
-        </label>
-
-        <label>
-            Tên hiển thị
-            <input th:field="*{displayName}" placeholder="Nguyễn Văn A">
-        </label>
-
-        <div class="invalid-feedback"
-             th:if="${#fields.hasErrors('password')}"
-             th:errors="*{password}"></div>
-        <label>
-            Mật khẩu
-            <input type="password" th:field="*{password}">
-        </label>
-
-        <div class="invalid-feedback"
-             th:if="${#fields.hasErrors('confirmPassword')}"
-             th:errors="*{confirmPassword}"></div>
-        <label>
-            Nhập lại mật khẩu
-            <input type="password" th:field="*{confirmPassword}">
-        </label>
+            <div class="input-box">
+                <input type="text" th:field="*{username}" class="input-field" id="user" required>
+                <label class="label" for="user">Username</label>
+                <i class="bx bx-user icon"></i>
+            </div>
 
 
-        <button type="submit"> Đăng ký </button>
-    </form>
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('email')}"
+                 th:errors="*{email}"></div>
+            <div class="input-box">
+                <input type="text" th:field="*{email}" id="email" class="input-field" required>
+                <label for="email" class="label">Email</label>
+                <i class='bx bx-envelope icon' ></i>
+            </div>
 
-    <a th:href="@{/login}"> Đã có tài khoản ? Đăng nhập ngay </a>
+            <div class="input-box">
+                <input th:field="*{displayName}" id="name" class="input-field" required>
+                <label for="name" class="label">Tên hiển thị</label>
+                <i class='bx bx-edit-alt icon' ></i>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('password')}"
+                 th:errors="*{password}"></div>
+            <div class="input-box">
+                <input type="password" th:field="*{password}" id="pass" class="input-field" required>
+                <label for="pass" class="label">Mật khẩu</label>
+                <i class="bx bx-lock-alt icon"></i>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('confirmPassword')}"
+                 th:errors="*{confirmPassword}"></div>
+            <div class="input-box">
+                <input type="password" th:field="*{confirmPassword}" id="pass-again" class="input-field" required>
+                <label for="pass-again" class="label">Nhập lại mật khẩu</label>
+                <i class="bx bx-lock-alt icon"></i>
+            </div>
+
+
+            <div class="input-box">
+                <button type="submit" class="input-submit"> Đăng ký </button>
+            </div>
+
+            <div class="register">
+                <p>Đã có tài khoản ? <a th:href="@{/login}">Đăng nhập ngay </a></p>
+            </div>
+
+        </form>
+
+
+    </div>
 </body>
 </html>

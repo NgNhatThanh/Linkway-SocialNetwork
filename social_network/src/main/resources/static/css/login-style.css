@@ -1,0 +1,128 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    margin: 0;
+    position: absolute;
+    width: 450px;
+    backdrop-filter: blur(35px);
+    background-color: white;
+    border-radius: 15px;
+    padding: 7.5em 2.5em 4em 2.5em;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.backhome{
+    position: absolute;
+    font-size: 40px;
+    top: 2%;
+    left: 2%;
+    color: black;
+}
+.login-header {
+    position: absolute;
+    font-size: 30px;
+    color: black;
+    top: 14%;
+}
+
+.login-fail{
+    color: red;
+    font-size: 13px;
+}
+.input-box{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.input-field{
+    width: 100%;
+    height: 55px;
+    font-size: 16px;
+    background: transparent;
+    padding-inline: 20px 50px;
+    border: 2px solid #79747E;
+    border-radius: 15px;
+    outline: none;
+}
+
+#user{
+    margin-bottom: 10px;
+}
+
+.label{
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    transition: .2s;
+}
+
+.input-field:focus ~ .label,
+.input-field:valid ~ .label{
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 14px;
+    background-color: white;
+    color: black;
+    padding: 0 10px;
+}
+
+.icon{
+    position: absolute;
+    top: 18px;
+    right: 25px;
+    font-size: 20px;
+}
+
+.input-submit{
+    width: 100%;
+    height: 50px;
+    background: #3869EB;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.register{
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register a {
+    text-decoration: none;
+    color: #FF8682;
+    font-weight: 500;
+}
+
+.register a.hover{
+    text-decoration: underline;
+}
