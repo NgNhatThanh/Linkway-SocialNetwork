@@ -31,4 +31,8 @@ public class PostService {
         return postRepository.findByAuthor(author, pageable);
     }
 
+    public Post findById(int id){
+        return postRepository.findById(id);
+    }
+
 }

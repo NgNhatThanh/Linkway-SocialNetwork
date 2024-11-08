@@ -45,7 +45,7 @@
 
     <div th:if="${!postList.isEmpty()}">
       <h2>Posts:</h2>
-      <div th:replace="~{home/posts.html :: post-section}"></div>
+      <div th:replace="~{home/postlist.html :: post-section}"></div>
     </div>
 
     <h2 th:if="${postList.isEmpty()}">No posts to display.</h2>
