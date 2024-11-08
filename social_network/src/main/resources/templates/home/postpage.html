@@ -5,28 +5,40 @@
     <title>Title</title>
 </head>
 <body>
-    <main class="post-section">
+    <main class="post-page">
         <link rel="stylesheet" th:href="@{/css/postpage.css}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
 
+        <div class="post-div">
+            <div class="author-meta">
+                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}">
+                    <img th:src="@{${post.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
+                </a>
 
-        <div class="author-meta">
-            <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}">
-                <img th:src="@{${post.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
-            </a>
+                <div class="post-author-info">
+                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
 
-            <div class="post-author-info">
-                <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                    <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
+                       th:text="*{post.getAuthor().getDisplayName()}"></a>
+                </div>
+            </div>
 
-                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
-                   th:text="*{post.getAuthor().getDisplayName()}"></a>
+            <div class="post-content">
+                <div th:utext="${postContent}"></div>
             </div>
         </div>
 
-        <div class="post-content">
-            <div th:utext="${postContent}"></div>
+        <div class="side-div">
+            <div class="author-div">
+                
+            </div>
+
+            <div class="related-posts-div">
+                <h3> Bài viết liên quan </h3>
+
+            </div>
         </div>
 
     </main>
