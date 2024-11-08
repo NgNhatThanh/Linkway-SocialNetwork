@@ -194,7 +194,10 @@ public class ProfileController {
     public String showFollowers(@PathVariable("username") String username, Model model,
             @RequestParam(value = "followerPage", defaultValue = "1") int followerPage) {
         Optional<User> optionalUser = userService.findByUsername(username);
-
+        if (followerPage < 1) {
+            followerPage = 1;
+            return "redirect:/followers/" + username + "?followerPage=" + followerPage;
+        }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Page<Follow> followers = followService.getFollowers(user, followerPage);
@@ -218,7 +221,10 @@ public class ProfileController {
     public String showFollowings(@PathVariable("username") String username, Model model,
             @RequestParam(value = "followingPage", defaultValue = "1") int followingPage) {
         Optional<User> optionalUser = userService.findByUsername(username);
-
+        if (followingPage < 1) {
+            followingPage = 1;
+            return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+        }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Page<Follow> followings = followService.getFollowing(user, followingPage);
