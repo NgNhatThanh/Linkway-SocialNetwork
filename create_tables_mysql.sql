@@ -16,7 +16,7 @@ CREATE TABLE follows (
   id int primary key auto_increment,
   followed_id int references users(id),
   follower_id int references users(id),
-  create_at datetime
+  created_at datetime
 );
 
 CREATE TABLE posts (
