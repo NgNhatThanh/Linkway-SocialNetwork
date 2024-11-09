@@ -3,6 +3,16 @@
     grid-template-columns: 80% auto;
 }
 
+.post-tags{
+    display: flex;
+}
+
+.post-tags > a{
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+
 .side-div{
     position: sticky;
     top: 8%;
