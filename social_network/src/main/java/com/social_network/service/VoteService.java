@@ -15,23 +15,23 @@ public class VoteService {
     private PostService postService;
 
     @Transactional
-    public void increasePostVote(int postId, String username, int voteType){
-        String query = "INSERT INTO post_votes (post_id, voter_username, vote_type)\n" +
-                "VALUES (" + postId + ", '" + username + "', " + voteType + ")" +
+    public void increasePostVote(int postId, int voterId, int voteType){
+        String query = "INSERT INTO post_votes (post_id, voter_id, vote_type)\n" +
+                "VALUES (" + postId + ", '" + voterId + "', " + voteType + ")" +
                 "ON DUPLICATE KEY UPDATE\n" +
                 "vote_type = VALUES(vote_type)";
         jdbcOperations.execute(query);
     }
 
-    public void unvotePost(int postId, String username){
+    public void unvotePost(int postId, int voterId){
         String query = "delete from post_votes\n " +
-                "where post_id = " + postId + " and voter_username = '" + username + "'";
+                "where post_id = " + postId + " and voter_id = '" + voterId + "'";
         jdbcOperations.execute(query);
     }
 
-    public int getUserPostVoteType(int postId, String username){
+    public int getUserPostVoteType(int postId, int voterId){
         String query = "select coalesce(vote_type, 0) from post_votes\n" +
-                "where post_id = " + postId + " and voter_username = '" + username + "'";
+                "where post_id = " + postId + " and voter_id = '" + voterId + "'";
         Integer type;
         try{
             type = jdbcOperations.queryForObject(query, Integer.class);
