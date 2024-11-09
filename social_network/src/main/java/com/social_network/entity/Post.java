@@ -3,6 +3,7 @@ package com.social_network.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -44,8 +45,10 @@ public class Post {
     @Column(name = "views")
     private int views;
 
+    @Formula("(SELECT COUNT(*) FROM post_votes v WHERE v.post_id = id AND v.vote_type = 1)")
     private int upvotes;
 
+    @Formula("(SELECT COUNT(*) FROM post_votes v WHERE v.post_id = id AND v.vote_type = -1)")
     private int downvotes;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

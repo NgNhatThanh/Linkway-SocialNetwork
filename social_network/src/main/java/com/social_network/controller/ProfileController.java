@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 
 import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -121,8 +122,11 @@ public class ProfileController {
 
     // Follow/unfollow a user
     @PostMapping("/profile/{username}/follow")
-    public String toggleFollowUser(@PathVariable("username") String username, Model model) {
+    public String toggleFollowUser(@PathVariable("username") String username,
+                                   Model model,
+                                   HttpServletRequest request) {
         String currentUsername = securityUtil.getCurrentUser().getUsername();
+        String prevPath = request.getHeader("Referer");
 
         if (currentUsername.equals(username)) {
             model.addAttribute("error", "You cannot follow yourself.");
@@ -140,7 +144,7 @@ public class ProfileController {
                 followService.followUser(currentUsername, username);
             }
 
-            return "redirect:/profile/" + username;
+            return "redirect:" + prevPath;
         } else {
             model.addAttribute("error", "User not found");
             return "error";

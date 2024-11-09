@@ -5,7 +5,8 @@
 }
 
 .side-bar {
-    width: 18%;
+    position: sticky;
+    top: 10%;
     background-color: #f0f0f0;
     align-items: center;
     /*align-content: center;*/
