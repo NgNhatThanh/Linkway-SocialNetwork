@@ -40,6 +40,7 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment"
             , cascade = CascadeType.REMOVE
             , fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Comment> replies = new HashSet<>();
 
     @Column(name = "has_child")

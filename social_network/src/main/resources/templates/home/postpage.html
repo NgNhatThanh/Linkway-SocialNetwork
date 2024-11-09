@@ -19,7 +19,7 @@
                 </a>
 
                 <div class="post-author-info">
-                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=date></p>
                     <p th:text="${post.getViews() + ' views'}"></p>
 
                     <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
@@ -34,12 +34,36 @@
 
             <div class="post-tags">
                 <a th:each="tag : ${post.getTags()}"
-                   th:href="@{/#}"
+                   th:href="@{#}"
                    th:text="*{tag.getName()}"></a>
             </div>
 
             <div class="post-comments">
-                
+                <h2> Bình luận: </h2>
+
+                <div class="comment-form">
+
+                </div>
+
+                <div class="comment-thread">
+                    <div th:each="comment : ${rootComments}" class="root-comment">
+                        <div class="comment-author-info">
+                            <a th:href="@{*{'/profile/' + comment.getAuthor().getUsername()}}">
+                                <img th:src="@{*{comment.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
+                            </a>
+                            <div>
+                                <p th:text="*{#dates.format(comment.getCreatedAt(), 'yyyy/MM/dd HH:mm')}"
+                                   class="date"></p>
+                                <a th:href="@{*{'/profile/' + comment.getAuthor().getUsername()}}"
+                                   th:text="*{comment.getAuthor().getDisplayName()}"></a>
+                            </div>
+                        </div>
+
+                        <div class="comment-content">
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -50,6 +74,7 @@
                 <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
                     th:text="${post.getAuthor().getDisplayName()}"
                     class="author-card-anchor"></a>
+                <p th:text="${post.getAuthor().getUsername()}"></p>
                 <p th:text="${authorFollowers + ' followers'}"></p>
 
                 <div class="author-card-follow">

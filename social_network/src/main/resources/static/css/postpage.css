@@ -13,6 +13,15 @@
     border: 1px solid grey;
 }
 
+.post-comments{
+    border-radius: 5px;
+    background-color: lightgray;
+}
+
+.root-comment{
+    border: 1px solid red;
+}
+
 .side-div{
     position: sticky;
     top: 8%;

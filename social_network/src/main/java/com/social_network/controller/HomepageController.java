@@ -1,5 +1,6 @@
 package com.social_network.controller;
 
+import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
@@ -35,6 +36,8 @@ public class HomepageController {
 
     private VoteService voteService;
 
+    private CommentService commentService;
+
     @ModelAttribute("followingTags")
     public List<Tag> getAllTags() {
         List<Tag> followingTags = null;
@@ -68,12 +71,16 @@ public class HomepageController {
 
     @GetMapping("/post/{postId}")
     public String showPostPage(@PathVariable("postId") int postId,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
                                Model model,
                                 HttpServletRequest request){
         postService.increaseView(postId);
         Post post = postService.findById(postId);
         String htmlContent = markdownRenderUtil.convertToHtml(post.getContent());
         String currentUsername = securityUtil.getCurrentUser().getUsername();
+
+        Page<Comment> rootComments = commentService.findRootCommentsByPost(post, page);
+
 
         int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
         long authorFollowers = followService.getFollowerCount(post.getAuthor());
@@ -87,6 +94,7 @@ public class HomepageController {
                                                     post.getAuthor().getUsername()));
         model.addAttribute("upvoted", voteType == 1);
         model.addAttribute("downvoted", voteType == -1);
+        model.addAttribute("rootComments" ,rootComments);
         return "home/postpage";
     }
 
