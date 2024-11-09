@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main class="post-page">
+        <link rel="stylesheet" th:href="@{/css/postpage.css}">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script>
+
+        <div class="post-div">
+            <div class="author-meta">
+                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}">
+                    <img th:src="@{${post.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
+                </a>
+
+                <div class="post-author-info">
+                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                    <p th:text="${post.getViews() + ' views'}"></p>
+
+                    <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
+                       th:text="*{post.getAuthor().getDisplayName()}"></a>
+                </div>
+            </div>
+
+            <div class="post-content">
+                <h1 th:text="${post.getTitle()}"></h1>
+                <div th:utext="${postContent}"></div>
+            </div>
+
+            <div class="post-tags">
+                <a th:each="tag : ${post.getTags()}"
+                   th:href="@{/#}"
+                   th:text="*{tag.getName()}"></a>
+            </div>
+
+            <div class="post-comments">
+                
+            </div>
+        </div>
+
+        <div class="side-div">
+            <div class="author-card">
+                <img th:src="@{${post.getAuthor().getAvatarImagePath()}}"
+                    class="author-card-avatar">
+                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
+                    th:text="${post.getAuthor().getDisplayName()}"
+                    class="author-card-anchor"></a>
+                <p th:text="${authorFollowers + ' followers'}"></p>
+
+                <div class="author-card-follow">
+                    <!-- Edit Profile Button for Current User -->
+                    <button th:if="${isCurrentUser}">
+                        <a th:href="@{/updateProfile}" class="btn">Edit Profile</a>
+                    </button>
+
+                    <!-- Follow/Unfollow Button for Other Users -->
+                    <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
+                          method="post">
+                        <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
+                        <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="vote-div">
+                <div class="vote-interact">
+                    <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
+                          method="post">
+                        <button type="submit">
+                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
+                        </button>
+                    </form>
+                    <p th:text="${post.getUpvotes()}" class="vote-count"></p>
+                </div>
+
+                <div class="vote-interact">
+                    <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
+                        <button type="submit">
+                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
+                        </button>
+                    </form>
+                    <p th:text="${post.getDownvotes()}" class="vote-count"></p>
+                </div>
+
+
+            </div>
+
+            <div class="related-posts-div">
+                <h3> Bài viết liên quan </h3>
+
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>

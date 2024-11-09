@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="btl-oop@localhost" uuid="92cd49ca-c8ae-4b3a-93a7-2cc7b91e1fe5">
+    <data-source source="LOCAL" name="social_network@localhost" uuid="c80f1704-535c-440a-86d5-0db9dc94a344">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
+      <imported>true</imported>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://localhost:3306/social_network</jdbc-url>
       <jdbc-additional-properties>

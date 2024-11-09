@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
@@ -48,5 +50,11 @@ public class Comment {
 
     @Column(name = "was_updated")
     private boolean wasUpdated;
+
+    @Formula("(SELECT COUNT(*) FROM comment_votes c WHERE c.comment_id = id AND c.vote_type = 1)")
+    private int upvotes;
+
+    @Formula("(SELECT COUNT(*) FROM comment_votes c WHERE c.comment_id = id AND c.vote_type = -1)")
+    private int downvotes;
 
 }

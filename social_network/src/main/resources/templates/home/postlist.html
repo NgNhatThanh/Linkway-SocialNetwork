@@ -20,7 +20,7 @@
                     <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
                 </div>
 
-                <a th:href="@{#}" th:text="*{post.getTitle()}" class="post-title"></a>
+                <a th:href="@{*{'/post/' + post.getId()}}" th:text="*{post.getTitle()}" class="post-title"></a>
 
                 <div class="post-tags">
                     <a th:href="@{#}" th:each="tag : ${post.getTags()}" class="post-tag" th:text="*{tag.getName()}">
