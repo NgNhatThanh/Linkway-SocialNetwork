@@ -8,6 +8,7 @@ import com.social_network.util.MarkdownRenderUtil;
 import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,12 +67,15 @@ public class HomepageController {
     }
 
     @GetMapping("/post/{postId}")
-    public String showPostPage(@PathVariable("postId") int postId, Model model){
+    public String showPostPage(@PathVariable("postId") int postId,
+                               Model model,
+                                HttpServletRequest request){
         postService.increaseView(postId);
         Post post = postService.findById(postId);
         String htmlContent = markdownRenderUtil.convertToHtml(post.getContent());
         String currentUsername = securityUtil.getCurrentUser().getUsername();
-        int voteType = voteService.getUserPostVoteType(postId, currentUsername);
+
+        int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
         long authorFollowers = followService.getFollowerCount(post.getAuthor());
         model.addAttribute("post", post);
         model.addAttribute("postContent", htmlContent);
@@ -93,7 +97,7 @@ public class HomepageController {
         String prevPath = request.getHeader("Referer");
         int voteChange = voteType.equals("upvote") ? 1 : -1;
         String currentUsername = securityUtil.getCurrentUser().getUsername();
-        voteService.increasePostVote(postId, currentUsername, voteChange);
+        voteService.increasePostVote(postId, (int)request.getSession().getAttribute("id"), voteChange);
         return "redirect:" + prevPath;
     }
 
@@ -102,7 +106,7 @@ public class HomepageController {
                              HttpServletRequest request){
         String prevPath = request.getHeader("Referer");
         String currentUsername = securityUtil.getCurrentUser().getUsername();
-        voteService.unvotePost(postId, currentUsername);
+        voteService.unvotePost(postId, (int)request.getSession().getAttribute("id"));
         return "redirect:" + prevPath;
     }
 

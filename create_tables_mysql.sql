@@ -53,16 +53,16 @@ CREATE TABLE comments (
 
 CREATE TABLE post_votes (
   post_id int references posts(id),
-  voter_username nvarchar(50),
-  vote_type int,
-  PRIMARY KEY (post_id, voter_username)
+  voter_id int references users(id),
+  vote_type int check(vote_type in (1, -1)),
+  PRIMARY KEY (post_id, voter_id)
 );
 
 CREATE TABLE comment_votes (
   comment_id int references comments(id),
-  voter_username nvarchar(50),
-  vote_type int,
-  PRIMARY KEY (comment_id, voter_username)
+  voter_id int references users(id),
+  vote_type int check(vote_type in (1, -1)),
+  PRIMARY KEY (comment_id, voter_id)
 );
 
 CREATE TABLE roles (
