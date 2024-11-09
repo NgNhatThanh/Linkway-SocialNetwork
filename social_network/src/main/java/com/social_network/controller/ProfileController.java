@@ -2,7 +2,10 @@ package com.social_network.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
@@ -56,19 +59,23 @@ public class ProfileController {
     // Show the current user's profile page
     @GetMapping("/profile")
     public String showCurrentUserProfile(Model model,
-                     @RequestParam(value = "page", defaultValue = "1") int page) {
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "followerPage", defaultValue = "1") int followerPage,
+            @RequestParam(value = "followingPage", defaultValue = "1") int followingPage) {
         String username = securityUtil.getCurrentUser().getUsername();
         Optional<User> optionalUser = userService.findByUsername(username);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Page<Post> posts = postService.findByAuthor(user, page);
+            Page<Follow> followers = followService.getFollowers(user, followerPage);
+            Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
             model.addAttribute("totalPages", posts.getTotalPages());
             model.addAttribute("currentPage", page);
-            model.addAttribute("followings", followService.getFollowing(user));
-            model.addAttribute("followers", followService.getFollowers(user));
+            model.addAttribute("followings", followings);
+            model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", true); // Indicate that this is the current user's profile
             model.addAttribute("followingsCount", followService.getFollowingCount(user)); // Add followings count
             model.addAttribute("followersCount", followService.getFollowerCount(user)); // Add followers count
@@ -84,25 +91,28 @@ public class ProfileController {
     // Show another user's profile by their username
     @GetMapping("/profile/{username}")
     public String showUserProfile(@PathVariable("username") String username,
-                                  Model model,
-                                  @RequestParam(value = "page", defaultValue = "1") int page) {
+            Model model,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "followerPage", defaultValue = "1") int followerPage,
+            @RequestParam(value = "followingPage", defaultValue = "1") int followingPage) {
         Optional<User> optionalUser = userService.findByUsername(username);
         String currentUsername = securityUtil.getCurrentUser().getUsername();
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             Page<Post> posts = postService.findByAuthor(user, page);
+            Page<Follow> followers = followService.getFollowers(user, followerPage);
+            Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
             model.addAttribute("totalPages", posts.getTotalPages());
             model.addAttribute("currentPage", page);
-            model.addAttribute("followings", followService.getFollowing(user));
-            model.addAttribute("followers", followService.getFollowers(user));
+            model.addAttribute("followings", followings);
+            model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", username.equals(currentUsername)); // Check if this is the current user
             model.addAttribute("isFollowing", followService.isFollowing(currentUsername, username)); // Following status
             model.addAttribute("followingsCount", followService.getFollowingCount(user)); // Add followings count
             model.addAttribute("followersCount", followService.getFollowerCount(user)); // Add followers count
-
             return "profile"; // Matches profile.html template for other user profiles as well
         } else {
             model.addAttribute("error", "User not found");
@@ -185,13 +195,25 @@ public class ProfileController {
     }
 
     @GetMapping("/followers/{username}")
-    public String showFollowers(@PathVariable("username") String username, Model model) {
+    public String showFollowers(@PathVariable("username") String username, Model model,
+            @RequestParam(value = "followerPage", defaultValue = "1") int followerPage) {
         Optional<User> optionalUser = userService.findByUsername(username);
-
+        if (followerPage < 1) {
+            followerPage = 1;
+            return "redirect:/followers/" + username + "?followerPage=" + followerPage;
+        }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            Page<Follow> followers = followService.getFollowers(user, followerPage);
             model.addAttribute("user", user);
-            model.addAttribute("followers", followService.getFollowers(user));
+            model.addAttribute("followers", followers);
+            int totalPages = followers.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
             return "followers"; // Template to show followers
         } else {
             model.addAttribute("error", "User not found");
@@ -200,13 +222,25 @@ public class ProfileController {
     }
 
     @GetMapping("/followings/{username}")
-    public String showFollowings(@PathVariable("username") String username, Model model) {
+    public String showFollowings(@PathVariable("username") String username, Model model,
+            @RequestParam(value = "followingPage", defaultValue = "1") int followingPage) {
         Optional<User> optionalUser = userService.findByUsername(username);
-
+        if (followingPage < 1) {
+            followingPage = 1;
+            return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+        }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+            Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
-            model.addAttribute("followings", followService.getFollowing(user));
+            model.addAttribute("followings", followings);
+            int totalPages = followings.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
             return "followings"; // Template to show followings
         } else {
             model.addAttribute("error", "User not found");

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +24,11 @@ public class PostService {
     public Page<Post> getAll(int page) {
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
         return postRepository.findAll(pageable);
+    }
+
+    public Page<Post> getByUser(User user, int page) {
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
+        return postRepository.findByAuthor(user, pageable);
     }
 
     public Page<Post> findByAuthor(User author, int page) {

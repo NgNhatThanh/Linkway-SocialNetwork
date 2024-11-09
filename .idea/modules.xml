@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/BTL-OOP-backend.iml" filepath="$PROJECT_DIR$/.idea/BTL-OOP-backend.iml" />
-      <module fileurl="file://$PROJECT_DIR$/social_network/social_network.iml" filepath="$PROJECT_DIR$/social_network/social_network.iml" />
     </modules>
   </component>
 </project>

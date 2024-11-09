@@ -2,65 +2,67 @@
 <html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${user.displayName} + ' - Profile'">User Profile</title>
-
+    <meta charset="UTF-8">
+    <title th:text="${user.displayName} + ' - Profile'">User Profile</title>
 </head>
 
 <body>
-  <main class="profile">
-    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <main class="profile">
+        <link rel="stylesheet" th:href="@{/css/profile.css}">
 
-    <div>
-      <img th:src="${user.avatarImagePath}" th:alt="'Avatar of ' + ${user.displayName}" alt="User Avatar" width="150"
-           height="150" />
-    </div>
+        <div>
+            <img th:src="${user.avatarImagePath}" th:alt="'Avatar of ' + ${user.displayName}" alt="User Avatar"
+                width="150" height="150" />
+        </div>
 
-    <!-- Display Username and Email -->
-    <h1 th:text="${user.displayName}">User Name</h1>
-    <h2 th:text="${user.email}">User Email</h2>
+        <!-- Display Username and Email -->
+        <h1 th:text="${user.displayName}">User Name</h1>
+        <h2 th:text="${user.email}">User Email</h2>
 
-    <!-- Follower and Following Counts -->
-    <div>
-      <p>Followers: <a th:href="@{/followers/{username}(username=${user.username})}" th:text="${followersCount}">0</a>
-      </p>
-      <p>Following: <a th:href="@{/followings/{username}(username=${user.username})}" th:text="${followingsCount}">0</a>
-      </p>
-    </div>
+        <!-- Follower and Following Counts -->
+        <div>
+            <p>Followers: <a th:href="@{/followers/{username}(username=${user.username})}"
+                    th:text="${followersCount}">0</a>
+            </p>
+            <p>Following: <a th:href="@{/followings/{username}(username=${user.username})}"
+                    th:text="${followingsCount}">0</a>
+            </p>
+        </div>
 
-    <!-- Conditionally Display "Edit Profile" or "Follow/Unfollow" -->
-    <div>
-      <!-- Edit Profile Button for Current User -->
-      <a th:if="${isCurrentUser}" th:href="@{/updateProfile}" class="btn">Edit Profile</a>
+        <!-- Conditionally Display "Edit Profile" or "Follow/Unfollow" -->
+        <div>
+            <!-- Edit Profile Button for Current User -->
+            <a th:if="${isCurrentUser}" th:href="@{/updateProfile}" class="btn">Edit Profile</a>
 
-      <!-- Follow/Unfollow Button for Other Users -->
-      <form th:if="${not isCurrentUser}" th:action="@{/profile/{username}/follow(username=${user.username})}"
-        method="post">
-        <input type="hidden" name="username" th:value="${user.username}" />
-        <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
-      </form>
-    </div>
+            <!-- Follow/Unfollow Button for Other Users -->
+            <form th:if="${not isCurrentUser}" th:action="@{/profile/{username}/follow(username=${user.username})}"
+                method="post">
+                <input type="hidden" name="username" th:value="${user.username}" />
+                <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+            </form>
+        </div>
 
-    <!-- Display User's Posts -->
+        <!-- Display User's Posts -->
 
-    <div th:if="${!postList.isEmpty()}">
-      <h2>Posts:</h2>
-      <div th:replace="~{home/postlist.html :: post-section}"></div>
-    </div>
+        <div th:if="${!postList.isEmpty()}">
+            <h2>Posts:</h2>
+            <div th:replace="~{home/posts.html :: post-section}"></div>
+        </div>
 
-    <h2 th:if="${postList.isEmpty()}">No posts to display.</h2>
 
-    <!-- Error Message Display -->
-    <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+        <h2 th:if="${postList.isEmpty()}">No posts to display.</h2>
 
-    <!-- Logout Form -->
-    <!-- <div class="logout-container">
+        <!-- Error Message Display -->
+        <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+
+        <!-- Logout Form -->
+        <!-- <div class="logout-container">
       <form th:action="@{/logout}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <button class="dropdown-item" type="submit" style="color: red;">Logout</button>
       </form>
     </div> -->
-  </main>
+    </main>
 </body>
 
 </html>

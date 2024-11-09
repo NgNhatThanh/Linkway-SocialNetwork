@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <title th:text="${user.displayName} + ' - Followers'">Followers</title>
-    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
@@ -13,13 +12,47 @@
         <h2>Followers:</h2>
 
         <ul>
-            <li th:each="follower : ${followers}">
-                <a th:href="@{/profile/{username}(username=${follower.username})}"
-                    th:text="${follower.displayName}"></a>
+            <!-- Iterate over the followers content -->
+            <li th:each="follow : ${followers.content}">
+                <!-- Access the 'follower' user details -->
+                <a th:href="@{/profile/{username}(username=${follow.follower.username})}"
+                    th:text="${follow.follower.displayName}">Follower Name</a>
             </li>
         </ul>
 
-        <p th:if="${#lists.isEmpty(followers)}">No followers to display.</p>
+        <p th:if="${#lists.isEmpty(followers.content)}">No followers to display.</p>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <!-- Previous button -->
+                <li class="page-item" th:classappend="${followers.number == 0 ? 'disabled' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followers/{username}(username=${user.username}, followerPage=${followers.number})}"
+                        aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- Page number buttons -->
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, followers.totalPages)}"
+                    th:classappend="${pageNumber == followers.number + 1 ? 'active' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followers/{username}(username=${user.username}, followerPage=${pageNumber})}"
+                        th:text="${pageNumber}"></a>
+                </li>
+
+                <!-- Next button -->
+                <li class="page-item"
+                    th:classappend="${followers.number + 1 == followers.totalPages ? 'disabled' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followers/{username}(username=${user.username}, followerPage=${followers.number + 2})}"
+                        aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
         <!-- Back to Profile Link -->
         <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>

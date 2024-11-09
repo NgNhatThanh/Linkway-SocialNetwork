@@ -1,27 +1,57 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title th:text="${user.displayName} + ' - Following'">Following</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <title th:text="${user.displayName} + ' - Followings'">Followings</title>
 </head>
 
 <body>
     <main class="followings">
         <h1 th:text="${user.displayName}">User Name</h1>
-        <h2>Following:</h2>
-
+        <h2>Followings:</h2>
         <ul>
-            <li th:each="following : ${followings}">
-                <a th:href="@{/profile/{username}(username=${following.username})}"
-                    th:text="${following.displayName}"></a>
+            <li th:each="following : ${followings.content}">
+                <a th:href="@{/profile/{username}(username=${following.followed.username})}"
+                    th:text="${following.followed.displayName}">User Name</a>
             </li>
         </ul>
 
-        <p th:if="${#lists.isEmpty(followings)}">Not following anyone.</p>
+        <p th:if="${#lists.isEmpty(followings.content)}">No followings to display.</p>
 
-        <!-- Back to Profile Link -->
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <!-- Previous button -->
+                <li class="page-item" th:classappend="${followings.number == 0 ? 'disabled' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number})}"
+                        aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <!-- Page number buttons -->
+                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, followings.totalPages)}"
+                    th:classappend="${pageNumber == followings.number + 1 ? 'active' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${pageNumber})}"
+                        th:text="${pageNumber}"></a>
+                </li>
+
+                <!-- Next button -->
+                <li class="page-item"
+                    th:classappend="${followings.number + 1 == followings.totalPages ? 'disabled' : ''}">
+                    <a class="page-link"
+                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number + 2})}"
+                        aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+
         <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
     </main>
 </body>

@@ -48,7 +48,7 @@ public class HomepageController {
 
     @GetMapping("/")
     public String showHomePage(Model model,
-            @RequestParam(value = "page", defaultValue = "1") int page) {
+                               @RequestParam(value = "page", defaultValue = "1") int page) {
 
         Page<Post> postList = postService.getAll(page);
 
