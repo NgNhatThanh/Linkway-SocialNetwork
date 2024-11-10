@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +34,10 @@ public class CommentService {
     public void addComment(Comment comment){
         comment.setCreatedAt(Date.from(Instant.now()));
         commentRepository.save(comment);
+    }
+
+    public List<Comment> getChildComments(int parentId){
+        return commentRepository.findByParentComment_Id(parentId);
     }
 
 }

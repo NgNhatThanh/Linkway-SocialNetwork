@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @AllArgsConstructor
 public class PostpageController {
@@ -58,6 +60,7 @@ public class PostpageController {
         model.addAttribute("downvoted", voteType == -1);
         model.addAttribute("userComment", new CommentDTO());
         model.addAttribute("rootComments" ,rootComments);
+        model.addAttribute("currentPage", page);
         return "home/postpage";
     }
 
@@ -94,5 +97,10 @@ public class PostpageController {
         return "redirect:" + prevPath + "#post-comments";
     }
 
+    @GetMapping("/comment/{parendId}/child")
+    @ResponseBody
+    public List<Comment> getChildComments(@PathVariable int parendId){
+        return commentService.getChildComments(parendId);
+    }
 
 }

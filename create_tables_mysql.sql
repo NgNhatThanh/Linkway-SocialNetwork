@@ -44,7 +44,7 @@ CREATE TABLE comments (
   id int PRIMARY KEY auto_increment,
   post_id int references posts(id),
   author_id int references users(id),
-  content mediumtext,
+  content longtext,
   parent_id int references comments(id),
   has_child bool default 0,
   created_at datetime,

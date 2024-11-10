@@ -23,10 +23,12 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
+//    @JsonIgnore
     private User author;
 
     @Column(name = "content")
@@ -44,7 +46,7 @@ public class Comment {
     private Set<Comment> replies = new HashSet<>();
 
     @Column(name = "has_child")
-    private boolean has_child = false;
+    private boolean hasChild = false;
 
     @Column(name = "created_at")
     private Date createdAt;

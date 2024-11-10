@@ -13,6 +13,10 @@
     border: 1px solid grey;
 }
 
+.comment-content{
+    /*text-wrap: pretty;*/
+}
+
 .post-comments{
     border-radius: 5px;
     background-color: lightgray;
@@ -38,6 +42,11 @@
 
 .root-comment{
     border: 1px solid red;
+}
+
+#comment-container{
+    display: grid;
+    grid-template-columns: 95% auto;
 }
 
 .side-div{
@@ -159,6 +168,53 @@ pre {
     padding: 1em 1.5em;
     display: block;
     word-wrap: break-word;
+}
+
+.pagination {
+    display: flex;
+    padding: 0;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.pagination ul{
+    list-style: none;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/*.pagination a:hover {*/
+/*    background-color: #ddd;*/
+/*}*/
+
+.pagination .active a {
+    color: #fff;
+    background-color: #007bff;
+    cursor: default;
+}
+
+.pagination .disabled a {
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #f2f2f2;
+}
+
+.child-comments {
+    margin-left: 20px;
+    border-left: 1px solid #ddd;
+    padding-left: 10px;
 }
 
 
