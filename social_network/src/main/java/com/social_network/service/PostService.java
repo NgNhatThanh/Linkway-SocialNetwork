@@ -4,9 +4,8 @@ import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
 
 import com.social_network.entity.User;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +34,17 @@ public class PostService {
     public Page<Post> findByAuthor(User author, int page) {
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
         return postRepository.findByAuthor(author, pageable);
+    }
+
+    public Post findById(int id){
+        return postRepository.findById(id);
+    }
+
+    @Transactional
+    public void increaseView(int postId){
+        Post post = findById(postId);
+        post.setViews(post.getViews() + 1);
+        postRepository.save(post);
     }
 
 }
