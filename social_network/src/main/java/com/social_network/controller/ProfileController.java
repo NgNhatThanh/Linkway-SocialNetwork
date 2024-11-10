@@ -7,6 +7,8 @@ import java.util.stream.IntStream;
 
 import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
+
+import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.social_network.service.UserService;
 import com.social_network.util.SecurityUtil;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import com.social_network.entity.User;
@@ -178,6 +181,9 @@ public class ProfileController {
 
             if (!file.isEmpty()) {
                 currentUser.setAvatarImagePath(this.uploadService.handleSaveUploadFile(file, "avatar"));
+                // update session.avatar
+                HttpSession session = this.securityUtil.getSession();
+                session.setAttribute("avatar", currentUser.getAvatarImagePath());
             }
             this.userService.save(currentUser);
 
@@ -223,7 +229,8 @@ public class ProfileController {
         Optional<User> optionalUser = userService.findByUsername(username);
         if (followingPage < 1) {
             followingPage = 1;
-            return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+            // return "redirect:/followings/" + username + "?followingPage=" +
+            // followingPage;
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -231,6 +238,13 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followings", followings);
             int totalPages = followings.getTotalPages();
+            if (totalPages == 0) {
+                return "followings"; // Template to show followings
+            }
+            if (followingPage > totalPages) {
+                followingPage = totalPages;
+                return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()
