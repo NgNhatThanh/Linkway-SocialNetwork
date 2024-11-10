@@ -18,6 +18,24 @@
     background-color: lightgray;
 }
 
+.comment-form{
+    display: flex;
+    border: 1px solid blue;
+}
+
+.editor-extra{
+    display: block;
+}
+
+.comment-editor{
+    display: flex;
+}
+
+
+.comment-author-info{
+    display: flex;
+}
+
 .root-comment{
     border: 1px solid red;
 }

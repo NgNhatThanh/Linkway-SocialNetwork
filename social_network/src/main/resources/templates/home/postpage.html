@@ -38,12 +38,35 @@
                    th:text="*{tag.getName()}"></a>
             </div>
 
-            <div class="post-comments">
+            <div id="post-comments">
                 <h2> Bình luận: </h2>
 
-                <div class="comment-form">
+                <form th:action="@{${'/post/' + post.getId() + '/comment'}}"
+                      class="comment-form"
+                      th:object="${userComment}" method="post">
+                    <a th:href="@{${'/profile/' + session.username}}">
+                        <img th:src="@{${session.avatar}}" class="author-mini-avatar">
+                    </a>
 
-                </div>
+                    <div class="comment-editor">
+
+                        <input type="hidden" th:name="postId" th:value="${post.id}">
+
+                        <input type="hidden" th:name="authorId" th:value="${session.id}">
+
+                        <textarea placeholder="Viết bình luận..." th:field="*{content}"></textarea>
+
+                        <div class="editor-extra">
+                            <button>
+                                <i class='bx bxs-image'></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="comment-form-submit">
+                        <button type="submit"> Bình luận </button>
+                    </div>
+                </form>
 
                 <div class="comment-thread">
                     <div th:each="comment : ${rootComments}" class="root-comment">
@@ -60,7 +83,7 @@
                         </div>
 
                         <div class="comment-content">
-
+                            <p th:text="*{comment.getContent()}"></p>
                         </div>
                     </div>
                 </div>

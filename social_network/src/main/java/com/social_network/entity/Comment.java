@@ -44,7 +44,7 @@ public class Comment {
     private Set<Comment> replies = new HashSet<>();
 
     @Column(name = "has_child")
-    private boolean has_child;
+    private boolean has_child = false;
 
     @Column(name = "created_at")
     private Date createdAt;
