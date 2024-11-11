@@ -80,7 +80,6 @@ public class SecurityConfiguration {
                         .successHandler(customSuccessHandler())
                         .permitAll())
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
-
         return http.build();
     }
 }

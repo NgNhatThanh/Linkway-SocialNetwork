@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
+        <input id="csrf-token" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
         <div class="post-div">
             <div class="author-meta">
@@ -100,19 +101,19 @@
 
                         <div class="comment-vote">
                             <div class="vote-interact">
-                                <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
+                                <form th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
                                       method="post">
                                     <button type="submit">
-                                        <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
+                                        <i th:class="${comment.upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
                                     </button>
                                 </form>
                                 <p th:text="${comment.upvotes}" class="vote-count"></p>
                             </div>
 
                             <div class="vote-interact">
-                                <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
+                                <form th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"  method="post">
                                     <button type="submit">
-                                        <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
+                                        <i th:class="${comment.downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
                                     </button>
                                 </form>
                                 <p th:text="${comment.downvotes}" class="vote-count"></p>

@@ -46,6 +46,12 @@ public class PostpageController {
 
         Page<Comment> rootComments = commentService.findRootCommentsByPost(post, page);
 
+        for(Comment  comment : rootComments.stream().toList()){
+            int voteType = voteService.getUserCommentVoteType(comment.getId(), (int)request.getSession().getAttribute("id"));
+            comment.setUpvoted(voteType == 1);
+            comment.setDownvoted(voteType == -1);
+        }
+
         int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
         long authorFollowers = followService.getFollowerCount(post.getAuthor());
         model.addAttribute("post", post);
@@ -97,10 +103,37 @@ public class PostpageController {
         return "redirect:" + prevPath + "#post-comments";
     }
 
+    @PostMapping("/comment/{commentId}/{voteType}")
+    public String voteComment(@PathVariable("commentId") int commentId,
+                              @PathVariable("voteType") String voteType,
+                              HttpServletRequest request){
+        String prevPath = request.getHeader("Referer");
+        int voteChange = voteType.equals("upvote") ? 1 : -1;
+        voteService.increaseCommentVote(commentId, (int)request.getSession().getAttribute("id"), voteChange);
+        return "redirect:" + prevPath + "#post-comments";
+    }
+
+    @PostMapping("/comment/{commentId}/unvote")
+    public String unvoteComment(@PathVariable("commentId") int commentId,
+                                HttpServletRequest request){
+        String prevPath = request.getHeader("Referer");
+        voteService.unvoteComment(commentId, (int)request.getSession().getAttribute("id"));
+        return "redirect:" + prevPath + "#post-comments";
+    }
+
     @GetMapping("/comment/{parendId}/child")
     @ResponseBody
-    public List<Comment> getChildComments(@PathVariable int parendId){
-        return commentService.getChildComments(parendId);
+    public List<Comment> getChildComments(@PathVariable int parendId,
+                                HttpServletRequest request){
+
+        List<Comment> childComments = commentService.getChildComments(parendId);
+
+        for(Comment comment : childComments){
+            int voteType = voteService.getUserCommentVoteType(comment.getId(), (int)request.getSession().getAttribute("id"));
+            comment.setUpvoted(voteType == 1);
+            comment.setDownvoted(voteType == -1);
+        }
+        return childComments;
     }
 
 }

@@ -21,11 +21,19 @@ function loadChildComments(parentId){
             console.log(childComments);
             const childCommentsContainer = document.getElementById(`child-comments-${parentId}`);
             childCommentsContainer.innerHTML = '';
+
+            const csrfToken = document.getElementById('csrf-token');
+            console.log(csrfToken);
+
             childComments.forEach(comment => {
                 const commentElement = document.createElement('div');
                 commentElement.className = 'child-comment';
 
                 comment.createdAt = formatDate(new Date(comment.createdAt));
+
+                const csrfToken = document.getElementById('csrf-token');
+
+                console.log(csrfToken);
 
                 var innerAdd = `<div id="comment-container">
                                             <div class="comment-meta">
@@ -52,19 +60,22 @@ function loadChildComments(parentId){
 
                 innerAdd += `<div class="comment-vote">
                                 <div class="vote-interact">
-                                    <form action='#'
-                                          method="get">
+                                    <form action=${comment.upvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/upvote`}
+                                          method="post">
+                                          ${csrfToken.outerHTML}
                                         <button type="submit">
-                                            <i class='bx bxs-upvote'></i>
+                                            <i class="${comment.upvoted ? "bx bxs-upvote" : "bx bx-upvote"}"></i>
                                         </button>
                                     </form>
                                     <p class="vote-count">${comment.upvotes}</p>
                                 </div>
 
                                 <div class="vote-interact">
-                                    <form action="#"  method="get">
+                                    <form action=${comment.downvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/downvote`} 
+                                        method="post">
+                                        ${csrfToken.outerHTML}
                                         <button type="submit">
-                                            <i class='bx bxs-downvote'"></i>
+                                            <i class="${comment.downvoted ? "bx bxs-downvote" : "bx bx-downvote"}"></i>
                                         </button>
                                     </form>
                                     <p class="vote-count">${comment.downvotes}</p>

@@ -28,7 +28,6 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-//    @JsonIgnore
     private User author;
 
     @Column(name = "content")
@@ -59,5 +58,11 @@ public class Comment {
 
     @Formula("(SELECT COUNT(*) FROM comment_votes c WHERE c.comment_id = id AND c.vote_type = -1)")
     private int downvotes;
+
+    @Transient
+    private boolean upvoted;
+
+    @Transient
+    private boolean downvoted;
 
 }
