@@ -9,11 +9,11 @@
 
 <body>
 
-  <div th:insert="~{home/navbar.html :: navbar}" class="nav-bar">
+  <div th:insert="~{home/navbar.html :: navbar}" class="nav">
   </div>
 
   <div class="content">
-    <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side-bar">
+    <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side">
     </div>
 
     <div class="main-zone" th:replace="${content}" >

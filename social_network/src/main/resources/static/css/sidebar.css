@@ -3,17 +3,50 @@
     margin: 0;
     box-sizing: border-box;
 }
-
 .side-bar {
-    position: sticky;
-    top: 10%;
-    background-color: #f0f0f0;
+    width: 100%;
+    background-color: #fff;
     align-items: center;
     /*align-content: center;*/
     justify-content: center;
+    padding: 10px;
+}
+.options {
+    width: 100%;
+    border-bottom: 0.5px solid gray;
+}
+.options form{
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 10px;
+
+}
+.options button{
+    border: none;
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    border-radius: 10px;
+}
+.options button i{
+    font-size: 25px;
+    margin-right: 10px;
+}
+.options button span{
+    font-size: 15px;
+}
+.options button:hover{
+    background-color: #f0f0f0;
+
+}
+
+
+.following{
+    margin-top: 15px;
 }
 
 ul{
     list-style: inside;
 }
-

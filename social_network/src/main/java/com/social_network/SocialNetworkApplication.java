@@ -13,10 +13,7 @@ import java.io.FileInputStream;
 
 @SpringBootApplication
 public class SocialNetworkApplication {
-
 	public static void main(String[] args) {
-
 		SpringApplication.run(SocialNetworkApplication.class, args);
 	}
-
 }
