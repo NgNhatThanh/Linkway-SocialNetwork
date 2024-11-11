@@ -1,5 +1,6 @@
 package com.social_network.controller;
 
+import com.cloudinary.Cloudinary;
 import com.social_network.dto.request.CommentDTO;
 import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
@@ -10,14 +11,22 @@ import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
+@CrossOrigin
 public class PostpageController {
 
     private UserService userService;
@@ -34,6 +43,8 @@ public class PostpageController {
 
     private CommentService commentService;
 
+    private Cloudinary cloudinary;
+
     @GetMapping("/post/{postId}")
     public String showPostPage(@PathVariable("postId") int postId,
                                @RequestParam(value = "page", defaultValue = "1") int page,
@@ -42,6 +53,7 @@ public class PostpageController {
         postService.increaseView(postId);
         Post post = postService.findById(postId);
         String htmlContent = markdownRenderUtil.convertToHtml(post.getContent());
+        post.setHtmlContent(htmlContent);
         String currentUsername = securityUtil.getCurrentUser().getUsername();
 
         Page<Comment> rootComments = commentService.findRootCommentsByPost(post, page);
@@ -50,12 +62,14 @@ public class PostpageController {
             int voteType = voteService.getUserCommentVoteType(comment.getId(), (int)request.getSession().getAttribute("id"));
             comment.setUpvoted(voteType == 1);
             comment.setDownvoted(voteType == -1);
+
+            String commentHtmlContent = markdownRenderUtil.convertToHtml(comment.getContent());
+            comment.setHtmlContent(commentHtmlContent);
         }
 
         int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
         long authorFollowers = followService.getFollowerCount(post.getAuthor());
         model.addAttribute("post", post);
-        model.addAttribute("postContent", htmlContent);
         model.addAttribute("authorFollowers", authorFollowers);
         model.addAttribute("isCurrentUser",
                 post.getAuthor().getUsername().equals(currentUsername));
@@ -99,6 +113,10 @@ public class PostpageController {
         newComment.setAuthor(author);
         Post post = postService.findById(commentDTO.getPostId());
         newComment.setPost(post);
+        if(commentDTO.getParentId() > 0){
+            Comment parentComment = commentService.findById(commentDTO.getParentId());
+            newComment.setParentComment(parentComment);
+        }
         commentService.addComment(newComment);
         return "redirect:" + prevPath + "#post-comments";
     }
@@ -132,8 +150,25 @@ public class PostpageController {
             int voteType = voteService.getUserCommentVoteType(comment.getId(), (int)request.getSession().getAttribute("id"));
             comment.setUpvoted(voteType == 1);
             comment.setDownvoted(voteType == -1);
+
+            String htmlContent = markdownRenderUtil.convertToHtml(comment.getContent());
+            comment.setHtmlContent(htmlContent);
         }
         return childComments;
+    }
+
+    @PostMapping("/upload")
+    @ResponseBody
+    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image){
+        Map<String, String> response = new HashMap<>();
+        try {
+            String url = this.cloudinary.uploader().upload(image.getBytes(),
+                    Map.of("public_id", UUID.randomUUID().toString())).get("url").toString();
+            response.put("url", url);
+            return response;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

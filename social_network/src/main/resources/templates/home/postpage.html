@@ -12,6 +12,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
         <input id="csrf-token" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input id="current-username" type="hidden" th:name="${session.username}" th:value="${session.username}"/>
+        <input id="current-avatar" type="hidden" th:name="${session.avatar}" th:value="${session.avatar}"/>
 
         <div class="post-div">
             <div class="author-meta">
@@ -30,7 +32,7 @@
 
             <div class="post-content">
                 <h1 th:text="${post.getTitle()}"></h1>
-                <div th:utext="${postContent}"></div>
+                <div th:utext="${post.htmlContent}"></div>
             </div>
 
             <div class="post-tags">
@@ -50,29 +52,30 @@
                     </a>
 
                     <div class="comment-editor">
-
-                        <input type="hidden" th:name="postId" th:value="${post.id}">
-
-                        <input type="hidden" th:name="authorId" th:value="${session.id}">
-
+                        <input class="postIdValue" type="hidden" th:name="postId" th:value="${post.id}">
+                        <input class="authorIdValue" type="hidden" th:name="authorId" th:value="${session.id}">
+                        <input class="parentIdValue" type="hidden" th:name="parentId" th:value="-1">
                         <textarea placeholder="Viết bình luận..."
                                   th:field="*{content}"
-                                  id="comment-textarea"></textarea>
+                                  class="comment-textarea"></textarea>
 
                         <div class="editor-extra">
-                            <button type="button">
-                                <i class='bx bxs-image'></i>
-                            </button>
+                            <div>
+                                <input type="file" class="imageInput" accept="image/*" style="display: none;" onchange="uploadImage(this)">
+                                <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
+                                    <i class='bx bxs-image'></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <div id="comment-form-submit">
-                        <button disabled="true" type="submit" id="submit-button"> Bình luận </button>
+                        <button disabled="true" type="submit" class="submit-button"> Bình luận </button>
                     </div>
                 </form>
 
                 <div class="comment-thread">
-                    <div th:each="comment : ${rootComments}" class="root-comment" id="comment-container">
+                    <div th:each="comment : ${rootComments}" class="root-comment" th:id="${'comment-container-' + comment.id}">
                         <div class="comment-meta">
                             <div class="comment-author-info">
                                 <a th:href="@{${'/profile/' + comment.getAuthor().getUsername()}}">
@@ -87,7 +90,7 @@
                             </div>
 
                             <div class="comment-content">
-                                <p th:text="*{comment.getContent()}"></p>
+                                <div th:utext="*{comment.htmlContent}"></div>
                             </div>
 
                             <div th:if="${comment.hasChild}">
@@ -96,6 +99,14 @@
                                         th:id="${'get-replies-' + comment.id}"> Xem phản hồi </button>
                             </div>
 
+                            <div>
+                                <button th:onclick="'showReplyForm(' + ${comment.id} + ', ' + ${post.id} + ')'">
+                                    Phản hồi
+                                </button>
+                            </div>
+
+                            <div th:id="${'reply-form-container-' + comment.id}" class="reply-form"></div>
+
                             <div th:id="${'child-comments-'+comment.id}" class="child-comments"></div>
                         </div>
 
@@ -103,7 +114,7 @@
                             <div class="vote-interact">
                                 <form th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
                                       method="post">
-                                    <button type="submit">
+                                    <button type="submit" data-rel="back">
                                         <i th:class="${comment.upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
                                     </button>
                                 </form>
@@ -111,7 +122,8 @@
                             </div>
 
                             <div class="vote-interact">
-                                <form th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"  method="post">
+                                <form th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"
+                                      method="post">
                                     <button type="submit">
                                         <i th:class="${comment.downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
                                     </button>

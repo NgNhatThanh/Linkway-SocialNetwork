@@ -33,6 +33,9 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
+    @Transient
+    private String htmlContent;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonIgnore
@@ -44,7 +47,7 @@ public class Comment {
     @JsonIgnore
     private Set<Comment> replies = new HashSet<>();
 
-    @Column(name = "has_child")
+    @Formula("(select exists(select 1 from comments c where c.parent_id = id))")
     private boolean hasChild = false;
 
     @Column(name = "created_at")

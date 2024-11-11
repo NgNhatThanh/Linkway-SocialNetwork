@@ -40,4 +40,8 @@ public class CommentService {
         return commentRepository.findByParentComment_Id(parentId);
     }
 
+    public Comment findById(int id){
+        return commentRepository.findById(id);
+    }
+
 }

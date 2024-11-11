@@ -1,13 +1,36 @@
-const commentContent = document.getElementById('comment-textarea');
-const submitButton = document.getElementById('submit-button');
+const commentContent = document.getElementsByClassName('comment-textarea');
+const submitButton = document.getElementsByClassName('submit-button');
 
-commentContent.addEventListener('input', function() {
-    if (commentContent.value.trim() === '') {
-        submitButton.disabled = true; // Disable if empty
-    } else {
-        submitButton.disabled = false; // Enable if not empty
-    }
+commentContent[0].addEventListener('input', function() {
+    submitButton[0].disabled = commentContent[0].value.trim() === '';
 });
+
+function uploadImage(input){
+
+    const commentEditor = input.closest(".comment-editor");
+    const commentContent = commentEditor.querySelector(".comment-textarea");
+
+    var file = input.files[0];
+    if(!file || !file.type.startsWith('image/')) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const csrfToken = document.getElementById("csrf-token").value;
+
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(response => {
+            commentContent.value += `\n![](${response.url})`;
+        })
+        .catch(error => console.log("Err: " + error))
+}
 
 function loadChildComments(parentId){
 
@@ -18,12 +41,10 @@ function loadChildComments(parentId){
     fetch(`/comment/${parentId}/child`)
         .then(response => response.json())
         .then(childComments => {
-            console.log(childComments);
             const childCommentsContainer = document.getElementById(`child-comments-${parentId}`);
             childCommentsContainer.innerHTML = '';
 
             const csrfToken = document.getElementById('csrf-token');
-            console.log(csrfToken);
 
             childComments.forEach(comment => {
                 const commentElement = document.createElement('div');
@@ -31,11 +52,7 @@ function loadChildComments(parentId){
 
                 comment.createdAt = formatDate(new Date(comment.createdAt));
 
-                const csrfToken = document.getElementById('csrf-token');
-
-                console.log(csrfToken);
-
-                var innerAdd = `<div id="comment-container">
+                var innerAdd = `<div id="comment-container-${comment.id}">
                                             <div class="comment-meta">
                                                 <div class="comment-author-info">
                                                     <a href="${'/profile/' + comment.author.username}">
@@ -48,7 +65,7 @@ function loadChildComments(parentId){
                                                 </div>
     
                                                 <div class="comment-content">
-                                                    <p>${comment.content}</p>
+                                                    ${comment.htmlContent}
                                                 </div>`;
                 if(comment.hasChild){
                     innerAdd += `<button type="button" 
@@ -91,14 +108,28 @@ function loadChildComments(parentId){
 }
 
 function hideChildComments(parentId){
-
     const button = document.getElementById(`get-replies-${parentId}`);
     button.onclick = () => loadChildComments(parentId);
     button.textContent = 'Xem phản hồi';
-
     const childCommentsContainer = document.getElementById(`child-comments-${parentId}`);
-
     childCommentsContainer.innerHTML = '';
+}
+
+function showReplyForm(parentId){
+    const replyContainer = document.getElementById(`reply-form-container-${parentId}`);
+    const commentForm = (document.getElementsByClassName('comment-form'))[0].cloneNode(true);
+    const parentIdValue = commentForm.querySelector(".parentIdValue");
+    const textArea = commentForm.querySelector("textarea");
+    textArea.value = '';
+    parentIdValue.value = parentId;
+
+    const submitButton = commentForm.querySelector('.submit-button');
+    submitButton.disabled = true;
+    textArea.addEventListener('input', function() {
+        submitButton.disabled = textArea.value.trim() === '';
+    });
+    replyContainer.innerHTML = '';
+    replyContainer.appendChild(commentForm);
 }
 
 function formatDate(date) {

@@ -35,6 +35,14 @@
     display: flex;
 }
 
+.comment-content img{
+    display: block;
+    max-width: 70%;
+    max-height: 70%;
+    width: auto;
+    height: auto;
+}
+
 
 .comment-author-info{
     display: flex;
@@ -44,7 +52,7 @@
     border: 1px solid red;
 }
 
-#comment-container{
+[id^="comment-container-"]{
     display: grid;
     grid-template-columns: 95% auto;
 }
@@ -212,6 +220,12 @@ pre {
 }
 
 .child-comments {
+    margin-left: 20px;
+    border-left: 1px solid #ddd;
+    padding-left: 10px;
+}
+
+.reply-form{
     margin-left: 20px;
     border-left: 1px solid #ddd;
     padding-left: 10px;

@@ -30,6 +30,9 @@ public class Post {
     @Column(name = "content")
     private String content;
 
+    @Transient
+    private String htmlContent;
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
