@@ -38,7 +38,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment"

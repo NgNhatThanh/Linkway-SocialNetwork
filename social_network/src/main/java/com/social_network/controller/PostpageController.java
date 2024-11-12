@@ -11,18 +11,13 @@ import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
@@ -67,6 +62,8 @@ public class PostpageController {
             comment.setHtmlContent(commentHtmlContent);
         }
 
+        List<Post> coauthorPosts = postService.getRandowPostsByAuthor(post.getAuthor(), 3);
+
         int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
         long authorFollowers = followService.getFollowerCount(post.getAuthor());
         model.addAttribute("post", post);
@@ -81,6 +78,7 @@ public class PostpageController {
         model.addAttribute("userComment", new CommentDTO());
         model.addAttribute("rootComments" ,rootComments);
         model.addAttribute("currentPage", page);
+        model.addAttribute("coauthorPosts", coauthorPosts);
         return "home/postpage";
     }
 
@@ -107,17 +105,28 @@ public class PostpageController {
                           @ModelAttribute("userComment") CommentDTO commentDTO,
                           HttpServletRequest request){
         String prevPath = request.getHeader("Referer");
-        Comment newComment = new Comment();
-        newComment.setContent(commentDTO.getContent());
-        User author = userService.findById(commentDTO.getAuthorId());
-        newComment.setAuthor(author);
-        Post post = postService.findById(commentDTO.getPostId());
-        newComment.setPost(post);
-        if(commentDTO.getParentId() > 0){
-            Comment parentComment = commentService.findById(commentDTO.getParentId());
-            newComment.setParentComment(parentComment);
+
+        Comment newComment;
+
+        if(commentDTO.getId() > 0){
+            newComment = commentService.findById(commentDTO.getId());
+            newComment.setContent(commentDTO.getContent());
+            newComment.setWasUpdated(true);
         }
-        commentService.addComment(newComment);
+        else{
+            newComment = new Comment();
+            newComment.setCreatedAt(Date.from(Instant.now()));
+            newComment.setContent(commentDTO.getContent());
+            User author = userService.findById(commentDTO.getAuthorId());
+            newComment.setAuthor(author);
+            Post post = postService.findById(commentDTO.getPostId());
+            newComment.setPost(post);
+            if(commentDTO.getParentId() > 0){
+                Comment parentComment = commentService.findById(commentDTO.getParentId());
+                newComment.setParentComment(parentComment);
+            }
+        }
+        commentService.saveComment(newComment);
         return "redirect:" + prevPath + "#post-comments";
     }
 
@@ -157,26 +166,19 @@ public class PostpageController {
         return childComments;
     }
 
-    @PostMapping("/upload")
+    @PostMapping("/transfer")
     @ResponseBody
-    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image){
-        Map<String, String> response = new HashMap<>();
-        try {
-            String url = this.cloudinary.uploader().upload(image.getBytes(),
-                    Map.of("public_id", UUID.randomUUID().toString())).get("url").toString();
-            response.put("url", url);
-            return response;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @PostMapping("/preview")
-    @ResponseBody
-    public String showCommentPreview(@RequestBody String content){
+    public String tranferToHtmlContent(@RequestBody String content){
         String htmlContent = markdownRenderUtil.convertToHtml(content);
         System.out.println("ABCDEF: " + content);
         return htmlContent;
+    }
+
+    @GetMapping("/comment/{commentId}")
+    @ResponseBody
+    public Comment getCommentById(@PathVariable int commentId){
+        Comment comment = commentService.findById(commentId);
+        return comment;
     }
 
 }

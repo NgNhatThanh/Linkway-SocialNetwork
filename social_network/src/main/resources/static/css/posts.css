@@ -36,6 +36,11 @@
 }
 
 .post-title{
+    display: -webkit-box;      /* Flex layout that works for truncating */
+    -webkit-line-clamp: 2;     /* Number of lines to show */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
     font-size: 20px;
     font-weight: bold;
 }

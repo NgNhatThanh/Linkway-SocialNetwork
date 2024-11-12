@@ -3,7 +3,6 @@ package com.social_network.service;
 import com.social_network.dao.CommentRepository;
 import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
-import jakarta.persistence.Transient;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,8 +30,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void addComment(Comment comment){
-        comment.setCreatedAt(Date.from(Instant.now()));
+    public void saveComment(Comment comment){
         commentRepository.save(comment);
     }
 

@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 public class CommentDTO {
 
+    private int id;
+
     private int postId;
 
     private int parentId;

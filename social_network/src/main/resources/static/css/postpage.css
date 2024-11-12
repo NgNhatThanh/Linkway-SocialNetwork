@@ -13,6 +13,11 @@
     border: 1px solid grey;
 }
 
+.comment-meta{
+    display: grid;
+    grid-template-columns: 95% auto;
+}
+
 .comment-content{
     /*text-wrap: pretty;*/
 }
@@ -53,8 +58,6 @@
 }
 
 [id^="comment-container-"]{
-    display: grid;
-    grid-template-columns: 95% auto;
 }
 
 .side-div{

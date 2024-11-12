@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @AllArgsConstructor
@@ -19,20 +20,18 @@ public class UploadController {
 
     private Cloudinary cloudinary;
 
-//    @PostMapping("/upload")
-//    @ResponseBody
-//    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image){
-////        try {
-////            Map r = this.cloudinary.uploader().upload(image.getBytes(),
-////                    ObjectUtils.asMap("resource_type", "auto"));
-////            return (String) r.get("secure_url");
-////        } catch (IOException e) {
-////            throw new RuntimeException(e);
-////        }
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("url", "afdf");
-//        return response;
-//    }
+    @PostMapping("/upload")
+    @ResponseBody
+    public Map<String, String> uploadImage(@RequestParam("image") MultipartFile image){
+        Map<String, String> response = new HashMap<>();
+        try {
+            String url = this.cloudinary.uploader().upload(image.getBytes(),
+                    Map.of("public_id", UUID.randomUUID().toString())).get("url").toString();
+            response.put("url", url);
+            return response;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

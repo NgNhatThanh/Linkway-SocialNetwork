@@ -45,6 +45,9 @@ function loadChildComments(parentId){
             childCommentsContainer.innerHTML = '';
 
             const csrfToken = document.getElementById('csrf-token');
+            const currentUsername = document.getElementById('current-username').value;
+
+            childComments.reverse();
 
             childComments.forEach(comment => {
                 const commentElement = document.createElement('div');
@@ -54,59 +57,73 @@ function loadChildComments(parentId){
 
                 var innerAdd = `<div id="comment-container-${comment.id}">
                                             <div class="comment-meta">
-                                                <div class="comment-author-info">
-                                                    <a href="${'/profile/' + comment.author.username}">
-                                                        <img src="${comment.author.avatarImagePath}" class="author-mini-avatar">
-                                                    </a>
-                                                    <div>
-                                                        <p class="date">${comment.createdAt}</p>
-                                                        <a href="${'/profile/' + comment.author.username}">${comment.author.displayName}</a>
+                                                <div class="comment-info">
+                                                    <div class="comment-author-info">
+                                                        <a href="${'/profile/' + comment.author.username}">
+                                                            <img src="${comment.author.avatarImagePath}" class="author-mini-avatar">
+                                                        </a>
+                                                        <div>
+                                                            <p class="date">${comment.createdAt}</p>
+                                                            <a href="${'/profile/' + comment.author.username}">${comment.author.displayName}</a>
+                                                        </div>
+                                                    </div>
+        
+                                                    <div class="comment-content">
+                                                        ${comment.htmlContent}
                                                     </div>
                                                 </div>
-    
-                                                <div class="comment-content">
-                                                    ${comment.htmlContent}
-                                                </div>`;
+
+                                                <div class="comment-vote">
+                                                    <div class="vote-interact">
+                                                        <form action=${comment.upvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/upvote`}
+                                                              method="post">
+                                                              ${csrfToken.outerHTML}
+                                                            <button type="submit">
+                                                                <i class="${comment.upvoted ? "bx bxs-upvote" : "bx bx-upvote"}"></i>
+                                                            </button>
+                                                        </form>
+                                                        <p class="vote-count">${comment.upvotes}</p>
+                                                    </div>
+
+                                                    <div class="vote-interact">
+                                                        <form action=${comment.downvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/downvote`} 
+                                                            method="post">
+                                                            ${csrfToken.outerHTML}
+                                                            <button type="submit">
+                                                                <i class="${comment.downvoted ? "bx bxs-downvote" : "bx bx-downvote"}"></i>
+                                                            </button>
+                                                        </form>
+                                                        <p class="vote-count">${comment.downvotes}</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="comment-option-buttons">
+                                            `;
                 if(comment.hasChild){
                     innerAdd += `<button type="button" 
                                 onclick=loadChildComments(${comment.id})
                                 id=get-replies-${comment.id}> Xem Phản hồi </button>`;
                 }
 
-                innerAdd += `<div>
-                                <button onclick='showReplyForm(${comment.id})'>
+                innerAdd += `<button onclick='showReplyForm(${comment.id})'>
                                     Phản hồi
-                                </button>
-                            </div>`;
+                             </button>`;
+
+                if(comment.author.username === currentUsername){
+                    innerAdd += `<button onclick=showCommentEditForm(${comment.id})>
+                                    Chỉnh sửa
+                                 </button>`;
+                }
+
+                innerAdd += `</div>
+                        </div>`;
 
                 innerAdd += `
                             <div id="${'reply-form-container-' + comment.id}" class="reply-form"></div>
                             <div id="${'child-comments-'+comment.id}" class="child-comments"></div>
                         </div>`;
 
-                innerAdd += `<div class="comment-vote">
-                                <div class="vote-interact">
-                                    <form action=${comment.upvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/upvote`}
-                                          method="post">
-                                          ${csrfToken.outerHTML}
-                                        <button type="submit">
-                                            <i class="${comment.upvoted ? "bx bxs-upvote" : "bx bx-upvote"}"></i>
-                                        </button>
-                                    </form>
-                                    <p class="vote-count">${comment.upvotes}</p>
-                                </div>
-
-                                <div class="vote-interact">
-                                    <form action=${comment.downvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/downvote`} 
-                                        method="post">
-                                        ${csrfToken.outerHTML}
-                                        <button type="submit">
-                                            <i class="${comment.downvoted ? "bx bxs-downvote" : "bx bx-downvote"}"></i>
-                                        </button>
-                                    </form>
-                                    <p class="vote-count">${comment.downvotes}</p>
-                                </div>
-                            </div>
+                innerAdd += `
                         </div>`;
 
                 commentElement.innerHTML = innerAdd;
@@ -130,6 +147,7 @@ function showReplyForm(parentId){
     const parentIdValue = commentForm.querySelector(".parentIdValue");
     const textArea = commentForm.querySelector("textarea");
     textArea.value = '';
+    textArea.placeholder = 'Viết phản hồi...'
     parentIdValue.value = parentId;
 
     const submitButton = commentForm.querySelector('.submit-button');
@@ -147,7 +165,8 @@ function showReplyForm(parentId){
 }
 
 function showPreview(button, content){
-    fetch('/preview', {
+    if(content.trim() === '') return;
+    fetch('/transfer', {
         method: 'POST',
         body: content,
         headers: {
@@ -161,6 +180,55 @@ function showPreview(button, content){
         })
 }
 
+function showCommentEditForm(commentId){
+    const commentForm = (document.getElementsByClassName('comment-form-all'))[0].cloneNode(true);
+    const commentContainer = document.getElementById(`comment-container-${commentId}`);
+    const commentMeta = commentContainer.querySelector('.comment-meta');
+
+    var oldComment;
+
+    fetch(`/comment/${commentId}`, {
+        method: "GET",
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(comment => {
+            oldComment = comment;
+            const textArea = commentForm.querySelector('textarea');
+
+            textArea.value = oldComment.content;
+            const parentIdValue = commentForm.querySelector(".parentIdValue");
+            parentIdValue.value = comment.parentComment === null ? -1 : comment.parentComment.id;
+
+            const commentIdValue = document.createElement('input');
+            commentIdValue.name = 'id';
+            commentIdValue.type = 'hidden';
+            commentIdValue.value = commentId;
+            commentIdValue.className = 'commentIdValue';
+            commentForm.querySelector('.comment-editor').appendChild(commentIdValue);
+
+            const exitButton = document.createElement('button');
+            exitButton.textContent = 'Hủy';
+            exitButton.onclick = function (){
+                const container = document.getElementById(`comment-container-${commentId}`);
+                container.removeChild(commentForm);
+                container.appendChild(commentMeta);
+            }
+            commentForm.appendChild(exitButton) ;
+
+            const submitButton = commentForm.querySelector('.submit-button');
+            submitButton.disabled = true;
+            textArea.addEventListener('input', function() {
+                submitButton.disabled = textArea.value.trim() === '';
+            });
+
+            commentContainer.removeChild(commentMeta);
+            commentContainer.appendChild(commentForm);
+        })
+        .catch(error => console.log("Error: " + error));
+}
 
 function formatDate(date) {
     const year = date.getFullYear();
