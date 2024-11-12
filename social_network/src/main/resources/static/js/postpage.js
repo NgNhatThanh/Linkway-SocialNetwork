@@ -5,6 +5,8 @@ commentContent[0].addEventListener('input', function() {
     submitButton[0].disabled = commentContent[0].value.trim() === '';
 });
 
+const csrfToken = document.getElementById("csrf-token").value;
+
 function uploadImage(input){
 
     const commentEditor = input.closest(".comment-editor");
@@ -15,8 +17,6 @@ function uploadImage(input){
 
     const formData = new FormData();
     formData.append('image', file);
-
-    const csrfToken = document.getElementById("csrf-token").value;
 
     fetch('/upload', {
         method: 'POST',
@@ -60,7 +60,7 @@ function loadChildComments(parentId){
                                                     </a>
                                                     <div>
                                                         <p class="date">${comment.createdAt}</p>
-                                                        <a href="${'/profile/' + comment.author.username}">${comment.author.username}</a>
+                                                        <a href="${'/profile/' + comment.author.username}">${comment.author.displayName}</a>
                                                     </div>
                                                 </div>
     
@@ -72,7 +72,16 @@ function loadChildComments(parentId){
                                 onclick=loadChildComments(${comment.id})
                                 id=get-replies-${comment.id}> Xem Phản hồi </button>`;
                 }
-                innerAdd += `<div id="${'child-comments-'+comment.id}" class="child-comments"></div>
+
+                innerAdd += `<div>
+                                <button onclick='showReplyForm(${comment.id})'>
+                                    Phản hồi
+                                </button>
+                            </div>`;
+
+                innerAdd += `
+                            <div id="${'reply-form-container-' + comment.id}" class="reply-form"></div>
+                            <div id="${'child-comments-'+comment.id}" class="child-comments"></div>
                         </div>`;
 
                 innerAdd += `<div class="comment-vote">
@@ -117,7 +126,7 @@ function hideChildComments(parentId){
 
 function showReplyForm(parentId){
     const replyContainer = document.getElementById(`reply-form-container-${parentId}`);
-    const commentForm = (document.getElementsByClassName('comment-form'))[0].cloneNode(true);
+    const commentForm = (document.getElementsByClassName('comment-form-all'))[0].cloneNode(true);
     const parentIdValue = commentForm.querySelector(".parentIdValue");
     const textArea = commentForm.querySelector("textarea");
     textArea.value = '';
@@ -128,9 +137,30 @@ function showReplyForm(parentId){
     textArea.addEventListener('input', function() {
         submitButton.disabled = textArea.value.trim() === '';
     });
+
+    previewContainer = commentForm.querySelector('.preview-container');
+    previewContainer.innerHTML = '';
+
     replyContainer.innerHTML = '';
     replyContainer.appendChild(commentForm);
+    replyContainer.appendChild()
 }
+
+function showPreview(button, content){
+    fetch('/preview', {
+        method: 'POST',
+        body: content,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => response.text())
+        .then(html => {
+            const container = button.closest('.comment-form-all').querySelector('.preview-container');
+            container.innerHTML = html;
+        })
+}
+
 
 function formatDate(date) {
     const year = date.getFullYear();

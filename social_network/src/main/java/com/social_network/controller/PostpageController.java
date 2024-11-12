@@ -171,4 +171,12 @@ public class PostpageController {
         }
     }
 
+    @PostMapping("/preview")
+    @ResponseBody
+    public String showCommentPreview(@RequestBody String content){
+        String htmlContent = markdownRenderUtil.convertToHtml(content);
+        System.out.println("ABCDEF: " + content);
+        return htmlContent;
+    }
+
 }

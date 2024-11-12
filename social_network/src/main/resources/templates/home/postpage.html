@@ -44,35 +44,46 @@
             <div id="post-comments">
                 <h2> Bình luận: </h2>
 
-                <form th:action="@{${'/post/' + post.getId() + '/comment'}}"
-                      class="comment-form"
-                      th:object="${userComment}" method="post">
-                    <a th:href="@{${'/profile/' + session.username}}">
-                        <img th:src="@{${session.avatar}}" class="author-mini-avatar">
-                    </a>
+                <div class="comment-form-all">
+                    <form th:action="@{${'/post/' + post.getId() + '/comment'}}"
+                          class="comment-form"
+                          th:object="${userComment}" method="post">
+                        <a th:href="@{${'/profile/' + session.username}}">
+                            <img th:src="@{${session.avatar}}" class="author-mini-avatar">
+                        </a>
 
-                    <div class="comment-editor">
-                        <input class="postIdValue" type="hidden" th:name="postId" th:value="${post.id}">
-                        <input class="authorIdValue" type="hidden" th:name="authorId" th:value="${session.id}">
-                        <input class="parentIdValue" type="hidden" th:name="parentId" th:value="-1">
-                        <textarea placeholder="Viết bình luận..."
-                                  th:field="*{content}"
-                                  class="comment-textarea"></textarea>
+                        <div class="comment-editor">
+                            <input class="postIdValue" type="hidden" th:name="postId" th:value="${post.id}">
+                            <input class="authorIdValue" type="hidden" th:name="authorId" th:value="${session.id}">
+                            <input class="parentIdValue" type="hidden" th:name="parentId" th:value="-1">
+                            <textarea placeholder="Viết bình luận..."
+                                      th:field="*{content}"
+                                      class="comment-textarea"></textarea>
 
-                        <div class="editor-extra">
-                            <div>
-                                <input type="file" class="imageInput" accept="image/*" style="display: none;" onchange="uploadImage(this)">
-                                <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
-                                    <i class='bx bxs-image'></i>
-                                </button>
+                            <div class="editor-extra">
+                                <div>
+                                    <input type="file" class="imageInput" accept="image/*" style="display: none;" onchange="uploadImage(this)">
+                                    <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
+                                        <i class='bx bxs-image'></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div id="comment-form-submit">
-                        <button disabled="true" type="submit" class="submit-button"> Bình luận </button>
+                        <div id="comment-form-submit">
+                            <button disabled="true" type="submit" class="submit-button"> Bình luận </button>
+                        </div>
+
+                        <button type="button"
+                                onclick="showPreview(this, this.closest('form').querySelector('.comment-textarea').value)">
+                            Xem trước
+                        </button>
+                    </form>
+
+                    <div class="preview-container">
                     </div>
-                </form>
+                </div>
+
 
                 <div class="comment-thread">
                     <div th:each="comment : ${rootComments}" class="root-comment" th:id="${'comment-container-' + comment.id}">
@@ -100,7 +111,7 @@
                             </div>
 
                             <div>
-                                <button th:onclick="'showReplyForm(' + ${comment.id} + ', ' + ${post.id} + ')'">
+                                <button th:onclick="'showReplyForm(' + ${comment.id} + ')'">
                                     Phản hồi
                                 </button>
                             </div>
@@ -118,7 +129,7 @@
                                         <i th:class="${comment.upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
                                     </button>
                                 </form>
-                                <p th:text="${comment.upvotes}" class="vote-count"></p>
+                                <p th:text="${comment.upvotes}" class="upvote-count"></p>
                             </div>
 
                             <div class="vote-interact">
@@ -128,7 +139,7 @@
                                         <i th:class="${comment.downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
                                     </button>
                                 </form>
-                                <p th:text="${comment.downvotes}" class="vote-count"></p>
+                                <p th:text="${comment.downvotes}" class="downvote-count"></p>
                             </div>
                         </div>
                     </div>
@@ -177,7 +188,7 @@
                             <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>
                         </button>
                     </form>
-                    <p th:text="${post.getUpvotes()}" class="vote-count"></p>
+                    <p th:text="${post.getUpvotes()}" class="upvote-count"></p>
                 </div>
 
                 <div class="vote-interact">
@@ -186,7 +197,7 @@
                             <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>
                         </button>
                     </form>
-                    <p th:text="${post.getDownvotes()}" class="vote-count"></p>
+                    <p th:text="${post.getDownvotes()}" class="downvote-count"></p>
                 </div>
 
 
