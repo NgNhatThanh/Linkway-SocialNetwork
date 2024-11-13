@@ -1,6 +1,9 @@
 .main-zone {
     flex: 1;
-    background-color: #e0e0e0;
+    background-color: white;
     align-items: center;
     justify-content: center;
+    margin-left: 80px;
+    margin-top: 15px;
+    margin-right: 350px;
 }
