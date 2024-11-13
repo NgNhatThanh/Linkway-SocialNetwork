@@ -85,6 +85,7 @@
 .post-image{
     width: 100%;
     border-radius: 15px;
+    margin-bottom: 7px;
 }
 .post-image img{
     width: 100%;
