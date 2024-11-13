@@ -27,7 +27,7 @@ public class UploadController {
         try {
             String url = this.cloudinary.uploader().upload(image.getBytes(),
                     Map.of("public_id", UUID.randomUUID().toString())).get("url").toString();
-            response.put("url", url);
+            response.put("imageUrl", url);
             return response;
         } catch (IOException e) {
             throw new RuntimeException(e);

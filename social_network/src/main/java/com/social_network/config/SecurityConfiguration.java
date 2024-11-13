@@ -17,7 +17,7 @@ import org.springframework.session.security.web.authentication.SpringSessionReme
 import jakarta.servlet.DispatcherType;
 
 @Configuration
-//@EnableMethodSecurity(securedEnabled = true)
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
     @Bean

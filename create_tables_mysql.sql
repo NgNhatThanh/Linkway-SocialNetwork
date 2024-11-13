@@ -46,7 +46,6 @@ CREATE TABLE comments (
   author_id int references users(id),
   content longtext,
   parent_id int references comments(id),
-  has_child bool default 0,
   created_at datetime,
   was_updated bool
 );

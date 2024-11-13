@@ -27,7 +27,7 @@ function uploadImage(input){
     })
         .then(response => response.json())
         .then(response => {
-            commentContent.value += `\n![](${response.url})`;
+            commentContent.value += `\n![](${response.imageUrl})`;
         })
         .catch(error => console.log("Err: " + error))
 }

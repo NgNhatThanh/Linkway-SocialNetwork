@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main class="create-post-zone">
+        <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+        <link rel="stylesheet" th:href="@{/css/editpost.css}">
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+
+        <form th:action="@{/post/update}"
+            method="post"
+            th:object="${postDTO}">
+
+            <div style="display: flex">
+                <textarea class="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
+                <button type="submit" onclick="prepareTagsForSubmit()">
+                    Đăng bài
+                </button>
+            </div>
+
+            <div id="tag-input-container">
+                <input type="text" id="tag-input" placeholder="Add a tag" onkeydown="addTag(event)">
+                <div id="tags-display"></div>
+            </div>
+
+            <div id="hidden-tags"></div>
+
+            <textarea id="post-editor" th:field="*{content}" th:value="*{content}"></textarea>
+        </form>
+
+        <script th:src="@{/js/editpost.js}"></script>
+    </main>
+</body>
+</html>

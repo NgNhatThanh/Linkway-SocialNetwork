@@ -11,9 +11,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script>hljs.highlightAll();</script>
-        <input id="csrf-token" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <input id="current-username" type="hidden" th:name="${session.username}" th:value="${session.username}"/>
-        <input id="current-avatar" type="hidden" th:name="${session.avatar}" th:value="${session.avatar}"/>
         <link rel="stylesheet" th:href="@{/css/posts.css}">
 
         <div class="post-div">
