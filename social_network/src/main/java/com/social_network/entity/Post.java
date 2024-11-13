@@ -9,10 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -44,7 +41,7 @@ public class Post {
     private Date updatedAt;
 
     @ManyToMany(mappedBy = "posts")
-    private Set<Tag> tags = new HashSet<>();
+    private List<Tag> tags;
 
     @Column(name = "views")
     private int views;

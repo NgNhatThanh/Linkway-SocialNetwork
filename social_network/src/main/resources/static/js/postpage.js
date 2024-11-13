@@ -38,7 +38,7 @@ function loadChildComments(parentId){
     button.onclick = () => hideChildComments(parentId);
     button.textContent = 'Ẩn phản hồi';
 
-    fetch(`/comment/${parentId}/child`)
+    fetch(`/api/comment/${parentId}/child`)
         .then(response => response.json())
         .then(childComments => {
             const childCommentsContainer = document.getElementById(`child-comments-${parentId}`);
@@ -186,7 +186,7 @@ function showCommentEditForm(commentId){
 
     var oldComment;
 
-    fetch(`/comment/${commentId}`, {
+    fetch(`/api/comment/${commentId}`, {
         method: "GET",
         headers: {
             'X-CSRF-TOKEN': csrfToken

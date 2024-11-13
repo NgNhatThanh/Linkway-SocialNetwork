@@ -19,4 +19,8 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
                 "on tags.id = t.tag_id")
     List<Tag> findFollowingTagsByUserId(int id);
 
+    List<Tag> findAll();
+
+    Tag findByName(String name);
+
 }

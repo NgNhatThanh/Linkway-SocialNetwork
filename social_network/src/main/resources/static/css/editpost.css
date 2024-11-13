@@ -3,14 +3,26 @@
     width: 300px;
 }
 
+.error{
+    color: darkred;
+}
+
+#post-title{
+    width: 85%;
+    font-size: 16px;
+    padding: 10px;
+    resize: none;
+}
+
 #tag-input {
     width: 100%;
     padding: 10px;
     font-size: 16px;
+    resize: none;
 }
 
 .suggestions {
-    position: absolute;
+    /*position: absolute;*/
     top: 100%;
     width: 100%;
     border: 1px solid #ddd;

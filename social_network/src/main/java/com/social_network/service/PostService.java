@@ -22,6 +22,10 @@ public class PostService {
 
     private PostRepository postRepository;
 
+    public Post save(Post post) {
+        return postRepository.save(post);
+    }
+
     public Page<Post> getAll(int page) {
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
         return postRepository.findAll(pageable);

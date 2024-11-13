@@ -1,5 +1,6 @@
 package com.social_network.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +26,7 @@ public class Tag {
     @JoinTable(name = "posts_tags"
                 , joinColumns = @JoinColumn(name = "tag_id")
                 , inverseJoinColumns = @JoinColumn(name = "post_id"))
+    @JsonIgnore
     private Set<Post> posts = new HashSet<>();
 
 }

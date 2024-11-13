@@ -148,7 +148,7 @@ public class PostpageController {
         return "redirect:" + prevPath + "#post-comments";
     }
 
-    @GetMapping("/comment/{parendId}/child")
+    @GetMapping("/api/comment/{parendId}/child")
     @ResponseBody
     public List<Comment> getChildComments(@PathVariable int parendId,
                                 HttpServletRequest request){
@@ -174,7 +174,7 @@ public class PostpageController {
         return htmlContent;
     }
 
-    @GetMapping("/comment/{commentId}")
+    @GetMapping("/api/comment/{commentId}")
     @ResponseBody
     public Comment getCommentById(@PathVariable int commentId){
         Comment comment = commentService.findById(commentId);

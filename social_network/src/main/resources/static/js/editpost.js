@@ -1,8 +1,22 @@
 
 const csrfToken = document.getElementById('csrf-token').value;
 
+const availableTags = [];
+
+fetch('/api/tags')
+    .then(response => response.json())
+    .then(tagList => {
+        tagList.forEach(tag => {
+            availableTags.push(tag.name);
+        })
+        availableTags.sort();
+    })
+    .catch(error => {
+        console.log(error);
+    });
+
 const easyMDE = new EasyMDE({
-    element: document.getElementById('post-editor'),
+    element: document.getElementById('post-content'),
     placeholder: 'Nội dung',
     uploadImage: true,
     toolbar: [
@@ -32,53 +46,89 @@ const easyMDE = new EasyMDE({
     }
 });
 
-let tags = [];
+let addedTags = [];
 
+const tagInput = document.getElementById("tag-input");
+const tagSuggestions = document.getElementById("tag-suggestions");
 
+tagInput.addEventListener("input", function() {
+    const query = tagInput.value.split(" ").pop(); // Get the current word
+    tagSuggestions.innerHTML = ""; // Clear previous suggestions
 
-function addTag(event) {
-    const input = document.getElementById('tag-input');
-    if (event.key === 'Enter' && input.value.trim()) {
-        event.preventDefault();
-        const newTag = input.value.trim();
-
-        // Ensure no duplicates and max of 5 tags
-        if (!tags.includes(newTag) && tags.length < 5) {
-            tags.push(newTag);
-            input.value = '';
-            renderTags();
-        }
-        if(tags.length === 5){
-            input.disabled = true;
-        }
+    if (query.length > 0) {
+        const matchedTags = availableTags.filter(tag => tag.toLowerCase().includes(query.toLowerCase()));
+        matchedTags.forEach(tag => {
+            const suggestion = document.createElement("div");
+            suggestion.className = "suggestion-item";
+            suggestion.innerText = tag;
+            suggestion.onclick = () => selectTag(tag);
+            tagSuggestions.appendChild(suggestion);
+        });
     }
+});
+
+function selectTag(tag){
+    tagInput.value = '';
+    addedTags.push(tag);
+    var idx = availableTags.indexOf(tag);
+    availableTags.splice(idx, 1);
+    tagSuggestions.innerHTML = '';
+    if(addedTags.length == 5) tagInput.disabled = true;
+    renderTags();
 }
 
 function renderTags() {
     const tagsDisplay = document.getElementById('tags-display');
     tagsDisplay.innerHTML = '';
 
-    tags.forEach((tag, index) => {
+    addedTags.forEach((tag, index) => {
         const tagElement = document.createElement('span');
         tagElement.className = 'tag';
         tagElement.innerText = tag;
-        tagElement.onclick = () => removeTag(index);
+        tagElement.onclick = () => removeTag(tag, index);
         tagsDisplay.appendChild(tagElement);
     });
 }
 
-function removeTag(index) {
-    tags.splice(index, 1);
+function removeTag(tag, index) {
+    addedTags.splice(index, 1);
+    availableTags.push(tag);
     const input = document.getElementById('tag-input');
     input.disabled = false;
     renderTags();
+}
+
+document.getElementById('submit-button').addEventListener('click', function (event){
+    const title = document.getElementById('post-title').value.trim();
+    const content = easyMDE.value().trim();
+    if(title.length > 0 && content.length > 0 && addedTags.length > 0) prepareTagsForSubmit();
+    else{
+        event.preventDefault();
+        if(title.length === 0){
+            showErrorMessage('post-title', 'Tiêu đề không được trống');
+        }
+        if(content.length === 0){
+            showErrorMessage('post-content', 'Nội dung không được trống');
+        }
+        if(addedTags.length === 0){
+            showErrorMessage('tag-input', 'Bài viết cần có tối thiểu 1 thẻ');
+        }
+    }
+});
+
+function showErrorMessage(id, message){
+    const error = document.createElement('p');
+    error.className = 'error';
+    error.textContent = message;
+    const tx = document.getElementById(id);
+    tx.parentNode.insertBefore(error, tx);
 }
 
 function prepareTagsForSubmit() {
     const hiddenTagsContainer = document.getElementById('hidden-tags');
     hiddenTagsContainer.innerHTML = ''; // Clear previous hidden inputs
 
-    tags.forEach(tag => {
+    addedTags.forEach(tag => {
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'tagNames';
