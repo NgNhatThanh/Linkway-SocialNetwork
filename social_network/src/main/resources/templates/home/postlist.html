@@ -29,7 +29,9 @@
                     <a th:href="@{#}" th:each="tag : ${post.getTags()}" class="post-tag" th:text="*{tag.getName()}">
                     </a>
                 </div>
-                <-- Nếu có ảnh nhét vô dei-->
+                <div class="post-image">
+                    <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>
+                </div>
                 <div class="post-stats">
                     <div class="vote-group">
                         <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>

@@ -82,6 +82,14 @@
     cursor: pointer;                 /* Pointer cursor on hover */
 }
 
+.post-image{
+    width: 100%;
+    border-radius: 15px;
+}
+.post-image img{
+    width: 100%;
+    border-radius: 15px;
+}
 
 .post-stats {
     display: flex;
