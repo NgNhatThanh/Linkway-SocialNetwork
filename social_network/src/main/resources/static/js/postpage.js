@@ -161,7 +161,6 @@ function showReplyForm(parentId){
 
     replyContainer.innerHTML = '';
     replyContainer.appendChild(commentForm);
-    replyContainer.appendChild()
 }
 
 function showPreview(button, content){
@@ -213,8 +212,7 @@ function showCommentEditForm(commentId){
             exitButton.textContent = 'Hủy';
             exitButton.onclick = function (){
                 const container = document.getElementById(`comment-container-${commentId}`);
-                container.removeChild(commentForm);
-                container.appendChild(commentMeta);
+                commentForm.replaceWith(commentMeta);
             }
             commentForm.appendChild(exitButton) ;
 
@@ -224,8 +222,10 @@ function showCommentEditForm(commentId){
                 submitButton.disabled = textArea.value.trim() === '';
             });
 
-            commentContainer.removeChild(commentMeta);
-            commentContainer.appendChild(commentForm);
+            commentMeta.replaceWith(commentForm);
+
+            // commentContainer.removeChild(commentMeta);
+            // commentContainer.appendChild(commentForm);
         })
         .catch(error => console.log("Error: " + error));
 }
