@@ -99,7 +99,7 @@ body{
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 38px;
+    top: 40px;
     right: 0px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -110,25 +110,38 @@ body{
 }
 .menu-item{
     display: block;
-    padding: 10px 15px;
+    padding: 7px 15px;
     font-size: 15px;
 }
 .icon{
-    width: 20px;
-    height: 20px;
     margin-right: 10px;
-    font-size: 12px;
+    font-size: 20px;
 }
 .dropdown-item {
-    padding: 12px 16px;
+    font-size: 15px;
+    padding: 8px 16px;
     color: #333;
     text-decoration: none;
     display :flex;
+    align-item: center;
+    border-radius: 15px;
 }
 .dropdown-item:hover {
     background-color: #f3f3f3;
+    cursor: pointer;
 }
-.btn{
+
+.dropdown-item .btn-logout:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+
+}
+.btn-logout{
     border: none;
-    background: white;
+    background: none;
+    display:flex;
+    align-item: center;
+    font-size: 15px;
+    color: #333;
+    border-radius: 15px;
 }

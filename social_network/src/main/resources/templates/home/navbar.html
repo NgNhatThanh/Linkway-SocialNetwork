@@ -46,9 +46,11 @@
                         </div>
                         <div class="menu-item">
                             <form th:action="@{/logout}" method="post" class="dropdown-item">
-                                <i class='bx bx-log-out bx-rotate-180 icon'></i>
-                                <button class="btn" type="submit">Đăng xuất</button>
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button class="btn-logout" type="submit">
+                                    <i class='bx bx-exit icon'  ></i>
+                                    <span>Đăng xuất</span>
+                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                </button>
                             </form>
                         </div>
                     </div>
