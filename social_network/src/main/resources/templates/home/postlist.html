@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
     <div th:fragment="post-section">
         <link rel="stylesheet" th:href="@{/css/posts.css}">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <div th:each="post : ${postList}" class="post-item">
 
-            <a th:href="@{*{'/profile/' + post.getAuthor().getUsername()}}">
-                <img th:src="@{*{post.getAuthor().getAvatarImagePath()}}" class="author-avatar">
-            </a>
+
 
             <div class="post-info">
-                <div style="display: flex">
-                    <a th:href="@{*{'/profile/' + post.getAuthor().getUsername()}}" th:text="*{post.getAuthor().getDisplayName()}" class="author-link"></a>
-                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=post-date></p>
+                <div style="display: flex" class="post-header">
+                    <a th:href="@{*{'/profile/' + post.getAuthor().getUsername()}}">
+                        <img th:src="@{*{post.getAuthor().getAvatarImagePath()}}" class="author-avatar">
+                    </a>
+                    <a th:href="@{*{'/profile/' + post.getAuthor().getUsername()}}" th:text="*{post.getAuthor().getDisplayName()}" class="author-link author"></a>
+                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class="post-date date"></p>
                 </div>
 
                 <a th:href="@{*{'/post/' + post.getId()}}" th:text="*{post.getTitle()}" class="post-title"></a>
@@ -26,9 +29,20 @@
                     <a th:href="@{#}" th:each="tag : ${post.getTags()}" class="post-tag" th:text="*{tag.getName()}">
                     </a>
                 </div>
-                <p th:text="*{post.getViews() + ' views'}"></p>
-                <p th:text="*{post.getUpvotes() + post.getDownvotes() + ' votes'}"></p>
-                <p th:text="*{post.getComments().size() + ' comments'}"></p>
+                <div class="post-image">
+                    <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>
+                </div>
+                <div class="post-stats">
+                    <div class="vote-group" >
+<!--                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>-->
+                        <i class='bx bx-upvote'></i>
+                        <span th:text="*{post.getUpvotes() + post.getDownvotes() + ' votes'}" class="votes">0</span>
+<!--                        <button class="vote-down"><i class='bx bx-down-arrow-circle' ></i></button>-->
+                    </div>
+                    <span class="views" th:text="*{post.getViews() + ' views'}">19</span>
+                    <span th:text="*{post.getComments().size() + ' comments'}" class="comments">0</span>
+                    <button class="share">Share</button>
+                </div>
             </div>
         </div>
 

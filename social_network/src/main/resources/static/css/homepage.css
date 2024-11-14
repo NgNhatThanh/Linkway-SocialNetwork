@@ -1,15 +1,21 @@
 body {
     display: flex;
     flex-direction: column;
-    /*height: 100vh;*/
+    height: 100vh;
+}
+.nav{
+    height: 10%;
+    border: 1px gray solid;
+    padding: 5px;
 }
 
 .content {
-    display: grid;
-    grid-template-columns: 18% auto;
-    /*flex: 1;*/
+    display: flex;
+    flex: 1;
 }
 
-.main-zone{
-    top: 10%;
+.content .side{
+    width: 300px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
 }
