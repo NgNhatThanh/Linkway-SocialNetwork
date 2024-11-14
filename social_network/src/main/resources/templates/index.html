@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Chat Application</title>
+</head>
+
+<body>
+
+    <h2>Chat Box</h2>
+
+    <!-- User Form for entering the chat -->
+    <div class="user-form" id="username-page">
+        <h3>Enter Chatroom</h3>
+        <form id="usernameForm">
+            <p id="loading-text">Loading user information...</p>
+            <p id="error-message" style="color: red; display: none;">Failed to retrieve user information.</p>
+        </form>
+    </div>
+
+    <!-- Chatroom UI -->
+    <div class="chat-container hidden" id="chat-page">
+        <div class="users-list">
+            <div id="notification-area" class="notification-area"></div>
+            <div class="users-list-container">
+                <h3>Your Following</h3>
+                <ul id="followingUsers"></ul> <!-- Following list -->
+            </div>
+            <div>
+                <p id="connected-user-displayname"></p>
+                <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <div id="chat-messages" class="chat-messages"></div> <!-- Messages will be added here -->
+            <form id="messageForm" name="messageForm">
+                <div class="message-input">
+                    <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+                    <button type="submit">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

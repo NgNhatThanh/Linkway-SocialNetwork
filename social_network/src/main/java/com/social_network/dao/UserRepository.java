@@ -1,5 +1,6 @@
 package com.social_network.dao;
 
+import com.social_network.entity.Status;
 import com.social_network.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUsername(String username);
 
-    User findById(int id);
+    Optional<User> findById(int id);
 
     User findByEmail(String email);
 
@@ -27,5 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAll();
 
     Optional<User> findByDisplayName(String displayName);
+
+    List<User> findAllByStatus(Status status);
 
 }

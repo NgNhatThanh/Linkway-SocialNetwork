@@ -46,7 +46,10 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToMany
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_tags", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> followingTags;
 

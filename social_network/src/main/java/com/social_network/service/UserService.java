@@ -2,9 +2,11 @@ package com.social_network.service;
 
 import com.social_network.dao.UserRepository;
 import com.social_network.dto.PageResponse;
+import com.social_network.dto.UserDTO;
 import com.social_network.dto.request.RegisterDTO;
 import com.social_network.dto.response.UserResponseDTO;
 import com.social_network.entity.Role;
+import com.social_network.entity.Status;
 import com.social_network.entity.User;
 import com.social_network.exception.DataExistedException;
 import com.social_network.exception.DataNotFoundException;
@@ -15,6 +17,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -58,7 +62,7 @@ public class UserService {
     }
 
     public User findById(int id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).get();
         if (user == null)
             throw new DataNotFoundException("Could not find user with id: " + id);
         return user;
@@ -106,8 +110,71 @@ public class UserService {
                 .build();
     }
 
+    public User getCurrentUser() {
+        // Get the authentication object
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Assuming you have a method to convert Spring Security User to your custom
+        // User entity
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            // Custom logic to map Spring Security User to your custom User entity
+            User principal = (User) authentication.getPrincipal();
+
+            // Now, fetch your custom User from your repository based on principal details,
+            // like username
+            User customUser = userRepository.findByUsername(principal.getUsername()).get();
+            return customUser;
+        }
+
+        return null;
+    }
+
     public void updateUserToken(String username, String token) {
         User user = findByUsername(username).get();
         userRepository.save(user);
+    }
+
+    public UserDTO convertToDTO(User user) {
+        return ModelMapper.getInstance()
+                .map(user, UserDTO.class);
+    }
+
+    public void saveUser(User user) {
+        if (user.getId() == 0 || !userRepository.existsById(user.getId())) {
+            // Set status to ONLINE only for new users
+            user.setStatus(Status.ONLINE);
+        }
+        userRepository.save(user); // Save the user in the repository
+    }
+
+    // Ngắt kết nối và thiết lập trạng thái OFFLINE
+    public void disconnect(User user) {
+        // Find the user by ID
+        Optional<User> storedUser = userRepository.findById(user.getId());
+
+        if (storedUser.isPresent()) {
+            // Set the status of the user to OFFLINE
+            User updatedUser = storedUser.get();
+            updatedUser.setStatus(Status.OFFLINE);
+
+            // Save the user with the updated status
+            userRepository.save(updatedUser);
+        } else {
+            // Optionally, handle the case when the user is not found
+            // For example, you could log the error or throw a custom exception
+            throw new DataNotFoundException("Could not find user with id: " + user.getId());
+        }
+    }
+
+    // Tìm danh sách người dùng đang ONLINE
+    public List<User> findConnectedUsers() {
+        // Return the list of users who are online
+        return userRepository.findAllByStatus(Status.ONLINE);
+    }
+
+    public List<UserDTO> convertToDTOList(List<User> followingUsers) {
+        return followingUsers.stream()
+                .map(user -> convertToDTO(user))
+                .collect(Collectors.toList());
     }
 }
