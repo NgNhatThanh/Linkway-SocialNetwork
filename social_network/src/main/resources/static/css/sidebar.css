@@ -19,7 +19,7 @@
     width: 100%;
     cursor: pointer;
     margin-bottom: 10px;
-
+    cursor: pointer;
 }
 .options button{
     border: none;
@@ -39,7 +39,7 @@
 }
 .options button:hover{
     background-color: #f0f0f0;
-
+    cursor: pointer;
 }
 
 

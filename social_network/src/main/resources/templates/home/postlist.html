@@ -33,10 +33,11 @@
                     <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>
                 </div>
                 <div class="post-stats">
-                    <div class="vote-group">
-                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>
-                        <span th:text="*{post.getUpvotes() + post.getDownvotes() + ' votes'}">0</span>
-                        <button class="vote-down"><i class='bx bx-down-arrow-circle' ></i></button>
+                    <div class="vote-group" >
+<!--                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>-->
+                        <i class='bx bx-upvote'></i>
+                        <span th:text="*{post.getUpvotes() + post.getDownvotes() + ' votes'}" class="votes">0</span>
+<!--                        <button class="vote-down"><i class='bx bx-down-arrow-circle' ></i></button>-->
                     </div>
                     <span class="views" th:text="*{post.getViews() + ' views'}">19</span>
                     <span th:text="*{post.getComments().size() + ' comments'}" class="comments">0</span>

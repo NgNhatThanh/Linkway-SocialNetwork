@@ -98,36 +98,24 @@
     gap: 24px;
     font-size: 0.9em;
 }
+
+
 /* Vote styling */
 .vote-group {
     display: flex;
     align-items: center;
-    padding: 3px;
+    justify-content: center;
+    padding: 7px;
     background-color: #E5EBEE;
     border-radius: 20px;
 }
-.vote-up, .vote-down {
-    border: none;
-    cursor: pointer;
-    position: relative;
-    background: none;
-    padding: 3px;
-}
-.vote-up: hover, .vote-down:hover {
-    background-color: #DBE4E9;
-    background-radius: 30px;
-}
-.vote-up i, .vote-down i{
-    font-size: 20px;
-    border: none;
-    background: none;
-}
-.vote-up i:hover, .vote-down i:hover{
-    color: orange;
-}
-.vote-group span{
-    margin-left: 10px;
-    margin-right: 10px;
+
+.votes{
+    display: flex;
+    align-items: center;
+    background-color: #E5EBEE;
+    border-radius: 20px;
+    margin-left: 5px;
 }
 /* Views styling */
 .views {
@@ -137,6 +125,7 @@
     border-radius: 20px;
     padding: 6px;
 }
+
 .views::before {
     content: "👁";
     margin-right: 4px;
@@ -159,10 +148,9 @@
     align-items: center;
     border: none;
     cursor: pointer;
-    padding: 4px 8px;
+    padding: 6px 8px;
     background-color: #E5EBEE;
     border-radius: 20px;
-    padding: 8px;
 }
 .share::before {
     content: "↗";
