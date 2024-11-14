@@ -9,6 +9,10 @@
 
 <body>
 
+  <input id="csrf-token" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+  <input id="current-username" type="hidden" th:name="${session.username}" th:value="${session.username}"/>
+  <input id="current-avatar" type="hidden" th:name="${session.avatar}" th:value="${session.avatar}"/>
+
   <div th:insert="~{home/navbar.html :: navbar}" class="nav">
   </div>
 

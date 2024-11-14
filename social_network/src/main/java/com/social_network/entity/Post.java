@@ -1,5 +1,6 @@
 package com.social_network.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -29,6 +27,9 @@ public class Post {
     @Column(name = "content")
     private String content;
 
+    @Transient
+    private String htmlContent;
+
     @ManyToOne
     @JoinColumn(name = "author_id")
     private User author;
@@ -39,8 +40,11 @@ public class Post {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToMany(mappedBy = "posts")
-    private Set<Tag> tags = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "posts_tags"
+            , joinColumns = @JoinColumn(name = "post_id")
+            , inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private List<Tag> tags;
 
     @Column(name = "views")
     private int views;
@@ -52,6 +56,7 @@ public class Post {
     private int downvotes;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private Set<Comment> comments = new HashSet<>();
+    @JsonIgnore
+    private List<Comment> comments;
 
 }

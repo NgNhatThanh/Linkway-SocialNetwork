@@ -19,4 +19,11 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
                 "on tags.id = t.tag_id")
     List<Tag> findFollowingTagsByUserId(int id);
 
+    List<Tag> findAll();
+
+    @Query(nativeQuery = true,
+    value = "select * from tags " +
+            "where name = ?1")
+    Tag findByName(String name);
+
 }

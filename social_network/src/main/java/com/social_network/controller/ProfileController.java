@@ -1,12 +1,15 @@
 package com.social_network.controller;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
+import com.social_network.entity.Tag;
+import com.social_network.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,15 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.social_network.service.UserService;
 import com.social_network.util.SecurityUtil;
 
 import jakarta.validation.Valid;
 
 import com.social_network.entity.User;
-import com.social_network.service.FollowService;
-import com.social_network.service.PostService;
-import com.social_network.service.UploadService;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +39,19 @@ public class ProfileController {
     private final SecurityUtil securityUtil;
     private final UploadService uploadService;
     private final FollowService followService;
+    private TagService tagService;
+
+    @ModelAttribute("followingTags")
+    public List<Tag> getFollowingTags() {
+        List<Tag> followingTags = null;
+        try {
+            String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
+            User user = userService.findByUsername(username).get();
+            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+        } catch (NullPointerException ignored) {
+        }
+        return followingTags;
+    }
 
     // Search for a user by username or display name
     @GetMapping("/searchUser")

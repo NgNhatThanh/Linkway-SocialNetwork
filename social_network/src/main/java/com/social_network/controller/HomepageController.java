@@ -1,5 +1,7 @@
 package com.social_network.controller;
 
+import com.social_network.dto.request.CommentDTO;
+import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
@@ -25,15 +27,7 @@ public class HomepageController {
 
     private final TagService tagService;
 
-    private final SecurityUtil securityUtil;
-
     private PostService postService;
-
-    private MarkdownRenderUtil markdownRenderUtil;
-
-    private FollowService followService;
-
-    private VoteService voteService;
 
     @ModelAttribute("followingTags")
     public List<Tag> getAllTags() {
@@ -65,49 +59,4 @@ public class HomepageController {
         model.addAttribute("postList", postList);
         return "home/mainzone";
     }
-
-    @GetMapping("/post/{postId}")
-    public String showPostPage(@PathVariable("postId") int postId,
-                               Model model,
-                                HttpServletRequest request){
-        postService.increaseView(postId);
-        Post post = postService.findById(postId);
-        String htmlContent = markdownRenderUtil.convertToHtml(post.getContent());
-        String currentUsername = securityUtil.getCurrentUser().getUsername();
-
-        int voteType = voteService.getUserPostVoteType(postId, (int)request.getSession().getAttribute("id"));
-        long authorFollowers = followService.getFollowerCount(post.getAuthor());
-        model.addAttribute("post", post);
-        model.addAttribute("postContent", htmlContent);
-        model.addAttribute("authorFollowers", authorFollowers);
-        model.addAttribute("isCurrentUser",
-                post.getAuthor().getUsername().equals(currentUsername));
-        model.addAttribute("isFollowing",
-                followService.isFollowing(currentUsername,
-                                                    post.getAuthor().getUsername()));
-        model.addAttribute("upvoted", voteType == 1);
-        model.addAttribute("downvoted", voteType == -1);
-        return "home/postpage";
-    }
-
-    @PostMapping("/post/{postId}/{voteType}")
-    public String votePost(@PathVariable("postId") int postId,
-                           @PathVariable("voteType") String voteType,
-                           HttpServletRequest request){
-        String prevPath = request.getHeader("Referer");
-        int voteChange = voteType.equals("upvote") ? 1 : -1;
-        String currentUsername = securityUtil.getCurrentUser().getUsername();
-        voteService.increasePostVote(postId, (int)request.getSession().getAttribute("id"), voteChange);
-        return "redirect:" + prevPath;
-    }
-
-    @PostMapping("/post/{postId}/unvote")
-    public String unvotePost(@PathVariable("postId") int postId,
-                             HttpServletRequest request){
-        String prevPath = request.getHeader("Referer");
-        String currentUsername = securityUtil.getCurrentUser().getUsername();
-        voteService.unvotePost(postId, (int)request.getSession().getAttribute("id"));
-        return "redirect:" + prevPath;
-    }
-
 }

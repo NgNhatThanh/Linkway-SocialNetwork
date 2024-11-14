@@ -24,7 +24,7 @@
             <div th:if="${session.username != null}" class="logged-in">
                 <!-- Direct to create post page -->
                 <div>
-                    <form th:action="@{/}">
+                    <form th:action="@{/post/edit}">
                         <button class="button button-primary"> Create </button>
                     </form>
                 </div>

@@ -11,7 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import lombok.AllArgsConstructor;
+
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +21,10 @@ public class PostService {
     private final int POST_PER_PAGE = 10;
 
     private PostRepository postRepository;
+
+    public Post save(Post post) {
+        return postRepository.save(post);
+    }
 
     public Page<Post> getAll(int page) {
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
@@ -45,6 +50,19 @@ public class PostService {
         Post post = findById(postId);
         post.setViews(post.getViews() + 1);
         postRepository.save(post);
+    }
+
+    public List<Post> getRandowPostsByAuthor(User author, int maxAmount){
+        List<Post> posts = postRepository.findByAuthor(author);
+        if(posts.size() <= maxAmount) return posts;
+        Set<Post> result = new HashSet<>();
+        int idx = 0;
+        Random rand = new Random();
+        while(result.size() < maxAmount){
+            idx = rand.nextInt(posts.size());
+            result.add(posts.get(idx));
+        }
+        return result.stream().toList();
     }
 
 }
