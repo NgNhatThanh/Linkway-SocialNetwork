@@ -21,6 +21,9 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
 
     List<Tag> findAll();
 
+    @Query(nativeQuery = true,
+    value = "select * from tags " +
+            "where name = ?1")
     Tag findByName(String name);
 
 }

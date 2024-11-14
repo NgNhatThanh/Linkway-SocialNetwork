@@ -12,10 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -51,6 +48,20 @@ public class EditPostController {
         return "editpost";
     }
 
+    @GetMapping("/post/edit/{postId}")
+    public String showEditPostPage(Model model, @PathVariable int postId){
+        Post post = postService.findById(postId);
+        PostDTO postDTO = new PostDTO();
+        postDTO.setId(post.getId());
+        postDTO.setTitle(post.getTitle());
+        postDTO.setContent(post.getContent());
+        for(Tag tag : post.getTags()){
+            postDTO.getTagNames().add(tag.getName());
+        }
+        model.addAttribute("postDTO", postDTO);
+        return "editpost";
+    }
+
     @PostMapping("/post/update")
     public String updatePost(@ModelAttribute("postDTO") PostDTO postDTO,
                              HttpServletRequest request){
@@ -72,7 +83,8 @@ public class EditPostController {
         newPost.setContent(postDTO.getContent());
         List<Tag> tags = new ArrayList<>();
         for(String tagName : postDTO.getTagNames()){
-            tags.add(tagService.findByName(tagName));
+            Tag tag = tagService.findByName(tagName);
+            tags.add(tag);
         }
         newPost.setTags(tags);
         newPost = postService.save(newPost);

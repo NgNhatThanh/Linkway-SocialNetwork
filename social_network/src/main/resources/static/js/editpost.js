@@ -1,7 +1,8 @@
-
 const csrfToken = document.getElementById('csrf-token').value;
 
 const availableTags = [];
+
+let addedTags = [];
 
 fetch('/api/tags')
     .then(response => response.json())
@@ -10,6 +11,15 @@ fetch('/api/tags')
             availableTags.push(tag.name);
         })
         availableTags.sort();
+
+        const hiddenTags = document.getElementById('hidden-tags')
+
+        Array.from(hiddenTags.children).forEach(tagInput => {
+            addedTags.push(tagInput.value);
+            availableTags.splice(availableTags.indexOf(tagInput.value), 1);
+        })
+
+        renderTags();
     })
     .catch(error => {
         console.log(error);
@@ -46,8 +56,6 @@ const easyMDE = new EasyMDE({
     }
 });
 
-let addedTags = [];
-
 const tagInput = document.getElementById("tag-input");
 const tagSuggestions = document.getElementById("tag-suggestions");
 
@@ -73,7 +81,7 @@ function selectTag(tag){
     var idx = availableTags.indexOf(tag);
     availableTags.splice(idx, 1);
     tagSuggestions.innerHTML = '';
-    if(addedTags.length == 5) tagInput.disabled = true;
+    if(addedTags.length === 5) tagInput.disabled = true;
     renderTags();
 }
 

@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.social_network.dto.request.CommentDTO;
 import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
+import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import com.social_network.service.*;
 import com.social_network.util.MarkdownRenderUtil;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @AllArgsConstructor
@@ -38,7 +40,19 @@ public class PostpageController {
 
     private CommentService commentService;
 
-    private Cloudinary cloudinary;
+    private TagService tagService;
+
+    @ModelAttribute("followingTags")
+    public List<Tag> getFollowingTags() {
+        List<Tag> followingTags = null;
+        try {
+            String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
+            User user = userService.findByUsername(username).get();
+            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+        } catch (NullPointerException ignored) {
+        }
+        return followingTags;
+    }
 
     @GetMapping("/post/{postId}")
     public String showPostPage(@PathVariable("postId") int postId,

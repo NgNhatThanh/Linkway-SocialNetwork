@@ -14,6 +14,8 @@
             method="post"
             th:object="${postDTO}">
 
+            <input type="hidden" th:field="*{id}" th:value="*{id}">
+
             <div style="display: flex">
                 <div id="post-title-container">
                      <textarea id="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
@@ -29,7 +31,9 @@
                 <div id="tag-suggestions" class="suggestions"></div>
             </div>
 
-            <div id="hidden-tags"></div>
+            <div id="hidden-tags">
+                <input type="hidden" th:each="tag : *{tagNames}" th:name="tagNames" th:value="${tag}">
+            </div>
 
             <div id="post-content-container">
                 <textarea id="post-content" th:field="*{content}" th:value="*{content}"></textarea>

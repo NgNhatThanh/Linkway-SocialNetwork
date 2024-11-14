@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,11 +23,12 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "posts_tags"
-                , joinColumns = @JoinColumn(name = "tag_id")
-                , inverseJoinColumns = @JoinColumn(name = "post_id"))
+    @ManyToMany(mappedBy = "tags")
     @JsonIgnore
-    private Set<Post> posts = new HashSet<>();
+    private List<Post> posts;
+
+    public String toString(){
+        return id + " " + name;
+    }
 
 }

@@ -24,6 +24,7 @@ public class TagService {
 
     public Tag findByName(String name){
         Tag tag = tagRepository.findByName(name);
+        System.out.println("Vao day");
         if(tag == null) throw new DataNotFoundException("Cannot find tag with name " + name);
         return tag;
     }

@@ -20,12 +20,22 @@
                 </a>
 
                 <div class="post-author-info">
-                    <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=date></p>
+                    <div style="display: flex">
+                        <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}" class=date></p>
+                        <h5 th:if="${post.getUpdatedAt() != null}"
+                            th:text="${'Đã chỉnh sửa vào ' + #dates.format(post.getUpdatedAt(), 'yyyy/MM/dd HH:mm')}"
+                            style="margin-left: 10px"></h5>
+                    </div>
                     <p th:text="${post.getViews() + ' views'}"></p>
 
                     <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
                        th:text="*{post.getAuthor().getDisplayName()}"></a>
                 </div>
+
+                <a th:href="@{${'/post/edit/' + post.id}}">
+                    <i class='bx bx-edit-alt'></i>
+                </a>
+
             </div>
 
             <div class="post-content">

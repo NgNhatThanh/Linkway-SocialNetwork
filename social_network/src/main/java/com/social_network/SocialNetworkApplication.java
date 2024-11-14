@@ -1,5 +1,7 @@
 package com.social_network;
 
+import com.social_network.entity.Tag;
+import com.social_network.service.TagService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -15,7 +17,6 @@ import java.io.FileInputStream;
 public class SocialNetworkApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(SocialNetworkApplication.class, args);
 	}
 

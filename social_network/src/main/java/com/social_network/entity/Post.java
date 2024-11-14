@@ -40,7 +40,10 @@ public class Post {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany
+    @JoinTable(name = "posts_tags"
+            , joinColumns = @JoinColumn(name = "post_id")
+            , inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
 
     @Column(name = "views")
@@ -54,6 +57,6 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Comment> comments = new HashSet<>();
+    private List<Comment> comments;
 
 }

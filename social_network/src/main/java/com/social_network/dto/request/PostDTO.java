@@ -4,6 +4,7 @@ import com.social_network.entity.Tag;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -18,5 +19,9 @@ public class PostDTO {
     private String content;
 
     private List<String> tagNames;
+
+    public PostDTO() {
+        tagNames = new ArrayList<>();
+    }
 
 }
