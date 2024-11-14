@@ -9,29 +9,43 @@
 <body>
     <div th:fragment="sidebar (followingTags)" class="side-bar">
         <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+        <div class="options">
+            <form th:action="@{/}">
+                <button type="submit">
+                    <i class='bx bx-home' ></i>
+                    <span>Home</span>
+                </button>
+            </form>
 
-        <form th:action="@{/}">
-            <button type="submit"> Home </button>
-        </form>
+            <!--        Hiện các post có nhiều upvote-->
+            <form th:action="@{/}">
+                <button type="submit">
+                    <i class='bx bx-right-top-arrow-circle'></i>
+                    <span>Popular</span>
+                </button>
+            </form>
 
-        <!--        Hiện các post có nhiều upvote-->
-        <form th:action="@{/}">
-            <button type="submit"> Popular </button>
-        </form>
+            <!--        Hiện tất cả tag (phân trang) -->
+            <form th:action="@{/}">
+                <button type="submit">
+                    <i class='bx bx-purchase-tag-alt' ></i>
+                    <span>Tags</span>
+                </button>
+            </form>
+        </div>
 
-        <!--        Hiện tất cả tag (phân trang) -->
-        <form th:action="@{/}">
-            <button type="submit"> Tags </button>
-        </form>
 
         <!--        Hiện các tag đang follow-->
-        <div th:if="${session.username != null}">
-            <h3> Following Tags </h3>
-            <ul th:each="tag : ${followingTags}">
-                <li>
-                    <a th:href="@{#}" th:text="*{tag.getName()}"></a>
-                </li>
-            </ul>
+        <div class="following">
+            <!-- Hiện các tag đang follow-->
+            <div th:if="${session.username != null}">
+                <h3> Following Tags </h3>
+                <ul th:each="tag : ${followingTags}">
+                    <li>
+                        <a th:href="@{#}" th:text="*{tag.getName()}"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
 
     </div>
