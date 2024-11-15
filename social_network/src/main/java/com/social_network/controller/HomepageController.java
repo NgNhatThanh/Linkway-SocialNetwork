@@ -35,7 +35,7 @@ public class HomepageController {
         try {
             String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
             User user = userService.findByUsername(username).get();
-            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+            followingTags = user.getFollowingTags();
         } catch (NullPointerException ignored) {
         }
         return followingTags;
@@ -54,8 +54,6 @@ public class HomepageController {
         } catch (NullPointerException ignored) {
         }
 
-        model.addAttribute("totalPages", postList.getTotalPages());
-        model.addAttribute("currentPage", page);
         model.addAttribute("postList", postList);
         return "home/mainzone";
     }

@@ -45,7 +45,7 @@ public class ProfileController {
         try {
             String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
             User user = userService.findByUsername(username).get();
-            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+            followingTags = user.getFollowingTags();
         } catch (NullPointerException ignored) {
         }
         return followingTags;
@@ -82,8 +82,6 @@ public class ProfileController {
             Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
-            model.addAttribute("totalPages", posts.getTotalPages());
-            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", true); // Indicate that this is the current user's profile
@@ -115,8 +113,6 @@ public class ProfileController {
             Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
-            model.addAttribute("totalPages", posts.getTotalPages());
-            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", username.equals(currentUsername)); // Check if this is the current user

@@ -3,6 +3,7 @@ package com.social_network.service;
 import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
 
+import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -63,6 +65,12 @@ public class PostService {
             result.add(posts.get(idx));
         }
         return result.stream().toList();
+    }
+
+    public Page<Post> findByTags(List<Tag> tags, int page){
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE, sort);
+        return postRepository.findPostByTags(tags, pageable);
     }
 
 }

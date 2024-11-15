@@ -48,7 +48,7 @@ public class PostpageController {
         try {
             String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
             User user = userService.findByUsername(username).get();
-            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+            followingTags = user.getFollowingTags();
         } catch (NullPointerException ignored) {
         }
         return followingTags;

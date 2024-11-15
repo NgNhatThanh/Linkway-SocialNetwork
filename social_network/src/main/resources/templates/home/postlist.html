@@ -8,12 +8,8 @@
 <body>
     <div th:fragment="post-section">
         <link rel="stylesheet" th:href="@{/css/posts.css}">
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <div th:each="post : ${postList}" class="post-item">
-
-
-
             <div class="post-info">
                 <div style="display: flex" class="post-header">
                     <a th:href="@{*{'/profile/' + post.getAuthor().getUsername()}}">
@@ -26,12 +22,15 @@
                 <a th:href="@{*{'/post/' + post.getId()}}" th:text="*{post.getTitle()}" class="post-title"></a>
 
                 <div class="post-tags">
-                    <a th:href="@{#}" th:each="tag : ${post.getTags()}" class="post-tag" th:text="*{tag.getName()}">
+                    <a th:each="tag : ${post.getTags()}"
+                       th:href="@{*{'/tag/' + tag.name}}"
+                       class="post-tag"
+                       th:text="*{tag.getName()}">
                     </a>
                 </div>
-                <div class="post-image">
-                    <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>
-                </div>
+<!--                <div class="post-image">-->
+<!--                    <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>-->
+<!--                </div>-->
                 <div class="post-stats">
                     <div class="vote-group" >
 <!--                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>-->
@@ -47,8 +46,8 @@
         </div>
 
         <div class="pagination">
-            <ul th:each="i : ${#numbers.sequence(1, totalPages)}">
-                <li th:classappend="${currentPage == i ? 'active' : ''}">
+            <ul th:each="i : ${#numbers.sequence(1, T(java.lang.Math).max(postList.totalPages,1))}">
+                <li th:classappend="${postList.number + 1 == i ? 'active' : ''}">
                     <a th:href="@{'?page='+${i}}" th:text="${i}"></a>
                 </li>
             </ul>
