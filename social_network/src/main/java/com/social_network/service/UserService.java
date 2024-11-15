@@ -32,6 +32,8 @@ public class UserService {
 
     private RoleService roleService;
 
+    private final String DEFAULT_AVATAR_PATH = "https://res.cloudinary.com/daxt0vwoc/image/upload/v1731641878/avatar_nuqmjm.jpg";
+
     @Transactional
     public User addUser(RegisterDTO newUser) {
         User user = ModelMapper.getInstance()
@@ -47,7 +49,7 @@ public class UserService {
         user.setPassword(encodedPassword);
         Role role = roleService.findByName("USER");
         user.setRole(role);
-        user.setAvatarImagePath("path to default profile picture");
+        user.setAvatarImagePath(DEFAULT_AVATAR_PATH);
         user.setCreatedAt(Date.from(Instant.now()));
         this.userRepository.save(user);
         return user;

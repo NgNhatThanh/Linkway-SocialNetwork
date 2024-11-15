@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.social_network.dto.request.UserUpdateDTO;
 import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
@@ -28,8 +29,6 @@ import com.social_network.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @AllArgsConstructor
@@ -37,7 +36,6 @@ public class ProfileController {
     private final UserService userService;
     private final PostService postService;
     private final SecurityUtil securityUtil;
-    private final UploadService uploadService;
     private final FollowService followService;
     private TagService tagService;
 
@@ -169,7 +167,13 @@ public class ProfileController {
         Optional<User> optionalUser = this.userService.findByUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            model.addAttribute("user", user);
+            UserUpdateDTO userDTO = new UserUpdateDTO();
+            userDTO.setId(user.getId());
+            userDTO.setDisplayName(user.getDisplayName());
+            userDTO.setIntroduction(user.getIntroduction());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAvatarImagePath(user.getAvatarImagePath());
+            model.addAttribute("userDTO", userDTO);
         } else {
             // Handle the case when the user is not found
             model.addAttribute("error", "User not found");
@@ -179,29 +183,18 @@ public class ProfileController {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-            RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file) {
+    public String updateProfile(@ModelAttribute("userDTO") @Valid UserUpdateDTO userDTO,
+                                BindingResult bindingResult,
+                                HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return "updateProfile";
         }
-        String username = this.securityUtil.getCurrentUser().getUsername();
-        Optional<User> optionalUser = this.userService.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            User currentUser = optionalUser.get();
-            currentUser.setDisplayName(user.getDisplayName());
-            currentUser.setIntroduction(user.getIntroduction());
-            currentUser.setEmail(user.getEmail());
-
-            if (!file.isEmpty()) {
-                currentUser.setAvatarImagePath(this.uploadService.handleSaveUploadFile(file, "avatar"));
-            }
-            this.userService.save(currentUser);
-
-        } else {
-            // Handle the case when the user is not found
-            redirectAttributes.addFlashAttribute("error", "User not found");
-            return "redirect:/error"; // Or redirect to an error page
-        }
+        User user = userService.findById(userDTO.getId());
+        user.setDisplayName(userDTO.getDisplayName());
+        user.setIntroduction(userDTO.getIntroduction());
+        user.setEmail(userDTO.getEmail());
+        user.setAvatarImagePath(userDTO.getAvatarImagePath());
+        request.getSession().setAttribute("avatar", userDTO.getAvatarImagePath());
         return "redirect:/profile";
 
     }
