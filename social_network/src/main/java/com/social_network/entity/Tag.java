@@ -1,11 +1,13 @@
 package com.social_network.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,10 +23,12 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany
-    @JoinTable(name = "posts_tags"
-                , joinColumns = @JoinColumn(name = "tag_id")
-                , inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private Set<Post> posts = new HashSet<>();
+    @ManyToMany(mappedBy = "tags")
+    @JsonIgnore
+    private List<Post> posts;
+
+    public String toString(){
+        return id + " " + name;
+    }
 
 }

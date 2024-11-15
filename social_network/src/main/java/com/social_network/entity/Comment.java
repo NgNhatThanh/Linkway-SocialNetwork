@@ -23,6 +23,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private Post post;
 
     @ManyToOne
@@ -32,18 +33,22 @@ public class Comment {
     @Column(name = "content")
     private String content;
 
+    @Transient
+    private String htmlContent;
+
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    @JsonIgnore
+//    @JsonIgnore
     private Comment parentComment;
 
     @OneToMany(mappedBy = "parentComment"
             , cascade = CascadeType.REMOVE
             , fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Comment> replies = new HashSet<>();
 
-    @Column(name = "has_child")
-    private boolean has_child;
+    @Formula("(select exists(select 1 from comments c where c.parent_id = id))")
+    private boolean hasChild = false;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -56,5 +61,11 @@ public class Comment {
 
     @Formula("(SELECT COUNT(*) FROM comment_votes c WHERE c.comment_id = id AND c.vote_type = -1)")
     private int downvotes;
+
+    @Transient
+    private boolean upvoted;
+
+    @Transient
+    private boolean downvoted;
 
 }
