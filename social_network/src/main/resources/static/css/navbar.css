@@ -3,18 +3,87 @@
     padding: 0;
     box-sizing: border-box;
 }
+body{
 
+    background: white
+}
 .nav-bar {
-    position: sticky;
-    top: 0;
-    z-index: 1;
     width: 100%;
-    height: 10%;
+    height: 100%;
     font-family: Arial, sans-serif;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background-color: darkgrey;
+    justify-content: space-between;
+    padding: 3px 10px;
+}
+
+/*1. Logo*/
+.back-home{
+    color: #0079D3;
+    text-decoration: none;
+}
+
+/*2. Search - input*/
+.search-container {
+    flex: 1;
+    max-width: 680px;
+    display: flex;
+    gap: 8px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 16px;
+    border: 1px solid #EDEFF1;
+    border-radius: 20px;
+    background-color: #F6F7F8;
+    width: 450px;
+    margin-left: 80px;
+    font-size: 15px;
+    height: 100%;
+}
+
+.search-input:focus {
+    outline: none;
+    background-color: white;
+    border-color: #0079D3;
+}
+.button {
+    padding: 10px 10px;
+    border-radius: 20px;
+    border: 1px solid #0079D3;
+    font-weight: 500;
+    cursor: pointer;
+}
+.button-primary {
+    background-color: #0079D3;
+    color: white;
+    font-size: 15px;
+}
+
+
+/*3. Create:*/
+.button-secondary {
+    background-color: white;
+    color: #0079D3;
+    font-size: 15px;
+    margin-right: 20px;
+}
+
+
+/*4. avatar*/
+.avatar-container {
+    position: relative;
+    display: inline-block;
+}
+.avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    margin-right: 10px;
+    margin-left: 20px;
 }
 
 
@@ -24,40 +93,55 @@
     justify-content: center;
 }
 
-.avatar-container {
-    position: relative;
-    display: inline-block;
-}
 
-.avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #ddd;
-}
 
+/*6. Dropdown menu*/
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 60px;
-    right: 0;
+    top: 40px;
+    right: 0px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    width: 150px;
+    width: 250px;
     z-index: 1000;
 }
-
-.dropdown-item {
+.menu-item{
     display: block;
-    padding: 12px 16px;
+    padding: 7px 15px;
+    font-size: 15px;
+}
+.icon{
+    margin-right: 10px;
+    font-size: 20px;
+}
+.dropdown-item {
+    font-size: 15px;
+    padding: 8px 16px;
     color: #333;
     text-decoration: none;
-    font-size: 14px;
+    display :flex;
+    align-item: center;
+    border-radius: 15px;
 }
-
 .dropdown-item:hover {
     background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+.dropdown-item .btn-logout:hover {
+    background-color: #f3f3f3;
+    cursor: pointer;
+
+}
+.btn-logout{
+    border: none;
+    background: none;
+    display:flex;
+    align-item: center;
+    font-size: 15px;
+    color: #333;
+    border-radius: 15px;
 }

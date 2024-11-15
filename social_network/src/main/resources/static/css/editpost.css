@@ -1,0 +1,52 @@
+.tag-input-container {
+    position: relative;
+    width: 300px;
+}
+
+.error{
+    color: darkred;
+}
+
+#post-title{
+    width: 85%;
+    font-size: 16px;
+    padding: 10px;
+    resize: none;
+}
+
+#tag-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    resize: none;
+}
+
+.suggestions {
+    /*position: absolute;*/
+    top: 100%;
+    width: 100%;
+    border: 1px solid #ddd;
+    background: white;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.suggestion-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background-color: #f0f0f0;
+}
+
+#tags-display .tag {
+    display: inline-block;
+    background-color: #ddd;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
