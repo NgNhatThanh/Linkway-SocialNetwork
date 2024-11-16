@@ -26,4 +26,5 @@ public class ChatMessageService {
         var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
         return chatId.map(repository::findByChatId).orElse(new ArrayList<>());
     }
+
 }

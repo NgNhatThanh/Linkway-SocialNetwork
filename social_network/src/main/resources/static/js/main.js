@@ -13,14 +13,19 @@ const errorMessageElement = document.getElementById('error-message');
 const loadingTextElement = document.getElementById('loading-text');
 
 // Notifications container
-const notificationContainer = document.createElement('div');
-notificationContainer.classList.add('notifications');
-document.body.appendChild(notificationContainer);
+// const notificationContainer = document.createElement('div');
+// notificationContainer.classList.add('notifications');
+// document.body.appendChild(notificationContainer);
 
 let stompClient = null;
 let username = null;
 let displayName = null;
 let selectedUserId = null; // Placeholder for selected user ID
+let selectedUserName = null;
+
+// Fetch recipientId from the URL or another source
+// const urlParams = new URLSearchParams(window.location.search);
+// const recipientId = urlParams.get('recipientId'); // Get recipientId from URL query parameters
 
 // Fetch current user from session
 async function fetchCurrentUser() {
@@ -33,7 +38,7 @@ async function fetchCurrentUser() {
                 displayName = currentUser.displayName;
                 document.querySelector('#connected-user-displayname').textContent = displayName;
                 connect();
-                fetchFollowingUsers();
+                fetchRecentUserChatWith();
             } else {
                 showError('No user data returned.');
             }
@@ -81,6 +86,88 @@ function onError(error) {
     connectingElement.classList.add('hidden');
 }
 
+// Fetch data for the current recipient (selected user)
+async function fetchCurrentRecipient(recipientId) {
+    try {
+        const response = await fetch(`/users/${recipientId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch recipient data');
+        }
+        const user = await response.json();
+        selectedUserName = user.displayName; // Store the selected user's name
+        updateChatHeader(user);
+    } catch (error) {
+        console.error('Error fetching recipient data:', error);
+        showError('Failed to fetch recipient information.');
+    }
+}
+// Append a reliable user to the reliable users list and add event listeners
+async function appendReliableUserElement(user, reliableUsersList) {
+    const listItem = document.createElement('li');
+    listItem.classList.add('reliable-item');
+    listItem.id = user.username;
+
+    const userImage = document.createElement('img');
+    userImage.src = `http://localhost:8080${user.avatarImagePath}`;
+
+    const usernameSpan = document.createElement('span');
+    usernameSpan.textContent = user.displayName;
+
+    listItem.appendChild(userImage);
+    listItem.appendChild(usernameSpan);
+
+    // Add an event listener for clicking the reliable user item
+    listItem.addEventListener('click', async () => {
+        selectedUserName = user.displayName; // Store the selected user's name
+        selectedUserId = user.username; // Store the selected user's username
+        loadMessageHistory(selectedUserId); // Fetch message history for selected user
+        updateChatHeader(); // Update the chat header with the selected user's name
+        messageInput.focus();
+    });
+
+    reliableUsersList.appendChild(listItem);
+}
+
+// Fetch data for the current recipient (selected user)
+async function fetchRecentUserChatWith() {
+    try {
+        const response = await fetch(`/users/chat`);
+        if (response.ok) {
+            const RecentUsers = await response.json();
+            const RecentUsersList = document.getElementById('RecentUsers');
+            RecentUsersList.innerHTML = '';
+            if (RecentUsers && RecentUsers.length > 0) {
+                RecentUsers.forEach(user => appendRecentUserElement(user, RecentUsersList));
+            } else {
+                RecentUsersList.innerHTML = '<li>No users followed yet.</li>';
+            }
+        } else {
+            showError('Failed to fetch reliable users');
+        }
+    }
+    catch (error) {
+        console.error('Error fetching user data:', error);
+        showError('An error occurred while retrieving user information.');
+    }
+}
+// Append a reliable user to the reliable users list and add event listeners
+function appendRecentUserElement(user, RecentUsersList) {
+    const listItem = document.createElement('li');
+    listItem.classList.add('Recent-item');
+    listItem.id = user.username;
+    listItem.textContent = user.displayName;
+    listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
+    listItem.addEventListener('click', () => {
+        selectedUserName = user.displayName;
+        selectedUserId = user.username;
+        updateChatHeader();
+        loadMessageHistory(selectedUserId);
+        messageInput.focus();
+    });
+    RecentUsersList.appendChild(listItem);
+
+}
+
 // Fetch and display the list of following users
 async function fetchFollowingUsers() {
     try {
@@ -106,6 +193,7 @@ function appendFollowingUserElement(user, followingUsersList) {
     listItem.classList.add('following-item');
     listItem.id = user.username;
 
+    // lòad user avatar
     const userImage = document.createElement('img');
     userImage.src = `http://localhost:8080${user.avatarImagePath}`;
 
@@ -116,13 +204,53 @@ function appendFollowingUserElement(user, followingUsersList) {
     listItem.appendChild(usernameSpan);
 
     listItem.addEventListener('click', () => {
+        selectedUserName = user.displayName; // Store the selected user's name
         selectedUserId = user.username;
+        updateChatHeader();
         loadMessageHistory(selectedUserId); // Fetch message history for selected user
         messageInput.focus();
     });
 
     followingUsersList.appendChild(listItem);
 }
+
+// Update the chat header with the name of the user you're chatting with
+function updateChatHeader() {
+    const chatHeader = document.getElementById('chat-with-username');
+    if (selectedUserName) {
+        chatHeader.textContent = selectedUserName;
+    } else {
+        chatHeader.textContent = 'Select a user to chat with';
+    }
+}
+
+
+// // Initialize chat with the recipient from the URL
+// function initializeChatWithRecipient() {
+//     const recipientInfo = document.getElementById('recipientInfo');
+//     const recipientId = recipientInfo ? recipientInfo.getAttribute('data-recipient-id') : null;
+//     const recipientName = recipientInfo ? recipientInfo.getAttribute('data-recipient-name') : null;
+
+//     if (recipientId && recipientName) {
+//         // Set selected user details
+//         selectedUserId = recipientId;
+//         selectedUserName = recipientName;
+
+//         // Update the chat header
+//         updateChatHeader();
+
+//         // Load message history for the selected user
+//         loadMessageHistory(selectedUserId);
+
+//         // Set focus on the message input field
+//         const messageInput = document.getElementById('messageInput'); // Ensure this element ID is correct
+//         if (messageInput) {
+//             messageInput.focus();
+//         }
+//     } else {
+//         console.error("Recipient information not found.");
+//     }
+// }
 
 // Load message history for selected user
 async function loadMessageHistory(recipientId) {
@@ -192,19 +320,24 @@ function appendMessageToChat(messageData, isSent) {
     chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-
-// Display a notification
-function showNotification(message, type = 'info') {
+// Display a notification with a timeout
+function showNotification(message, type = 'info', timeout = 5000) {
+    // Create the notification element
     const notification = document.createElement('div');
     notification.classList.add('notification', type);
     notification.textContent = message;
+
+    // Append the notification to the notification container
+    const notificationContainer = document.getElementById('notification-container');
     notificationContainer.appendChild(notification);
 
-    // Automatically remove the notification after 5 seconds
+    // Automatically remove the notification after the timeout period
     setTimeout(() => {
-        notificationContainer.removeChild(notification);
-    }, 5000);
+        notification.remove();
+    }, timeout);
 }
+
+
 
 // Logout and disconnect from WebSocket
 function onLogout() {
@@ -237,6 +370,29 @@ function onPublicMessageReceived(message) {
     showNotification('New public message', 'public');
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const chatPage = document.getElementById("chat-page");
+    const recipientId = chatPage.getAttribute("data-recipient-id");
+
+    // Fetch the current user before proceeding with chat setup
+    fetchCurrentUser().then(() => {
+        if (recipientId) {
+            console.log("Recipient ID:", recipientId);
+
+            // Initialize the chat with the specific recipient
+            selectedUserId = recipientId;
+            fetchCurrentRecipient(selectedUserId); // Fetch recipient data
+            loadMessageHistory(selectedUserId);  // Assuming loadMessageHistory takes recipientId
+            updateChatHeader(); // Update the chat header to show recipient's name
+            messageInput.focus();
+        } else {
+            // Fetch the list of following users if no specific recipient is selected
+            fetchRecentUserChatWith();
+        }
+    }).catch((error) => {
+        console.error("Error fetching current user:", error);
+    });
+});
 messageForm.addEventListener('submit', sendMessage);
 logout.addEventListener('click', onLogout);
-fetchCurrentUser();
+// fetchCurrentUser();

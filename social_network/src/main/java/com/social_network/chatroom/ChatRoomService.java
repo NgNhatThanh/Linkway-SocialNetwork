@@ -3,6 +3,7 @@ package com.social_network.chatroom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -51,5 +52,9 @@ public class ChatRoomService {
 
                 // Return the generated chat ID
                 return chatId;
+        }
+
+        public List<ChatRoom> getChatRoomsBySenderId(String senderId) {
+                return chatRoomRepository.findBySenderId(senderId);
         }
 }

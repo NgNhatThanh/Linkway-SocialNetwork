@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css">
-    <title>Chat Application</title>
+    <title>Private Chat</title>
 </head>
 
 <body>
 
-    <h2>Chat Box</h2>
+    <h2>Private Chat</h2>
 
     <!-- User Form for entering the chat -->
     <div class="user-form" id="username-page">
@@ -22,36 +22,26 @@
     </div>
 
     <!-- Chatroom UI -->
-    <div class="chat-container hidden" id="chat-page" th:data-recipient-id="${recipientId}">
-        <div class="users-list">
-            <div id="notification-area" class="notification-area"></div>
-            <div class="users-list-container">
-                <h3>Your RecentUsers</h3>
-                <ul id="RecentUsers"></ul> <!-- Following list -->
-            </div>
-            <div>
-                <p id="connected-user-displayname"></p>
-                <a class="logout" href="javascript:void(0)" id="logout">Logout</a>
-            </div>
-        </div>
-
+    <div class="chat-container hidden" id="chat-page">
         <div class="chat-area">
             <!-- Display the name of the person you are chatting with -->
             <div id="chat-with-user" class="chat-with-user">
-                <h3>Chatting with: <span id="chat-with-username"></span></h3>
+                <span id="chat-with-user-name">Chatting with: <span id="chat-partner-name"></span></span>
             </div>
 
-            <div id="chat-messages" class="chat-messages"></div> <!-- Messages will be added here -->
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- Message Input Form -->
             <form id="messageForm" name="messageForm">
                 <div class="message-input">
-                    <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+                    <input autocomplete="off" type="text" id="message" placeholder="Type your message..." />
                     <button type="submit">Send</button>
                 </div>
             </form>
         </div>
     </div>
-    <!-- Notification Container -->
-    <div id="notification-container"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>

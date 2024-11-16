@@ -6,10 +6,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import com.social_network.entity.User;
+import com.social_network.service.UserService;
 
 import java.util.List;
 
@@ -20,6 +25,7 @@ public class ChatController {
         private final SimpMessagingTemplate messagingTemplate;
         private final ChatMessageService chatMessageService;
         private final ChatNotificationService chatNotificationService;
+        private final UserService userService;
 
         // Receive the chat message and send to the recipient
         @MessageMapping("/chat.sendMessage")
@@ -44,6 +50,18 @@ public class ChatController {
                 // Retrieve chat messages from the database
                 List<ChatMessage> messages = chatMessageService.findChatMessages(senderId, recipientId);
                 return ResponseEntity.ok(messages);
+        }
+
+        @GetMapping("/chat/{recipientId}")
+        public String openChatWithUser(@PathVariable String recipientId, Model model) {
+                try {
+                        // Thêm recipientId vào model để frontend có thể sử dụng
+                        model.addAttribute("recipientId", recipientId);
+                        return "index"; // Trả về giao diện chat giữa hai người
+                } catch (Exception e) {
+                        model.addAttribute("error", "Không thể mở giao diện chat.");
+                        return "error"; // Trả về trang lỗi nếu không thể mở giao diện chat
+                }
         }
 
         // Show the chat page (Frontend will display this page)

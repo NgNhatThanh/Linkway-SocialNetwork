@@ -1,5 +1,8 @@
 package com.social_network.service;
 
+import com.social_network.chat.ChatMessage;
+import com.social_network.chatroom.ChatRoom;
+import com.social_network.chatroom.ChatRoomService;
 import com.social_network.dao.UserRepository;
 import com.social_network.dto.PageResponse;
 import com.social_network.dto.UserDTO;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Date;
+import java.util.HashSet;
 
 @Service
 @AllArgsConstructor
@@ -35,6 +39,7 @@ public class UserService {
     private UserRepository userRepository;
 
     private RoleService roleService;
+    private ChatRoomService chatRoomService;
 
     @Transactional
     public User addUser(RegisterDTO newUser) {
@@ -176,5 +181,22 @@ public class UserService {
         return followingUsers.stream()
                 .map(user -> convertToDTO(user))
                 .collect(Collectors.toList());
+    }
+
+    // Phương thức tìm danh sách người dùng đã từng nhắn tin với user hiện tại
+    public List<User> findUsersChattedWith(String userId) {
+        // Lấy tất cả chat rooms của user hiện tại
+        List<ChatRoom> chatRooms = chatRoomService.getChatRoomsBySenderId(userId);
+
+        // Lọc ra những chat room mà user hiện tại đã từng nhắn tin với
+        List<User> users = chatRooms.stream()
+                .map(chatRoom -> {
+                    String recipientId = chatRoom.getRecipientId();
+                    return userRepository.findByUsername(recipientId).get();
+                })
+                .collect(Collectors.toList());
+
+        // Trả về danh sách người dùng đã từng nhắn tin với user hiện tại
+        return users;
     }
 }

@@ -130,6 +130,21 @@ public class UserController {
         }
     }
 
+    @GetMapping("/users/{username}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable String username) {
+        try {
+            Optional<User> userOptional = userService.findByUsername(username);
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            User user = userOptional.get();
+            UserDTO userDTO = userService.convertToDTO(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
     // Fetch all users that the current logged-in user is following
     @GetMapping("/users/following/{username}")
     public ResponseEntity<List<UserDTO>> getFollowingUsers() {
@@ -160,11 +175,43 @@ public class UserController {
 
     // Fetch all online users (users with ONLINE status)
     @GetMapping("/users/online")
-    public ResponseEntity<List<User>> getOnlineUsers() {
+    public ResponseEntity<List<UserDTO>> getOnlineUsers() {
         try {
             // Get the list of users who are online
             List<User> onlineUsers = userService.findConnectedUsers();
-            return ResponseEntity.ok(onlineUsers);
+            if (onlineUsers.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No online users
+            }
+            List<UserDTO> onlineUserDTOs = userService.convertToDTOList(onlineUsers);
+            return ResponseEntity.ok(onlineUserDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/users/chat")
+    public ResponseEntity<List<UserDTO>> getChatUsers() {
+        try {
+            HttpSession session = securityUtil.getSession();
+            String username = (String) session.getAttribute("username");
+
+            if (username == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+
+            Optional<User> userOptional = userService.findByUsername(username);
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+
+            User user = userOptional.get();
+            List<User> chatUsers = userService.findUsersChattedWith(username);
+            if (chatUsers.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No chat users
+            }
+            List<UserDTO> chatUserDTOs = userService.convertToDTOList(chatUsers);
+            return ResponseEntity.ok(chatUserDTOs);
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

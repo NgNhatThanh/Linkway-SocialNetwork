@@ -70,6 +70,82 @@ body {
     /* Optional: Add margin between messages and the input area */
 }
 
+#chat-with-user {
+    position: fixed;
+    /* Fixes the header at the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #f0f0f0;
+    /* Optional: Customize the background color */
+    padding: 10px;
+    /* Optional: Adds padding for aesthetics */
+    z-index: 1000;
+    /* Keeps the header on top of other elements */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    /* Optional: Adds a shadow */
+}
+
+.chat-container {
+    margin-top: 60px;
+    /* Adjust this based on the header height */
+    overflow-y: auto;
+    /* Enables scrolling for the chat area */
+    height: calc(100vh - 60px);
+    /* Keeps the chat area within the viewport */
+}
+
+#notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.notification {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation: fadeInOut 5s forwards;
+}
+
+.notification.info {
+    background-color: #2196F3;
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.success {
+    background-color: #4CAF50;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
 .message {
     display: flex;
     justify-content: flex-start;
