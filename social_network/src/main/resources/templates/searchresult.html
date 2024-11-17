@@ -10,27 +10,32 @@
 
         <div id="search-type">
             <button>
-                <a th:href="@{'?type=post'}"> Bài viết </a>
+                <a th:href="${'?query=' + query + '&type=post'}"> Bài viết </a>
             </button>
 
             <button>
-                <a th:href="@{'?type=user'}"> Người dùng </a>
+                <a th:href="${'?query=' + query + '&type=user'}"> Người dùng </a>
             </button>
         </div>
 
-        <div th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'" id="search-filter">
-            <select>
-                <option> Liên quan </option>
-                <option> Mới nhất </option>
-                <option> Phổ biến </option>
+        <form th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'"
+              id="search-filter">
+            <input type="hidden" name="query" th:value="${param.query}">
+
+            <input type="hidden" name="type" th:value="${param.type == null ? 'post' : param.type}">
+
+            <select name="sortBy">
+                <option value="relevance" th:selected="${param.sortBy} == null or ${#strings.toString(param.sortBy) == 'relevance'}"> Liên quan </option>
+                <option value="newest" th:selected="${#strings.toString(param.sortBy) == 'newest'}"> Mới nhất </option>
+                <option value="hot" th:selected="${#strings.toString(param.sortBy) == 'hot'}"> Phổ biến </option>
             </select>
 
-            <select>
-                <option> Mọi lúc </option>
-                <option> Hôm nay </option>
-                <option> Tuần này </option>
-                <option> Tháng này </option>
-                <option> Năm nay </option>
+            <select name="date">
+                <option value="everytime" th:selected="${param.date} == null or ${#strings.toString(param.date) == 'everytime'}"> Mọi lúc </option>
+                <option value="today" th:selected="${#strings.toString(param.date) == 'today'}"> Hôm nay </option>
+                <option value="this_week" th:selected="${#strings.toString(param.date) == 'this_week'}"> Tuần này </option>
+                <option value="this_month" th:selected="${#strings.toString(param.date) == 'this_month'}"> Tháng này </option>
+                <option value="this_year" th:selected="${#strings.toString(param.date) == 'this_year'}"> Năm nay </option>
             </select>
 
             <div>
@@ -40,15 +45,13 @@
             </div>
 
             <div id="filter-hidden-tags">
-                <input type="hidden" th:each="tag : ${tags}" th:name="tags" th:value="${tag}">
+                <input type="hidden" th:each="tag : ${tagNames}" th:name="tagName" th:value="${tag}">
             </div>
 
-            <form>
-                <button type="submit">
-                    Lọc
-                </button>
-            </form>
-        </div>
+            <button type="submit" onclick="filter()">
+                Lọc
+            </button>
+        </form>
 
         <script th:src="@{/js/searchresult.js}"></script>
     </main>

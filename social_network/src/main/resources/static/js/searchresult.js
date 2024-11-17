@@ -70,3 +70,16 @@ function removeTag(tag, index) {
     availableTags.push(tag);
     renderTags();
 }
+
+function filter(){
+    const hiddenTagsContainer = document.getElementById('filter-hidden-tags');
+    hiddenTagsContainer.innerHTML = ''; // Clear previous hidden inputs
+
+    filterTags.forEach(tag => {
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'tagName';
+        hiddenInput.value = tag;
+        hiddenTagsContainer.appendChild(hiddenInput);
+    });
+}

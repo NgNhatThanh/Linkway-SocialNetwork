@@ -60,8 +60,21 @@ public class HomepageController {
 
     @GetMapping("/search")
     public String search(Model model,
-                         @RequestParam(value = "type", defaultValue = "post") String type){
+                         @RequestParam(value = "query") String query,
+                         @RequestParam(value = "type", defaultValue = "post") String type,
+                         @RequestParam(value = "sortBy", defaultValue = "relevance") String sortBy,
+                         @RequestParam(value = "date", defaultValue = "everytime") String date,
+                         @RequestParam(value = "tagName", defaultValue = "") List<String> tagNames){
 
+        System.out.println("ABCDEF: ");
+        for(String s : tagNames) System.out.println(s);
+
+//        model.addAttribute("query", query);
+//        model.addAttribute("type", type);
+//        model.addAttribute("sortBy", sortBy);
+
+        model.addAttribute("query", query);
+        model.addAttribute("tagNames", tagNames);
         return "searchresult";
     }
 }
