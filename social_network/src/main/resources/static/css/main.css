@@ -126,6 +126,12 @@ body {
     background-color: #4CAF50;
 }
 
+.highlight {
+    background-color: #ffeb3b;
+    /* Yellow color for notification */
+    font-weight: bold;
+}
+
 @keyframes fadeInOut {
     0% {
         opacity: 0;

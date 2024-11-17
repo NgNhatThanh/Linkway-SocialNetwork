@@ -163,6 +163,8 @@ function appendRecentUserElement(user, RecentUsersList) {
         updateChatHeader();
         loadMessageHistory(selectedUserId);
         messageInput.focus();
+        // Remove the highlight class when clicked
+        listItem.classList.remove('highlight');
     });
     RecentUsersList.appendChild(listItem);
 
@@ -292,6 +294,7 @@ function sendMessage(event) {
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
         messageInput.focus();
+        fetchRecentUserChatWith();
         appendMessageToChat(chatMessage, true);
     } else {
         console.log('Message cannot be empty or no recipient selected');
@@ -351,12 +354,20 @@ function onLogout() {
     usernamePage.classList.remove('hidden');
     chatPage.classList.add('hidden');
 }
+function highlightUser(username) {
+    const recentUserElement = document.getElementById(username);
+    const followingUserElement = document.querySelector(`#followingUsers #${username}`);
+
+    if (recentUserElement) recentUserElement.classList.add('highlight');
+    if (followingUserElement) followingUserElement.classList.add('highlight');
+}
 
 // Handle message received event
 function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
     appendMessageToChat(messageData, false);
     showNotification(`New message from ${messageData.senderId}`, 'message');
+    highlightUser(messageData.senderId);
 }
 
 // Handle public messages
