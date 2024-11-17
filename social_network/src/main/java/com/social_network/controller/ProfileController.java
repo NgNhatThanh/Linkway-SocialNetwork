@@ -51,21 +51,6 @@ public class ProfileController {
         return followingTags;
     }
 
-    // Search for a user by username or display name
-    @GetMapping("/searchUser")
-    public String searchUser(@RequestParam("query") String query, Model model) {
-        List<User> users = userService.findByUsernameOrDisplayName(query);
-
-        if (!users.isEmpty()) {
-            model.addAttribute("users", users);
-            model.addAttribute("query", query);
-            return "searchResults"; // This will display the search results
-        } else {
-            model.addAttribute("error", "User not found");
-            return "error"; // Ensure error.html template is present
-        }
-    }
-
     // Show the current user's profile page
     @GetMapping("/profile")
     public String showCurrentUserProfile(Model model,

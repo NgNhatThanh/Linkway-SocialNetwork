@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <link rel="stylesheet" th:href="@{/css/searchresult.css}">
+
+        <div id="search-type">
+            <button>
+                <a th:href="@{'?type=post'}"> Bài viết </a>
+            </button>
+
+            <button>
+                <a th:href="@{'?type=user'}"> Người dùng </a>
+            </button>
+        </div>
+
+        <div th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'" id="search-filter">
+            <select>
+                <option> Liên quan </option>
+                <option> Mới nhất </option>
+                <option> Phổ biến </option>
+            </select>
+
+            <select>
+                <option> Mọi lúc </option>
+                <option> Hôm nay </option>
+                <option> Tuần này </option>
+                <option> Tháng này </option>
+                <option> Năm nay </option>
+            </select>
+
+            <div>
+                <textarea id="filter-tag-input" placeholder="Lọc bởi thẻ"></textarea>
+                <div id="filter-tags-display"></div>
+                <div id="filter-tag-suggestions" class="filter-tags-suggestions"></div>
+            </div>
+
+            <div id="filter-hidden-tags">
+                <input type="hidden" th:each="tag : ${tags}" th:name="tags" th:value="${tag}">
+            </div>
+
+            <form>
+                <button type="submit">
+                    Lọc
+                </button>
+            </form>
+        </div>
+
+        <script th:src="@{/js/searchresult.js}"></script>
+    </main>
+</body>
+</html>

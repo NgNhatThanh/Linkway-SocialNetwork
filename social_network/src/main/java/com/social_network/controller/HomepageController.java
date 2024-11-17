@@ -57,4 +57,11 @@ public class HomepageController {
         model.addAttribute("postList", postList);
         return "home/mainzone";
     }
+
+    @GetMapping("/search")
+    public String search(Model model,
+                         @RequestParam(value = "type", defaultValue = "post") String type){
+
+        return "searchresult";
+    }
 }
