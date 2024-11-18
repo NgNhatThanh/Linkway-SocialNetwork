@@ -198,7 +198,7 @@
                         <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
                               method="post">
                             <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
-                            <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                            <button class="subFollow" type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
                         </form>
                     </div>
                     <div class="vote-section">

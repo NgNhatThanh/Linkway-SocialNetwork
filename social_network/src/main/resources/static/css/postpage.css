@@ -609,7 +609,19 @@ h5[th\:if="${comment.wasUpdated}"] {
     color: #333;
     margin-bottom: 5px;
 }
-
+.subFollow{
+    margin-top: 10px;
+    width: 75px;
+    height: 30px;
+    padding: 5px 10px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
 .profile-meta {
     color: #666;
     font-size: 0.9em;
