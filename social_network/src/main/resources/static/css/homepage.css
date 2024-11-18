@@ -9,13 +9,27 @@ body {
     padding: 5px;
 }
 
-.content {
+.main-content{
     display: flex;
-    flex: 1;
+    position: relative;
+    height: 100%;
 }
-
-.content .side{
+.main-content .side-bar-container{
+    top: 0;
+    left: 0;
     width: 300px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
+    height: 100%;
+    padding: 0px 10px;
+}
+.main-content .main-zone-container{
+    margin-left: 80px;
+    width: calc(100% - 80px);
+}
+.main-content .side{
+    width: 280px;
+}
+.main-content .main-zone-container .main-zone{
+    width: 100%;
 }

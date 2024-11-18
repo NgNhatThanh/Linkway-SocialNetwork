@@ -16,12 +16,17 @@
   <div th:insert="~{home/navbar.html :: navbar}" class="nav">
   </div>
 
-  <div class="content">
-    <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side">
+  <div class="main-content">
+    <div class="side-bar-container">
+      <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side"></div>
     </div>
 
-    <div class="main-zone" th:replace="${content}" >
+
+    <div class="main-zone-containter">
+      <div class="main-zone" th:replace="${content}" >
+      </div>
     </div>
+
   </div>
 
 

@@ -16,14 +16,15 @@
 
             <input type="hidden" th:field="*{id}" th:value="*{id}">
 
-            <div style="display: flex">
+            <div class="header">
                 <div id="post-title-container">
-                     <textarea id="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
+                    <textarea class="title-input" id="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
                 </div>
-                <button id="submit-button" type="submit">
+                <button id="submit-button" type="submit" class="post-button">
                     Đăng bài
                 </button>
             </div>
+
 
             <div id="tag-input-container">
                 <textarea id="tag-input" placeholder="Thêm tối đa 5 thẻ vào bài viết"></textarea>

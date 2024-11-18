@@ -59,12 +59,16 @@ function loadChildComments(parentId){
                                             <div class="comment-meta">
                                                 <div class="comment-info">
                                                     <div class="comment-author-info">
-                                                        <a href="${'/profile/' + comment.author.username}">
-                                                            <img src="${comment.author.avatarImagePath}" class="author-mini-avatar">
-                                                        </a>
-                                                        <div>
-                                                            <p class="date">${comment.createdAt}</p>
+                                                        <div style="display: flex; align-item: center;">
+                                                            <a class="comment-author-img"href="${'/profile/' + comment.author.username}">
+                                                                <img src="${comment.author.avatarImagePath}" class="author-mini-avatar">
+                                                            </a>
                                                             <a href="${'/profile/' + comment.author.username}">${comment.author.displayName}</a>
+                                                        </div>
+                                                        <div>
+                                                            <div class="comment-date" style="display: flex">
+                                                                <p class="date">${comment.createdAt}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
         
@@ -74,46 +78,44 @@ function loadChildComments(parentId){
                                                 </div>
 
                                                 <div class="comment-vote">
-                                                    <div class="vote-interact">
+                                                    <div class="vote-buttons">
                                                         <form action=${comment.upvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/upvote`}
                                                               method="post">
                                                               ${csrfToken.outerHTML}
-                                                            <button type="submit">
-                                                                <i class="${comment.upvoted ? "bx bxs-upvote" : "bx bx-upvote"}"></i>
+                                                            <button type="submit" data-rel="back" class="vote-btn up active">
+                                                                <span class="upvote-count">${comment.upvotes}</span>
                                                             </button>
                                                         </form>
-                                                        <p class="vote-count">${comment.upvotes}</p>
-                                                    </div>
-
-                                                    <div class="vote-interact">
-                                                        <form action=${comment.downvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/downvote`} 
+                                                        <form action=${comment.downvoted ? `/comment/${comment.id}/unvote` : `/comment/${comment.id}/downvote`}
                                                             method="post">
                                                             ${csrfToken.outerHTML}
-                                                            <button type="submit">
-                                                                <i class="${comment.downvoted ? "bx bxs-downvote" : "bx bx-downvote"}"></i>
+                                                            <button type="submit" data-rel="back" class="vote-btn down">
+                                                                <span class="downvote-count">${comment.downvotes}</span>
                                                             </button>
                                                         </form>
-                                                        <p class="vote-count">${comment.downvotes}</p>
                                                     </div>
+                                                    <button type="button" class="action-btn" onclick=loadChildComments(${comment.id}) id=get-replies-${comment.id}> Xem Phản hồi </button>
+                                                    <button class="action-btn" onclick='showReplyForm(${comment.id})'> Phản hồi </button>
+                                                    <button class="action-btn" onclick=showCommentEditForm(${comment.id})> Chỉnh sửa</button>
                                                 </div>
                                                 
-                                                <div class="comment-option-buttons">
+
                                             `;
-                if(comment.hasChild){
-                    innerAdd += `<button type="button" 
-                                onclick=loadChildComments(${comment.id})
-                                id=get-replies-${comment.id}> Xem Phản hồi </button>`;
-                }
-
-                innerAdd += `<button onclick='showReplyForm(${comment.id})'>
-                                    Phản hồi
-                             </button>`;
-
-                if(comment.author.username === currentUsername){
-                    innerAdd += `<button onclick=showCommentEditForm(${comment.id})>
-                                    Chỉnh sửa
-                                 </button>`;
-                }
+//                if(comment.hasChild){
+//                    innerAdd += `<button type="button" class="action-btn"
+//                                onclick=loadChildComments(${comment.id})
+//                                id=get-replies-${comment.id}> Xem Phản hồi </button>`;
+//                }
+//
+//                innerAdd += `<button class="action-btn" onclick='showReplyForm(${comment.id})'>
+//                                    Phản hồi
+//                             </button>`;
+//
+//                if(comment.author.username === currentUsername){
+//                    innerAdd += `<button class="action-btn" onclick=showCommentEditForm(${comment.id})>
+//                                    Chỉnh sửa
+//                                 </button>`;
+//                }
 
                 innerAdd += `</div>
                         </div>`;
