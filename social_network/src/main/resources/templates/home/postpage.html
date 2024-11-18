@@ -23,11 +23,15 @@
                     <p th:text="${post.getViews() + ' views'}"></p>
                 </div>
                 <br>
-                <div style="display: flex; justify-content: space-between;margin-bottom: 15px;">
-                    <h2 th:text="${post.getTitle()}" class="postpage-title"></h2>
-                    <a th:href="@{${'/post/edit/' + post.id}}" class="postpage-edit-btn">
-                        Chỉnh Sửa
-                    </a>
+                <div style=" display: flex; justify-content: space-between;margin-bottom: 15px;">
+                    <div style="width: 85%;">
+                        <h2 th:text="${post.getTitle()}" class="postpage-title"></h2>
+                    </div>
+                    <div style="width: 15%;">
+                        <a th:href="@{${'/post/edit/' + post.id}}" class="postpage-edit-btn">
+                            Chỉnh Sửa
+                        </a>
+                    </div>
                 </div>
 
                 <div class="postpage-author-info">
@@ -216,12 +220,14 @@
 
 
             <div class="related-posts">
-                <h3 th:text="${'Bài viết từ ' + post.getAuthor().getDisplayName()}"></h3>
-                <div class="post-item" th:each="post, iter : ${coauthorPosts}">
-                    <a class="post-title" th:href="@{${'/post/' + post.id}}" th:text="${post.title}"></a>
-                    <p th:text="${post.views + ' views'}"></p>
-                    <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
-                    <p th:text="${post.comments.size() + ' comments'}"></p>
+                <h3 class="related-posts-author-name" th:text="${'Bài viết từ: ' + post.getAuthor().getDisplayName()}"></h3>
+                <div class="related-posts-post-item" th:each="post, iter : ${coauthorPosts}">
+                    <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}" th:text="${post.title}"></a>
+                    <div>
+                        <p th:text="${post.views + ' views'}"></p>
+                        <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
+                        <p th:text="${post.comments.size() + ' comments'}"></p>
+                    </div>
                 </div>
             </div>
         </div>
