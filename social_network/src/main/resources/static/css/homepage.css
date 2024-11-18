@@ -3,6 +3,9 @@ body {
     flex-direction: column;
     height: 100vh;
 }
+textarea{
+    resize: vertical;
+}
 .nav{
     height: 10%;
     border: 1px gray solid;

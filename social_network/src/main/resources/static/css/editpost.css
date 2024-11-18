@@ -19,8 +19,8 @@
     margin-bottom: 20px;
 }
 #post-title-container{
-    width: 80%;
-    margin-right: 10px;
+    width: 100%;
+
 }
 
 .title-input {
@@ -38,6 +38,9 @@
 }
 
 .post-button {
+    margin-top: 15px;
+    width: 100px;
+    height: 40px;
     padding: 10px 20px;
     background: #0066cc;
     color: white;
@@ -133,5 +136,28 @@
 .stats {
     float: right;
     color: #666;
+    font-size: 0.9em;
+}
+
+
+.suggestions{
+    margin-bottom: 10px;
+}
+.suggestion-item{
+    margin-top: 10px;
+    margin-left: 15px;
+    color: #551A8B;
+}
+#tags-display{
+    margin-top: 10px;
+}
+#tags-display .tag{
+    display: inline-block;
+    padding: 4px 8px;
+    background: #e9ecef;
+    color: #495057;
+    border-radius: 4px;
+    margin-right: 8px;
+    text-decoration: none;
     font-size: 0.9em;
 }

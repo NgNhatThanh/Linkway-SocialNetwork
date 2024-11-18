@@ -20,9 +20,6 @@
                 <div id="post-title-container">
                     <textarea class="title-input" id="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
                 </div>
-                <button id="submit-button" type="submit" class="post-button">
-                    Đăng bài
-                </button>
             </div>
 
 
@@ -39,6 +36,12 @@
             <div id="post-content-container">
                 <textarea id="post-content" th:field="*{content}" th:value="*{content}"></textarea>
             </div>
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <button id="submit-button" type="submit" class="post-button">
+                    Đăng bài
+                </button>
+            </div>
+
         </form>
 
         <script th:src="@{/js/editpost.js}"></script>

@@ -65,15 +65,19 @@
     font-size: 0.9em;
 }
 .postpage-edit-btn {
-    height: 30px;
+    height: 35px;
     width: 100%;
     align-item: center;
-    padding: 8px 16px;
+    justify-content: center;
+    padding: 10px 16px;
     background: #28a745;
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    font-size: 1.05em;
+    font-size: 15px;
+    display: flex;
+    flex-wrap: nowrap;
+    resize: vertical;
 }
 
 .postpage-edit-btn:hover {
@@ -575,7 +579,12 @@ h5[th\:if="${comment.wasUpdated}"] {
     padding: 10px;
     margin-left: 30px;
     border-radius: 20px;    background: #F5F5F5;
-
+    position: relative;
+}
+.side-container{
+    position: sticky;
+    top: 0;
+    left: 0;
 }
 .profile-section {
     display: flex;

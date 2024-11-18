@@ -178,58 +178,60 @@
         </div>
 
         <div class="side-div">
-            <div class="profile-section">
-                <img th:src="@{${post.getAuthor().getAvatarImagePath()}}"
-                    class="profile-image">
-                <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
-                    th:text="${post.getAuthor().getDisplayName()}"
-                    class="profile-name"></a>
-<!--                <p th:text="${post.getAuthor().getUsername()}"></p>-->
-                <p th:text="${authorFollowers + ' followers'}"></p>
+            <div class="side-container">
+                <div class="profile-section">
+                    <img th:src="@{${post.getAuthor().getAvatarImagePath()}}"
+                         class="profile-image">
+                    <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
+                       th:text="${post.getAuthor().getDisplayName()}"
+                       class="profile-name"></a>
+                    <!--                <p th:text="${post.getAuthor().getUsername()}"></p>-->
+                    <p th:text="${authorFollowers + ' followers'}"></p>
 
-                <div class="author-card-follow profile-actions">
-                    <!-- Edit Profile Button for Current User -->
-                    <button th:if="${isCurrentUser}" style="border: none; background:none; margin-top: 13px;">
-                        <a th:href="@{/updateProfile}" class="edit-profile-link">Edit Profile</a>
-                    </button>
-
-                    <!-- Follow/Unfollow Button for Other Users -->
-                    <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
-                          method="post">
-                        <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
-                        <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
-                    </form>
-                </div>
-                <div class="vote-section">
-                    <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
-                          method="post">
-                        <button class="vote-button vote-up" aria-label="Upvote" type="submit">
-<!--                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>-->
-                            <span class="vote-count" th:text="${post.getUpvotes()}" ></span>
+                    <div class="author-card-follow profile-actions">
+                        <!-- Edit Profile Button for Current User -->
+                        <button th:if="${isCurrentUser}" style="border: none; background:none; margin-top: 13px;">
+                            <a th:href="@{/updateProfile}" class="edit-profile-link">Edit Profile</a>
                         </button>
-                    </form>
-                    <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
-                        <button class="vote-button vote-down" type="submit" aria-label="Downvote">
-<!--                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>-->
-                            <span class="vote-count" th:text="${post.getDownvotes()}" ></span>
-                        </button>
-                    </form>
 
+                        <!-- Follow/Unfollow Button for Other Users -->
+                        <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
+                              method="post">
+                            <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
+                            <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                        </form>
+                    </div>
+                    <div class="vote-section">
+                        <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
+                              method="post">
+                            <button class="vote-button vote-up" aria-label="Upvote" type="submit">
+                                <!--                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>-->
+                                <span class="vote-count" th:text="${post.getUpvotes()}" ></span>
+                            </button>
+                        </form>
+                        <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
+                            <button class="vote-button vote-down" type="submit" aria-label="Downvote">
+                                <!--                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>-->
+                                <span class="vote-count" th:text="${post.getDownvotes()}" ></span>
+                            </button>
+                        </form>
+
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="related-posts">
-                <h3 class="related-posts-author-name" th:text="${'Bài viết từ: ' + post.getAuthor().getDisplayName()}"></h3>
-                <div class="related-posts-post-item" th:each="post, iter : ${coauthorPosts}">
-                    <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}" th:text="${post.title}"></a>
-                    <div>
-                        <p th:text="${post.views + ' views'}"></p>
-                        <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
-                        <p th:text="${post.comments.size() + ' comments'}"></p>
+                <div class="related-posts">
+                    <h3 class="related-posts-author-name" th:text="${'Bài viết từ: ' + post.getAuthor().getDisplayName()}"></h3>
+                    <div class="related-posts-post-item" th:each="post, iter : ${coauthorPosts}">
+                        <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}" th:text="${post.title}"></a>
+                        <div>
+                            <p th:text="${post.views + ' views'}"></p>
+                            <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
+                            <p th:text="${post.comments.size() + ' comments'}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
         <script th:src="@{/js/postpage.js}"></script>
