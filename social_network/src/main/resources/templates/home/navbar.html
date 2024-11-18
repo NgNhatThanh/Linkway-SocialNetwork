@@ -15,7 +15,7 @@
 
         <div>
             <form th:action="@{/searchUser}" method="get" class="search-container">
-                <input type="text" name="query" placeholder="Search for users..." required class="search-input"/>
+                <input type="text" name="query" placeholder="Search for users..." required class="search-input" />
                 <button class="button button-secondary" type="submit">Search</button>
             </form>
         </div>
@@ -52,7 +52,7 @@
                         <div class="menu-item">
                             <form th:action="@{/logout}" method="post" class="dropdown-item">
                                 <button class="btn-logout" type="submit">
-                                    <i class='bx bx-exit icon'  ></i>
+                                    <i class='bx bx-exit icon'></i>
                                     <span>Đăng xuất</span>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                 </button>
@@ -69,6 +69,7 @@
         </div>
 
         <script th:src="@{/js/navbar.js}"></script>
+        <script th:src="@{/js/main.js}"></script>
     </div>
 </body>
 

@@ -354,6 +354,7 @@ function onLogout() {
     usernamePage.classList.remove('hidden');
     chatPage.classList.add('hidden');
 }
+
 function highlightUser(username) {
     const recentUserElement = document.getElementById(username);
     const followingUserElement = document.querySelector(`#followingUsers #${username}`);
@@ -368,6 +369,20 @@ function onMessageReceived(message) {
     appendMessageToChat(messageData, false);
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
+    // Update the navbar notification indicator
+    updateNavbarMessageNotification();
+}
+
+// Function to update navbar message notification
+function updateNavbarMessageNotification() {
+    const notificationBadge = document.getElementById('message-notification');
+
+    // If badge exists, show it and increment count
+    if (notificationBadge) {
+        notificationBadge.style.display = 'inline';
+        const count = parseInt(notificationBadge.textContent) || 0;
+        notificationBadge.textContent = count + 1;
+    }
 }
 
 // Handle public messages
