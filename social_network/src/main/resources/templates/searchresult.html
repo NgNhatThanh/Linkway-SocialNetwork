@@ -53,6 +53,29 @@
             </button>
         </form>
 
+        <div th:if="${userList != null}">
+
+            <p th:if="${userList.isEmpty()}">
+                Không tìm thấy kết quả nào!
+            </p>
+
+            <div th:each="user : ${userList}" class="user-card" style="display: flex; width: 60%">
+                <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
+                <div>
+                    <div style="display: flex">
+                        <h4 th:text="${user.displayName}"></h4>
+                        <p th:text="${user.username}"></p>
+                    </div>
+                    <div style="display: flex">
+                        <p th:text="${user.followersCount + ' người theo dõi'}"></p>
+                        <p th:text="${user.postsCount + ' bài viết'}"></p>
+                    </div>
+                    <p th:text="${user.introduction}" class="user-introduction"></p>
+                </div>
+            </div>
+
+        </div>
+
         <script th:src="@{/js/searchresult.js}"></script>
     </main>
 </body>

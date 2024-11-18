@@ -73,4 +73,8 @@ public class PostService {
         return postRepository.findPostByTags(tags, pageable);
     }
 
+    public int countPostsByAuthor(User author){
+        return postRepository.countByAuthor(author);
+    }
+
 }

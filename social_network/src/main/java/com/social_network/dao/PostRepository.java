@@ -25,4 +25,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Page<Post> findPostByTags(List<Tag> tags, Pageable pageable);
 
+    int countByAuthor(User author);
+
 }

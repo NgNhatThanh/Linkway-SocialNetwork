@@ -1,12 +1,14 @@
 package com.social_network.controller;
 
 import com.social_network.dto.request.CommentDTO;
+import com.social_network.dto.response.UserSearchDTO;
 import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import com.social_network.service.*;
 import com.social_network.util.MarkdownRenderUtil;
+import com.social_network.util.ModelMapper;
 import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,8 @@ public class HomepageController {
     private final UserService userService;
 
     private final TagService tagService;
+
+    private final FollowService followService;
 
     private PostService postService;
 
@@ -64,15 +68,21 @@ public class HomepageController {
                          @RequestParam(value = "type", defaultValue = "post") String type,
                          @RequestParam(value = "sortBy", defaultValue = "relevance") String sortBy,
                          @RequestParam(value = "date", defaultValue = "everytime") String date,
-                         @RequestParam(value = "tagName", defaultValue = "") List<String> tagNames){
+                         @RequestParam(value = "tagName", defaultValue = "") List<String> tagNames,
+                         @RequestParam(value = "page", defaultValue = "1") int page){
+        if(type.equals("user")){
+            Page<User> userList = userService.findByKeyword(query, page);
+            Page<UserSearchDTO> userDTOList = userList.map(user -> {
+               UserSearchDTO dto = ModelMapper.getInstance().map(user, UserSearchDTO.class);
+               dto.setFollowersCount(followService.getFollowerCount(user));
+               dto.setPostsCount(postService.countPostsByAuthor(user));
+               return dto;
+            });
+            model.addAttribute("userList", userDTOList);
+        }
+        else{
 
-        System.out.println("ABCDEF: ");
-        for(String s : tagNames) System.out.println(s);
-
-//        model.addAttribute("query", query);
-//        model.addAttribute("type", type);
-//        model.addAttribute("sortBy", sortBy);
-
+        }
         model.addAttribute("query", query);
         model.addAttribute("tagNames", tagNames);
         return "searchresult";
