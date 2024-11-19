@@ -26,7 +26,7 @@
             </form>
 
             <!--        Hiện tất cả tag (phân trang) -->
-            <form th:action="@{/}">
+            <form th:action="@{/tags}">
                 <button type="submit">
                     <i class='bx bx-purchase-tag-alt' ></i>
                     <span>Tags</span>
@@ -42,7 +42,7 @@
                 <h3> Following Tags </h3>
                 <ul th:each="tag : ${followingTags}">
                     <li>
-                        <a th:href="@{#}" th:text="*{tag.getName()}"></a>
+                        <a th:href="@{${'/tag/' + tag.name}}" th:text="*{tag.getName()}"></a>
                     </li>
                 </ul>
             </div>

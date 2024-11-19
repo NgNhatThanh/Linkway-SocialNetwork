@@ -12,6 +12,8 @@ import com.social_network.util.BCryptEncoder;
 import com.social_network.util.ModelMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.support.ResourcePatternResolver;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,26 +30,24 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserService {
 
+    private final ResourcePatternResolver resourcePatternResolver;
     private UserRepository userRepository;
 
     private RoleService roleService;
+
+    private final int USER_PER_PAGE = 10;
+
+    private final String DEFAULT_AVATAR_PATH = "https://res.cloudinary.com/daxt0vwoc/image/upload/v1731641878/avatar_nuqmjm.jpg";
 
     @Transactional
     public User addUser(RegisterDTO newUser) {
         User user = ModelMapper.getInstance()
                 .map(newUser, User.class);
-
-        // if(userRepository.existsByEmail(user.getEmail()))
-        // throw new DataExistedException("Email has been taken");
-        //
-        // if(userRepository.existsByUsername(user.getUsername()))
-        // throw new DataExistedException("Username has been taken");
-
         String encodedPassword = BCryptEncoder.getInstance().encode(user.getPassword());
         user.setPassword(encodedPassword);
         Role role = roleService.findByName("USER");
         user.setRole(role);
-        user.setAvatarImagePath("path to default profile picture");
+        user.setAvatarImagePath(DEFAULT_AVATAR_PATH);
         user.setCreatedAt(Date.from(Instant.now()));
         this.userRepository.save(user);
         return user;
@@ -63,12 +63,6 @@ public class UserService {
             throw new DataNotFoundException("Could not find user with id: " + id);
         return user;
     }
-    //
-    // public User updateUser(UserCreationDTO updatedUser){
-    // User user = findByUsername(updatedUser.getUsername());
-    //
-    // return userRepository.save(user);
-    // }
 
     public Optional<User> findByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
@@ -79,9 +73,6 @@ public class UserService {
 
     public List<User> findByUsernameOrDisplayName(String query) {
         List<User> allUsers = userRepository.findAll();
-
-        // Return users whose username or display name contains the query (case
-        // insensitive)
         return allUsers.stream()
                 .filter(user -> user.getUsername().toLowerCase().contains(query.toLowerCase()) ||
                         user.getDisplayName().toLowerCase().contains(query.toLowerCase()))
@@ -106,8 +97,9 @@ public class UserService {
                 .build();
     }
 
-    public void updateUserToken(String username, String token) {
-        User user = findByUsername(username).get();
-        userRepository.save(user);
+    public Page<User> findByKeyword(String keyword, int page){
+        Pageable pageable = PageRequest.of(page - 1, USER_PER_PAGE);
+        return userRepository.findByKeyword(keyword, pageable);
     }
+
 }

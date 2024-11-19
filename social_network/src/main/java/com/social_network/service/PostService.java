@@ -3,6 +3,7 @@ package com.social_network.service;
 import com.social_network.dao.PostRepository;
 import com.social_network.entity.Post;
 
+import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -10,8 +11,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 @Service
@@ -19,6 +24,7 @@ import java.util.*;
 public class PostService {
 
     private final int POST_PER_PAGE = 10;
+    private final TagService tagService;
 
     private PostRepository postRepository;
 
@@ -63,6 +69,69 @@ public class PostService {
             result.add(posts.get(idx));
         }
         return result.stream().toList();
+    }
+
+    public Page<Post> findByTags(List<Tag> tags, int page){
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE, sort);
+        return postRepository.findPostByTags(tags, pageable);
+    }
+
+    public int countPostsByAuthor(User author){
+        return postRepository.countByAuthor(author);
+    }
+
+    public Page<Post> search(String query,
+                             int page,
+                             String sortBy,
+                             String date,
+                             List<String> tagNames){
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
+        if(sortBy.equals("hot")){
+            sort = Sort.by(Sort.Direction.DESC, "views");
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE, sort);
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime dateFrom = LocalDateTime.of(1900, 1, 1, 0, 0);
+        LocalDateTime dateTo = LocalDateTime.of(3000, 1, 1, 0, 0);
+
+        switch (date) {
+            case "today":
+                dateFrom = today.atStartOfDay();
+                dateTo = today.atTime(23, 59, 59);
+                break;
+            case "this_week":
+                dateFrom = today.with(DayOfWeek.MONDAY).atStartOfDay();
+                dateTo = today.atTime(23, 59, 59);
+                break;
+            case "this_month":
+                dateFrom = today.with(TemporalAdjusters.firstDayOfMonth()).atStartOfDay();
+                dateTo = today.atTime(23, 59, 59);
+                break;
+            case "this_year":
+                dateFrom = today.with(TemporalAdjusters.firstDayOfYear()).atStartOfDay();
+                dateTo = today.atTime(23, 59, 59);
+        }
+
+        if(tagNames.isEmpty()) return postRepository.findPostsByTitleContainingIgnoreCaseAndCreatedAtBetween(query,
+                Date.from(dateFrom.atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(dateTo.atZone(ZoneId.systemDefault()).toInstant()),
+                pageable);
+
+        List<Tag> tags = new ArrayList<>();
+
+        for(String tagName : tagNames){
+            tags.add(tagService.findByName(tagName));
+        }
+
+        return postRepository.findPostsByTitleContainingIgnoreCaseAndCreatedAtBetweenAndTagsIn(query,
+                Date.from(dateFrom.atZone(ZoneId.systemDefault()).toInstant()),
+                Date.from(dateTo.atZone(ZoneId.systemDefault()).toInstant()),
+                tags,
+                pageable);
     }
 
 }

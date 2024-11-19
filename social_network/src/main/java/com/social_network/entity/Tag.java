@@ -23,12 +23,15 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "short_description")
+    private String shortDescription;
+
     @ManyToMany(mappedBy = "tags")
     @JsonIgnore
     private List<Post> posts;
 
-    public String toString(){
-        return id + " " + name;
-    }
+    @ManyToMany(mappedBy = "followingTags")
+    @JsonIgnore
+    private List<User> followingUsers;
 
 }
