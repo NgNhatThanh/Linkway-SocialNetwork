@@ -128,7 +128,7 @@
                                     <div class="vote-buttons">
                                         <form th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
                                               method="post">
-                                            <button type="submit" data-rel="back" class="vote-btn up active">
+                                            <button type="submit" data-rel="back" class="vote-btn up">
                                                 <span th:text="${comment.upvotes}" class="upvote-count"></span>
                                             </button>
                                         </form>
@@ -204,13 +204,13 @@
                     <div class="vote-section">
                         <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
                               method="post">
-                            <button class="vote-button vote-up" aria-label="Upvote" type="submit">
+                            <button class="vote-btn up" aria-label="Upvote" type="submit">
                                 <!--                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>-->
                                 <span class="vote-count" th:text="${post.getUpvotes()}" ></span>
                             </button>
                         </form>
                         <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
-                            <button class="vote-button vote-down" type="submit" aria-label="Downvote">
+                            <button class="vote-btn down" type="submit" aria-label="Downvote">
                                 <!--                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>-->
                                 <span class="vote-count" th:text="${post.getDownvotes()}" ></span>
                             </button>

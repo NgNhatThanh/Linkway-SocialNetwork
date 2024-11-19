@@ -387,10 +387,13 @@
 .vote-btn.up.active::before {
     color: #1a73e8;
 }
-
+.vote-btn .down.active::before {
+    color: #1a73e8;
+}
 .vote-btn:hover::before {
     color: #1a73e8;
 }
+
 
 /* Vote counts */
 .upvote-count,
@@ -583,7 +586,7 @@ h5[th\:if="${comment.wasUpdated}"] {
 }
 .side-container{
     position: sticky;
-    top: 0;
+    top: 10%;
     left: 0;
 }
 .profile-section {

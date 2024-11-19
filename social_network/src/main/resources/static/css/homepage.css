@@ -1,15 +1,19 @@
 body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
 }
 textarea{
     resize: vertical;
 }
 .nav{
+    background: #FFFFFF;
+    position: sticky;
+    top: 0;
+    left: 0;
     height: 10%;
     border: 1px gray solid;
     padding: 5px;
+    z-index: 100;
 }
 
 .main-content{
@@ -18,13 +22,14 @@ textarea{
     height: 100%;
 }
 .main-content .side-bar-container{
-    top: 0;
+    top: 10%;
     left: 0;
     width: 300px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
     height: 100%;
     padding: 0px 10px;
+    position: sticky;
 }
 .main-content .main-zone-container{
     margin-left: 80px;
@@ -35,4 +40,7 @@ textarea{
 }
 .main-content .main-zone-container .main-zone{
     width: 100%;
+    height: 100%;
+}
+.side{
 }
