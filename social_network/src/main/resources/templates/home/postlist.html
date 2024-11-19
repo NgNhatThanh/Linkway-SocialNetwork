@@ -28,9 +28,7 @@
                        th:text="*{tag.getName()}">
                     </a>
                 </div>
-<!--                <div class="post-image">-->
-<!--                    <img src="https://toigingiuvedep.vn/wp-content/uploads/2022/03/hinh-nen-your-name-full-hd-4k-cho-may-tinh.jpg"/>-->
-<!--                </div>-->
+
                 <div class="post-stats">
                     <div class="vote-group" >
 <!--                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>-->
@@ -48,10 +46,20 @@
         <div class="pagination">
             <ul th:each="i : ${#numbers.sequence(1, T(java.lang.Math).max(postList.totalPages,1))}">
                 <li th:classappend="${postList.number + 1 == i ? 'active' : ''}">
-                    <a th:href="@{'?page='+${i}}" th:text="${i}"></a>
+                    <a href="javascript:void(0)" th:onclick="'window.location.href = setPage(' + ${i} + ')'" th:text="${i}"></a>
                 </li>
             </ul>
         </div>
+
+        <script>
+
+            function setPage(page){
+                const url = new URL(window.location.href);
+                url.searchParams.set('page', page); // Update the page parameter
+                return url.toString(); // Navigate to the updated URL
+            }
+
+        </script>
     </div>
 </body>
 </html>

@@ -18,6 +18,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
 
@@ -81,7 +84,8 @@ public class HomepageController {
             model.addAttribute("userList", userDTOList);
         }
         else{
-
+            Page<Post> postList = postService.search(query, page, sortBy, date, tagNames);
+            model.addAttribute("postList", postList);
         }
         model.addAttribute("query", query);
         model.addAttribute("tagNames", tagNames);
