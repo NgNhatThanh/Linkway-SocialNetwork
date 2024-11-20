@@ -16,8 +16,9 @@
         </div>
 
         <!-- Profile Update Form -->
-        <form th:action="@{/updateProfile}" th:object="${user}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/updateProfile}" th:object="${userDTO}" method="post">
             <!-- Display Name -->
+            <input type="hidden" th:field="*{id}" th:value="*{id}">
             <div>
                 <label for="displayName">Display Name:</label>
                 <input type="text" id="displayName" th:field="*{displayName}" required />
@@ -40,21 +41,47 @@
 
             <!-- Avatar Upload -->
             <div>
-                <label for="avatar">Avatar:</label>
-                <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" />
-                <!-- Display current avatar if available -->
-                <div th:if="${user.avatarImagePath}">
-                    <img th:src="@{${user.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
+                <label for="avatar">Ảnh đại diện:</label>
+                <input id="avatar-path" th:field="*{avatarImagePath}" type="hidden">
+                <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onchange="uploadImage(this)"/>
+                <div>
+                    <img id="user-avatar" th:src="@{${userDTO.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
                 </div>
+
             </div>
 
-            <!-- Submit Button -->
             <div>
                 <button type="submit">Update Profile</button>
             </div>
         </form>
 
         <a href="/profile">Back to Profile</a>
+
+        <script>
+            function uploadImage(input){
+                const csrfToken = document.getElementById('csrf-token').value;
+
+                var file = input.files[0];
+                if(!file || !file.type.startsWith('image/')) return;
+
+                const formData = new FormData();
+                formData.append('image', file);
+
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken
+                    }
+                })
+                    .then(response => response.json())
+                    .then(response => {
+                        document.getElementById('user-avatar').src = response.imageUrl;
+                        document.getElementById('avatar-path').value = response.imageUrl
+                    })
+                    .catch(error => console.log("Err: " + error))
+            }
+        </script>
     </main>
 </body>
 

@@ -24,6 +24,10 @@ public class ChatNotificationService {
         return chatNotificationRepository.findByRecipientId(recipientId);
     }
 
+    public List<ChatNotification> findNotificationsBySender(String senderId) {
+        return chatNotificationRepository.findBySenderId(senderId);
+    }
+
     public void deleteNotificationById(String recipientId) {
         chatNotificationRepository.deleteByRecipientId(recipientId);
     }
@@ -34,8 +38,28 @@ public class ChatNotificationService {
         chatNotificationRepository.saveAll(notifications);
     }
 
+    public void markNotificationsAsReadWithSender(String senderId) {
+        List<ChatNotification> notifications = findUnreadNotificationsBySenderId(senderId);
+        notifications.forEach(notification -> notification.setRead(true));
+        chatNotificationRepository.saveAll(notifications);
+    }
+
+    public void markNotificationsAsReadWithSenderAndRecipient(String senderId, String recipientId) {
+        List<ChatNotification> notifications = findUnreadNotificationsBySenderIdAndRecipientId(senderId, recipientId);
+        notifications.forEach(notification -> notification.setRead(true));
+        chatNotificationRepository.saveAll(notifications);
+    }
+
     public List<ChatNotification> findUnreadNotificationsByRecipientId(String recipientId) {
         return chatNotificationRepository.findByRecipientIdAndRead(recipientId, false);
+    }
+
+    public List<ChatNotification> findUnreadNotificationsBySenderId(String senderId) {
+        return chatNotificationRepository.findBySenderIdAndRead(senderId, false);
+    }
+
+    public List<ChatNotification> findUnreadNotificationsBySenderIdAndRecipientId(String senderId, String recipientId) {
+        return chatNotificationRepository.findBySenderIdAndRecipientIdAndRead(senderId, recipientId, false);
     }
 
 }

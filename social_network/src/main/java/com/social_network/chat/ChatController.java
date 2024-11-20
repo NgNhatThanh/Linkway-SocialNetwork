@@ -69,6 +69,19 @@ public class ChatController {
                 }
         }
 
+        @GetMapping("/notifications/{senderId}/sender")
+        public ResponseEntity<List<ChatNotification>> findUnreadNotificationsWithSender(@PathVariable String senderId) {
+                try {
+                        // Fetch read notifications using the service
+                        List<ChatNotification> notifications = chatNotificationService
+                                        .findUnreadNotificationsBySenderId(senderId);
+                        return ResponseEntity.ok(notifications);
+                } catch (Exception e) {
+                        // Handle error if fetching notifications fails
+                        return ResponseEntity.status(500).body(new ArrayList<>());
+                }
+        }
+
         // Get the chat messages between two users
         @GetMapping("/messages/{senderId}/{recipientId}")
         public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
@@ -113,6 +126,20 @@ public class ChatController {
                 try {
                         // Đánh dấu tất cả thông báo là đã đọc
                         chatNotificationService.markNotificationsAsRead(recipientId);
+                        return ResponseEntity.ok("Notifications marked as read successfully");
+                } catch (Exception e) {
+                        // Xử lý lỗi nếu không thể đánh dấu thông báo
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Error while marking notifications as read: " + e.getMessage());
+                }
+        }
+
+        @PutMapping("/notifications/{senderId}/{recipientId}/mark-as-read")
+        public ResponseEntity<String> markNotificationsAsReadWithSenderAndRecipient(@PathVariable String senderId,
+                        @PathVariable String recipientId) {
+                try {
+                        // Đánh dấu tất cả thông báo là đã đọc
+                        chatNotificationService.markNotificationsAsReadWithSenderAndRecipient(senderId, recipientId);
                         return ResponseEntity.ok("Notifications marked as read successfully");
                 } catch (Exception e) {
                         // Xử lý lỗi nếu không thể đánh dấu thông báo

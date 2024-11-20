@@ -16,6 +16,7 @@
     <div class="user-form" id="username-page">
         <h3>Enter Chatroom</h3>
         <form id="usernameForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="csrf-token" />
             <p id="loading-text">Loading user information...</p>
             <p id="error-message" style="color: red; display: none;">Failed to retrieve user information.</p>
         </form>

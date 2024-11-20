@@ -40,7 +40,7 @@ public class FollowService {
         return followRepository.countByFollower(user);
     }
 
-    public long getFollowerCount(User user) {
+    public int getFollowerCount(User user) {
         return followRepository.countByFollowed(user); // Updated to count followers
     }
 

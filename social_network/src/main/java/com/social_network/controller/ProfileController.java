@@ -6,11 +6,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.social_network.dto.request.UserUpdateDTO;
 import com.social_network.entity.Follow;
 import com.social_network.entity.Post;
-
-import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener.Session;
-
 import com.social_network.entity.Tag;
 import com.social_network.service.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.social_network.util.SecurityUtil;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import com.social_network.entity.User;
@@ -32,8 +29,6 @@ import com.social_network.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @AllArgsConstructor
@@ -41,7 +36,6 @@ public class ProfileController {
     private final UserService userService;
     private final PostService postService;
     private final SecurityUtil securityUtil;
-    private final UploadService uploadService;
     private final FollowService followService;
     private TagService tagService;
 
@@ -51,25 +45,10 @@ public class ProfileController {
         try {
             String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
             User user = userService.findByUsername(username).get();
-            followingTags = tagService.findFollowingTagsByUsername(user.getId());
+            followingTags = user.getFollowingTags();
         } catch (NullPointerException ignored) {
         }
         return followingTags;
-    }
-
-    // Search for a user by username or display name
-    @GetMapping("/searchUser")
-    public String searchUser(@RequestParam("query") String query, Model model) {
-        List<User> users = userService.findByUsernameOrDisplayName(query);
-
-        if (!users.isEmpty()) {
-            model.addAttribute("users", users);
-            model.addAttribute("query", query);
-            return "searchResults"; // This will display the search results
-        } else {
-            model.addAttribute("error", "User not found");
-            return "error"; // Ensure error.html template is present
-        }
     }
 
     // Show the current user's profile page
@@ -88,8 +67,6 @@ public class ProfileController {
             Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
-            model.addAttribute("totalPages", posts.getTotalPages());
-            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", true); // Indicate that this is the current user's profile
@@ -121,8 +98,6 @@ public class ProfileController {
             Page<Follow> followings = followService.getFollowing(user, followingPage);
             model.addAttribute("user", user);
             model.addAttribute("postList", posts);
-            model.addAttribute("totalPages", posts.getTotalPages());
-            model.addAttribute("currentPage", page);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
             model.addAttribute("isCurrentUser", username.equals(currentUsername)); // Check if this is the current user
@@ -173,7 +148,13 @@ public class ProfileController {
         Optional<User> optionalUser = this.userService.findByUsername(username);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            model.addAttribute("user", user);
+            UserUpdateDTO userDTO = new UserUpdateDTO();
+            userDTO.setId(user.getId());
+            userDTO.setDisplayName(user.getDisplayName());
+            userDTO.setIntroduction(user.getIntroduction());
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAvatarImagePath(user.getAvatarImagePath());
+            model.addAttribute("userDTO", userDTO);
         } else {
             // Handle the case when the user is not found
             model.addAttribute("error", "User not found");
@@ -183,32 +164,18 @@ public class ProfileController {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-            RedirectAttributes redirectAttributes, @RequestParam("avatar") MultipartFile file) {
+    public String updateProfile(@ModelAttribute("userDTO") @Valid UserUpdateDTO userDTO,
+            BindingResult bindingResult,
+            HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return "updateProfile";
         }
-        String username = this.securityUtil.getCurrentUser().getUsername();
-        Optional<User> optionalUser = this.userService.findByUsername(username);
-        if (optionalUser.isPresent()) {
-            User currentUser = optionalUser.get();
-            currentUser.setDisplayName(user.getDisplayName());
-            currentUser.setIntroduction(user.getIntroduction());
-            currentUser.setEmail(user.getEmail());
-
-            if (!file.isEmpty()) {
-                currentUser.setAvatarImagePath(this.uploadService.handleSaveUploadFile(file, "avatar"));
-                // update session.avatar
-                HttpSession session = this.securityUtil.getSession();
-                session.setAttribute("avatar", currentUser.getAvatarImagePath());
-            }
-            this.userService.save(currentUser);
-
-        } else {
-            // Handle the case when the user is not found
-            redirectAttributes.addFlashAttribute("error", "User not found");
-            return "redirect:/error"; // Or redirect to an error page
-        }
+        User user = userService.findById(userDTO.getId());
+        user.setDisplayName(userDTO.getDisplayName());
+        user.setIntroduction(userDTO.getIntroduction());
+        user.setEmail(userDTO.getEmail());
+        user.setAvatarImagePath(userDTO.getAvatarImagePath());
+        request.getSession().setAttribute("avatar", userDTO.getAvatarImagePath());
         return "redirect:/profile";
 
     }
@@ -246,8 +213,7 @@ public class ProfileController {
         Optional<User> optionalUser = userService.findByUsername(username);
         if (followingPage < 1) {
             followingPage = 1;
-            // return "redirect:/followings/" + username + "?followingPage=" +
-            // followingPage;
+            return "redirect:/followings/" + username + "?followingPage=" + followingPage;
         }
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -255,13 +221,6 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followings", followings);
             int totalPages = followings.getTotalPages();
-            if (totalPages == 0) {
-                return "followings"; // Template to show followings
-            }
-            if (followingPage > totalPages) {
-                followingPage = totalPages;
-                return "redirect:/followings/" + username + "?followingPage=" + followingPage;
-            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()

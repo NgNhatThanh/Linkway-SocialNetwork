@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title> Thẻ </title>
+</head>
+<body>
+    <main>
+        <div class="tag-info">
+            <div style="display: flex">
+                <h2 th:text="${tag.name}"></h2>
+                <form method="post" th:action="@{${'/tag/' + tag.name + (isFollowing ? '/unfollow' : '/follow')}}">
+                    <button type="submit" th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}">
+                    </button>
+                </form>
+            </div>
+
+            <p th:text="${tag.posts.size() + ' bài viết'}"></p>
+
+            <p th:text="${tag.followingUsers.size() + ' người theo dõi'}"></p>
+
+            <p th:text="${tag.shortDescription}"></p>
+
+        </div>
+
+        <div th:replace="~{home/postlist.html :: post-section}">
+        </div>
+    </main>
+</body>
+</html>

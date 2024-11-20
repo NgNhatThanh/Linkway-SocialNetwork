@@ -22,9 +22,9 @@ public interface FollowRepository extends JpaRepository<Follow, Integer> {
 
     Optional<Follow> findByFollowerAndFollowed(User follower, User followed); // Changed to "followed"
 
-    long countByFollowed(User user); // To count followers, now counts how many users follow this user
+    int countByFollowed(User user); // To count followers, now counts how many users follow this user
 
-    long countByFollower(User user); // To count how many users this user is following
+    int countByFollower(User user); // To count how many users this user is following
 
     void deleteByFollowerAndFollowed(User follower, User followed); // Use "followed" here as well
 }

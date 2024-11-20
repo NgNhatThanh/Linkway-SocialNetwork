@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>okee</title>
   <link rel="stylesheet" th:href="@{/css/homepage.css}">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -16,12 +17,17 @@
   <div th:insert="~{home/navbar.html :: navbar}" class="nav">
   </div>
 
-  <div class="content">
-    <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side">
+  <div class="main-content">
+    <div class="side-bar-container">
+      <div th:insert="~{home/sidebar.html :: sidebar(${followingTags})}" class="side"></div>
     </div>
 
-    <div class="main-zone" th:replace="${content}" >
+
+    <div class="main-zone-containter">
+      <div class="main-zone" th:replace="${content}" >
+      </div>
     </div>
+
   </div>
 
 

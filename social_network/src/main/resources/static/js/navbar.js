@@ -111,9 +111,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const dropdownMenu = document.getElementById("dropdown-menu");
     const notificationBadge = document.getElementById('message-notification');
 
-    if (notificationBadge) {
-        notificationBadge.addEventListener('click', clearNotificationBadge);
-    }
+    // if (notificationBadge) {
+    //     notificationBadge.addEventListener('click', clearNotificationBadge);
+    // }
 
     // Toggle dropdown menu on avatar click
     avatarIcon.addEventListener("click", function () {

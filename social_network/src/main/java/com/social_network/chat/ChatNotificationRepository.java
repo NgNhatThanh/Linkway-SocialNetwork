@@ -14,10 +14,16 @@ public interface ChatNotificationRepository extends JpaRepository<ChatNotificati
 
     List<ChatNotification> findByRecipientId(String recipientId);
 
+    List<ChatNotification> findBySenderId(String senderId);
+
     @Transactional
     @Query("DELETE FROM ChatNotification cn WHERE cn.recipientId = :recipientId AND cn.id > 0")
     void deleteByRecipientId(@Param("recipientId") String recipientId);
 
     List<ChatNotification> findByRecipientIdAndRead(String recipientId, boolean b);
+
+    List<ChatNotification> findBySenderIdAndRead(String senderId, boolean b);
+
+    List<ChatNotification> findBySenderIdAndRecipientIdAndRead(String senderId, String recipientId, boolean b);
 
 }

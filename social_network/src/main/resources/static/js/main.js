@@ -130,47 +130,88 @@ async function appendReliableUserElement(user, reliableUsersList) {
     reliableUsersList.appendChild(listItem);
 }
 
-// Fetch data for the current recipient (selected user)
 async function fetchRecentUserChatWith() {
     try {
-        const response = await fetch(`/users/chat`);
-        if (response.ok) {
-            const RecentUsers = await response.json();
-            const RecentUsersList = document.getElementById('RecentUsers');
-            RecentUsersList.innerHTML = '';
-            if (RecentUsers && RecentUsers.length > 0) {
-                RecentUsers.forEach(user => appendRecentUserElement(user, RecentUsersList));
+        // Fetch the list of users the current user has chatted with
+        const responseUsers = await fetch(`/users/chat`);
+        // Fetch the list of users with unread notifications
+        const responseUnread = await fetch(`/notifications/${username}`);
+
+        if (responseUsers.ok && responseUnread.ok) {
+            const recentUsers = await responseUsers.json();
+            const unreadNotifications = await responseUnread.json();
+
+            // Extract sender IDs with unread notifications
+            const unreadSenderIds = new Set(unreadNotifications.map(notification => notification.senderId));
+
+            const recentUsersList = document.getElementById('RecentUsers');
+            recentUsersList.innerHTML = '';
+
+            if (recentUsers && recentUsers.length > 0) {
+                recentUsers.forEach(user =>
+                    appendRecentUserElement(user, recentUsersList, unreadSenderIds.has(user.username))
+                );
             } else {
-                RecentUsersList.innerHTML = '<li>No users followed yet.</li>';
+                recentUsersList.innerHTML = '<li>No users followed yet.</li>';
             }
         } else {
-            showError('Failed to fetch reliable users');
+            showError('Failed to fetch reliable users or unread notifications');
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error('Error fetching user data:', error);
         showError('An error occurred while retrieving user information.');
     }
 }
-// Append a reliable user to the reliable users list and add event listeners
-function appendRecentUserElement(user, RecentUsersList) {
+
+function appendRecentUserElement(user, recentUsersList, hasUnread) {
     const listItem = document.createElement('li');
     listItem.classList.add('Recent-item');
     listItem.id = user.username;
     listItem.textContent = user.displayName;
     listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
-    listItem.addEventListener('click', () => {
+
+    // Highlight the user if they have unread notifications
+    if (hasUnread) {
+        listItem.classList.add('highlight');
+    }
+
+    // Add a click event listener
+    listItem.addEventListener('click', async () => {
         selectedUserName = user.displayName;
         selectedUserId = user.username;
         updateChatHeader();
         loadMessageHistory(selectedUserId);
         messageInput.focus();
+
+        // Attempt to mark notifications for the selected user as read
+        try {
+            const csrfToken = document.getElementById("csrf-token").value;
+            const response = await fetch(`/notifications/${user.username}/${username}/mark-as-read`, {
+                method: 'PUT',
+                credentials: 'include',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            });
+
+            if (response.ok) {
+                console.log(`Notifications for ${selectedUserId} marked as read.`);
+                listItem.classList.remove('highlight'); // Remove the highlight if successful
+            } else {
+                console.error(`Failed to mark notifications for ${selectedUserId} as read. Status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error("Error while marking notifications as read:", error);
+        }
         // Remove the highlight class when clicked
         listItem.classList.remove('highlight');
     });
-    RecentUsersList.appendChild(listItem);
 
+    // Append the list item to the recent users list
+    recentUsersList.appendChild(listItem);
 }
+
+
 
 // Fetch and display the list of following users
 async function fetchFollowingUsers() {
@@ -377,9 +418,9 @@ async function fetchNotifications() {
         const response = await fetch(`/notifications/${currentUserId}`, { credentials: 'include' });
         if (response.ok) {
             const notifications = await response.json();
-            notifications.forEach(notification => {
-                showNotification(notification.message, notification.type);
-            });
+            // notifications.forEach(notification => {
+            //     showNotification(notification.message, notification.type);
+            // });
             updateNavbarMessageNotification(notifications.length); // Update the badge with the correct count
         }
     } catch (error) {
@@ -437,7 +478,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const chatPage = document.getElementById("chat-page");
     const recipientId = chatPage.getAttribute("data-recipient-id");
     // Fetch the current user before proceeding with chat setup
-    fetchCurrentUser().then(() => {
+    then(() => {
         if (recipientId) {
             console.log("Recipient ID:", recipientId);
 
