@@ -92,14 +92,13 @@ body {
 .notification-badge {
     background-color: red;
     color: white;
-    padding: 5px 8px;
     border-radius: 50%;
-    font-size: 0.75rem;
+    padding: 3px 8px;
+    font-size: 12px;
     position: absolute;
-    top: 5px;
-    right: 10px;
+    top: 0;
+    right: 0;
 }
-
 
 .avatar {
     width: 30px;

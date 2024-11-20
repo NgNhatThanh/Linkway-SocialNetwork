@@ -1,22 +1,29 @@
 package com.social_network.chat;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.social_network.entity.User;
 import com.social_network.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,6 +40,11 @@ public class ChatController {
                 // Save message to the database (or memory)
                 ChatMessage savedMsg = chatMessageService.save(chatMessage);
 
+                chatNotificationService.sendNotification(
+                                chatMessage.getSenderId(),
+                                chatMessage.getRecipientId(),
+                                chatMessage.getContent());
+
                 // Send a notification to the recipient's queue
                 messagingTemplate.convertAndSendToUser(
                                 chatMessage.getRecipientId(), "/queue/messages",
@@ -40,7 +52,21 @@ public class ChatController {
                                                 savedMsg.getId(),
                                                 savedMsg.getSenderId(),
                                                 savedMsg.getRecipientId(),
-                                                savedMsg.getContent()));
+                                                savedMsg.getContent(), false));
+
+        }
+
+        @GetMapping("/notifications/{recipientId}")
+        public ResponseEntity<List<ChatNotification>> findUnreadNotifications(@PathVariable String recipientId) {
+                try {
+                        // Fetch unread notifications using the service
+                        List<ChatNotification> notifications = chatNotificationService
+                                        .findUnreadNotificationsByRecipientId(recipientId);
+                        return ResponseEntity.ok(notifications);
+                } catch (Exception e) {
+                        // Handle error if fetching notifications fails
+                        return ResponseEntity.status(500).body(new ArrayList<>());
+                }
         }
 
         // Get the chat messages between two users
@@ -70,22 +96,29 @@ public class ChatController {
                 return "index"; // Return the view for chat UI
         }
 
-        @PostMapping("/api/chat/sendNotification")
-        public ResponseEntity<String> sendNotification(@RequestBody ChatNotification chatNotification) {
+        @DeleteMapping("/notifications/{recipientId}/delete")
+        public ResponseEntity<?> deleteAllNotifications(@PathVariable String recipientId) {
                 try {
-                        // Save the notification to the database
-                        chatNotificationService.sendNotification(
-                                        chatNotification.getSenderId(),
-                                        chatNotification.getRecipientId(),
-                                        chatNotification.getContent());
-
-                        // Send the notification to the recipient's queue via WebSocket
-                        messagingTemplate.convertAndSendToUser(
-                                        chatNotification.getRecipientId(), "/queue/messages", chatNotification);
-
-                        return ResponseEntity.ok("Notification sent successfully.");
+                        // Xóa tất cả thông báo của người dùng
+                        chatNotificationService.deleteNotificationById(recipientId);
+                        return ResponseEntity.ok().build(); // Trả về 200 OK nếu xóa thành công
                 } catch (Exception e) {
-                        return ResponseEntity.status(500).body("Failed to send notification: " + e.getMessage());
+                        // Xử lý lỗi nếu không xóa được
+                        return ResponseEntity.status(500).body("Error while deleting notifications: " + e.getMessage());
                 }
         }
+
+        @PutMapping("/notifications/{recipientId}/mark-as-read")
+        public ResponseEntity<String> markNotificationsAsRead(@PathVariable String recipientId) {
+                try {
+                        // Đánh dấu tất cả thông báo là đã đọc
+                        chatNotificationService.markNotificationsAsRead(recipientId);
+                        return ResponseEntity.ok("Notifications marked as read successfully");
+                } catch (Exception e) {
+                        // Xử lý lỗi nếu không thể đánh dấu thông báo
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                        .body("Error while marking notifications as read: " + e.getMessage());
+                }
+        }
+
 }

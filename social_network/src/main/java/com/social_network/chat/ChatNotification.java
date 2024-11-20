@@ -27,4 +27,7 @@ public class ChatNotification {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "read_status", nullable = false)
+    private boolean read; // New column to track the read/unread status
 }

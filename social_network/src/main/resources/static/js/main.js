@@ -36,7 +36,9 @@ async function fetchCurrentUser() {
             if (currentUser) {
                 username = currentUser.username;
                 displayName = currentUser.displayName;
-                document.querySelector('#connected-user-displayname').textContent = displayName;
+                sessionStorage.setItem('username', username);
+                sessionStorage.setItem('displayName', displayName);
+                // document.querySelector('#connected-user-displayname').textContent = displayName;
                 connect();
                 fetchRecentUserChatWith();
             } else {
@@ -63,12 +65,12 @@ function showError(message) {
 
 // Connect to WebSocket server
 function connect() {
-    if (username && displayName) {
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, onConnected, onError);
+    if (username && displayName && usernamePage && chatPage) {
         usernamePage.classList.add('hidden');
         chatPage.classList.remove('hidden');
-        const socket = new SockJS('/ws');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, onConnected, onError);
     }
 }
 
@@ -296,6 +298,12 @@ function sendMessage(event) {
         messageInput.focus();
         fetchRecentUserChatWith();
         appendMessageToChat(chatMessage, true);
+        const notificationData = {
+            senderId: chatMessage.senderId,
+            recipientId: chatMessage.recipientId,
+            message: `New message from ${chatMessage.senderId}`
+        };
+        localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
     } else {
         console.log('Message cannot be empty or no recipient selected');
     }
@@ -363,25 +371,53 @@ function highlightUser(username) {
     if (followingUserElement) followingUserElement.classList.add('highlight');
 }
 
+async function fetchNotifications() {
+    try {
+        const currentUserId = sessionStorage.getItem('username');
+        const response = await fetch(`/notifications/${currentUserId}`, { credentials: 'include' });
+        if (response.ok) {
+            const notifications = await response.json();
+            notifications.forEach(notification => {
+                showNotification(notification.message, notification.type);
+            });
+            updateNavbarMessageNotification(notifications.length); // Update the badge with the correct count
+        }
+    } catch (error) {
+        console.error("Failed to fetch notifications:", error);
+    }
+}
+
 // Handle message received event
 function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
-    appendMessageToChat(messageData, false);
+    const chatPage = document.getElementById("chat-page");
+    if (chatPage) {
+        appendMessageToChat(messageData, false);
+    }
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
-    // Update the navbar notification indicator
-    updateNavbarMessageNotification();
+    fetchNotifications();
+
+    // Lưu thông báo vào localStorage để truyền thông tin sang navbar.js
+    const notificationData = {
+        senderId: messageData.senderId,
+        recipientId: messageData.recipientId,
+        message: `New message from ${messageData.senderId}`
+    };
+    localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
 }
 
-// Function to update navbar message notification
-function updateNavbarMessageNotification() {
-    const notificationBadge = document.getElementById('message-notification');
 
-    // If badge exists, show it and increment count
+// Update notification icon on the navbar with the count of unread notifications
+function updateNavbarMessageNotification(count = 0) {
+    const notificationBadge = document.getElementById('message-notification');
     if (notificationBadge) {
-        notificationBadge.style.display = 'inline';
-        const count = parseInt(notificationBadge.textContent) || 0;
-        notificationBadge.textContent = count + 1;
+        if (count > 0) {
+            notificationBadge.style.display = 'inline';
+            notificationBadge.textContent = count;
+        } else {
+            notificationBadge.style.display = 'none';
+        }
     }
 }
 
@@ -396,10 +432,10 @@ function onPublicMessageReceived(message) {
     showNotification('New public message', 'public');
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    fetchCurrentUser();
     const chatPage = document.getElementById("chat-page");
     const recipientId = chatPage.getAttribute("data-recipient-id");
-
     // Fetch the current user before proceeding with chat setup
     fetchCurrentUser().then(() => {
         if (recipientId) {

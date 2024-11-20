@@ -12,6 +12,8 @@
         <div class="home-div">
             <a th:href="@{/}"> Home </a>
         </div>
+        <!-- Notification Container for Message Popups -->
+        <div id="notification-container"></div>
 
         <div>
             <form th:action="@{/searchUser}" method="get" class="search-container">
@@ -29,11 +31,15 @@
                     </form>
                 </div>
 
-                <!-- Chat Link -->
-                <div>
-                    <a th:href="@{/chat}" class="chat-button">Chat</a>
+                <!-- Notification Icon for New Messages -->
+                <div class="notification-icon">
+                    <a th:href="@{/chat}" class="chat-button">
+                        Chat
+                        <span id="message-notification" class="notification-badge" style="display: none;">0</span>
+                    </a>
                 </div>
 
+                <!-- Avatar and Dropdown Menu -->
                 <div class="avatar-container">
                     <img th:src="${session.avatar}" alt="Avatar" class="avatar" id="avatar-icon">
                     <div class="dropdown-menu" id="dropdown-menu">
@@ -68,9 +74,14 @@
             </div>
         </div>
 
+
+        <!-- Linking JS files -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script th:src="@{/js/navbar.js}"></script>
         <script th:src="@{/js/main.js}"></script>
     </div>
+
 </body>
 
 </html>

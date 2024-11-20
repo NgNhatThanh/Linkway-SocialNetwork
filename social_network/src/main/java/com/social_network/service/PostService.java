@@ -41,24 +41,25 @@ public class PostService {
         return postRepository.findByAuthor(author, pageable);
     }
 
-    public Post findById(int id){
+    public Post findById(int id) {
         return postRepository.findById(id);
     }
 
     @Transactional
-    public void increaseView(int postId){
+    public void increaseView(int postId) {
         Post post = findById(postId);
         post.setViews(post.getViews() + 1);
         postRepository.save(post);
     }
 
-    public List<Post> getRandowPostsByAuthor(User author, int maxAmount){
+    public List<Post> getRandowPostsByAuthor(User author, int maxAmount) {
         List<Post> posts = postRepository.findByAuthor(author);
-        if(posts.size() <= maxAmount) return posts;
+        if (posts.size() <= maxAmount)
+            return posts;
         Set<Post> result = new HashSet<>();
         int idx = 0;
         Random rand = new Random();
-        while(result.size() < maxAmount){
+        while (result.size() < maxAmount) {
             idx = rand.nextInt(posts.size());
             result.add(posts.get(idx));
         }
