@@ -9,11 +9,22 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import java.util.Collection;
 import java.util.Optional;
 
 @Component
 public class SecurityUtil {
+
+    private final HttpServletRequest request;
+
+    // Inject HttpServletRequest to access the current session
+    public SecurityUtil(HttpServletRequest request) {
+        this.request = request;
+
+    }
 
     public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -59,6 +70,10 @@ public class SecurityUtil {
             return user.getAuthorities(); // Return all roles
         }
         return null; // Return null if user is null
+    }
+
+    public HttpSession getSession() {
+        return request.getSession(); // Returns the current session
     }
 
 }

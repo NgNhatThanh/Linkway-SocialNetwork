@@ -114,8 +114,8 @@ public class ProfileController {
     // Follow/unfollow a user
     @PostMapping("/profile/{username}/follow")
     public String toggleFollowUser(@PathVariable("username") String username,
-                                   Model model,
-                                   HttpServletRequest request) {
+            Model model,
+            HttpServletRequest request) {
         String currentUsername = securityUtil.getCurrentUser().getUsername();
         String prevPath = request.getHeader("Referer");
 
@@ -165,8 +165,8 @@ public class ProfileController {
 
     @PostMapping("/updateProfile")
     public String updateProfile(@ModelAttribute("userDTO") @Valid UserUpdateDTO userDTO,
-                                BindingResult bindingResult,
-                                HttpServletRequest request) {
+            BindingResult bindingResult,
+            HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return "updateProfile";
         }

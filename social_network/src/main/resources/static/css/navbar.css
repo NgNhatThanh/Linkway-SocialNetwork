@@ -3,10 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
 
     background: white
 }
+
 .nav-bar {
 
     width: 100%;
@@ -18,8 +20,16 @@ body{
     padding: 3px 10px;
 }
 
+#notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
 /*1. Logo*/
-.back-home{
+.back-home {
     color: #0079D3;
     text-decoration: none;
 }
@@ -49,6 +59,7 @@ body{
     background-color: white;
     border-color: #0079D3;
 }
+
 .button {
     padding: 10px 10px;
     border-radius: 20px;
@@ -56,6 +67,7 @@ body{
     font-weight: 500;
     cursor: pointer;
 }
+
 .button-primary {
     background-color: #0079D3;
     color: white;
@@ -77,6 +89,18 @@ body{
     position: relative;
     display: inline-block;
 }
+
+.notification-badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 3px 8px;
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .avatar {
     width: 30px;
     height: 30px;
@@ -88,7 +112,7 @@ body{
 }
 
 
-.logged-in{
+.logged-in {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -109,24 +133,28 @@ body{
     width: 250px;
     z-index: 1000;
 }
-.menu-item{
+
+.menu-item {
     display: block;
     padding: 7px 15px;
     font-size: 15px;
 }
-.icon{
+
+.icon {
     margin-right: 10px;
     font-size: 20px;
 }
+
 .dropdown-item {
     font-size: 15px;
     padding: 8px 16px;
     color: #333;
     text-decoration: none;
-    display :flex;
+    display: flex;
     align-item: center;
     border-radius: 15px;
 }
+
 .dropdown-item:hover {
     background-color: #f3f3f3;
     cursor: pointer;
@@ -137,10 +165,11 @@ body{
     cursor: pointer;
 
 }
-.btn-logout{
+
+.btn-logout {
     border: none;
     background: none;
-    display:flex;
+    display: flex;
     align-item: center;
     font-size: 15px;
     color: #333;
