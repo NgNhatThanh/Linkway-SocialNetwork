@@ -2,6 +2,7 @@
 .create-post-zone{
     padding-left: 80px;
     padding-top: 20px;
+    padding-right: 300px;
 }
 
 .editor-container {
@@ -39,9 +40,10 @@
 
 .post-button {
     margin-top: 15px;
+    margin-bottom: 15px;
     width: 100px;
-    height: 40px;
-    padding: 10px 20px;
+    height: 35px;
+    padding: 8px 15px;
     background: #0066cc;
     color: white;
     border: none;

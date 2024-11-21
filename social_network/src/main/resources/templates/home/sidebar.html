@@ -40,7 +40,7 @@
             <!-- Hiện các tag đang follow-->
             <div th:if="${session.username != null}">
                 <h3> Following Tags </h3>
-                <ul th:each="tag : ${followingTags}">
+                <ul th:each="tag : ${followingTags}" class="optiontags">
                     <li>
                         <a th:href="@{${'/tag/' + tag.name}}" th:text="*{tag.getName()}"></a>
                     </li>
