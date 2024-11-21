@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+/* Main container */
+.followers {
+    flex-grow: 1;          /* Chiếm hết không gian còn lại */
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow-y: auto;      /* Thêm cuộn dọc nếu nội dung quá dài */
+}
+
+.followers:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+/* Header */
+h1 {
+    font-size: 2rem;
+    color: #007bff;
+    text-align: center;
+}
+h2 {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 15px;
+}
+/* Follower list styles */
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+ul li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+ul li:last-child {
+    border-bottom: none;
+}
+/* Follower name link */
+ul li a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+ul li a:hover {
+    color: #0056b3;
+}
+/* Empty message */
+p {
+    text-align: center;
+    font-size: 1rem;
+    color: #888;
+}
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.page-item {
+    margin: 0 5px;
+}
+.page-link {
+    color: #007bff;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+.page-link:hover {
+    background-color: #f1f1f1;
+    text-decoration: none;
+}
+.page-item.disabled .page-link {
+    color: #ccc;
+    cursor: not-allowed;
+}
+.page-item.active .page-link {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+/* Back to Profile Link */
+a {
+    display: inline-block;
+    margin-top: 30px;
+    text-decoration: none;
+    color: #007bff;
+    font-size: 1rem;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
