@@ -2,17 +2,43 @@
 
 #tag-search{
     padding: 20px;
+    display: flex;
+    align-item: center;
+}
+#tag-search label{
+    margin-right: 10px;
+    padding: 3px;
+    font-size: 22px;
+    display: flex;
+    align-item: center;
+    justify-content: center;
+}
+#tag-search input{
+    padding: 8px 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    background-color: #F6F7F8;
+    width: 450px;
+    font-size: 12px;
+    height: 100%;
+}
+#tag-search input:focus {
+    outline: none;
+    background-color: white;
+    border-color: #0079D3;
 }
 
 #tags-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các phần tử xuống dòng nếu không đủ không gian */
+    gap: 20px;       /* Khoảng cách giữa các phần tử */
     padding: 20px;
+    justify-content: flex-start; /* Sắp xếp các phần tử bắt đầu từ trái sang phải */
 }
 
 /* Each tag card */
 .tag-card {
+    width: 240px;
     background-color: #f9f9f9;
     border: 1px solid #e1e1e1;
     border-radius: 8px;
@@ -25,6 +51,7 @@
 
 /* Tag title styling */
 .tag-title {
+    width: 220px; /* Đảm bảo kích thước tối đa không vượt quá 250px */
     background-color: #ddd;
     padding: 5px 10px;
     border-radius: 12px;
@@ -45,7 +72,10 @@
     flex-direction: column;
     gap: 5px;
 }
-
+.tag-description{
+    width: 100%;
+    margin-bottom: 8px;
+}
 .pagination {
     display: flex;
     padding: 0;

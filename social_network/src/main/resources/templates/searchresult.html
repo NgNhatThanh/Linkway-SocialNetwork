@@ -7,10 +7,11 @@
 </head>
 
 <body>
-    <main>
+    <main class="searchpage">
         <link rel="stylesheet" th:href="@{/css/searchresult.css}">
 
         <div id="search-type">
+            <h2>Tìm kiếm theo: </h2>
             <button>
                 <a th:href="${'?query=' + query + '&type=post'}"> Bài viết </a>
             </button>
@@ -45,8 +46,10 @@
                 <option value="this_year" th:selected="${#strings.toString(param.date) == 'this_year'}"> Năm nay
                 </option>
             </select>
-
-            <div>
+            <button type="submit" onclick="filter()">
+                Lọc
+            </button>
+            <div style="width: 100%;">
                 <textarea id="filter-tag-input" placeholder="Lọc bởi thẻ"></textarea>
                 <div id="filter-tags-display"></div>
                 <div id="filter-tag-suggestions" class="filter-tags-suggestions"></div>
@@ -56,25 +59,23 @@
                 <input type="hidden" th:each="tag : ${tagNames}" th:name="tagName" th:value="${tag}">
             </div>
 
-            <button type="submit" onclick="filter()">
-                Lọc
-            </button>
+
         </form>
 
-        <div th:if="${userList != null}">
+        <div th:if="${userList != null}" class="search-user-list">
 
             <p th:if="${userList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
             </p>
 
-            <div th:each="user : ${userList}" class="user-card" style="display: flex; width: 60%">
+            <div th:each="user : ${userList}" class="user-card">
                 <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
                 <div>
-                    <div style="display: flex">
+                    <div style="display: flex; align-item: center; width: 100%;">
                         <a th:href="@{/profile/{username}(username=${user.username})}"
                             th:text="${user.displayName}"></a>
                         <a th:href="@{/profile/{username}(username=${user.username})}" th:text="${user.username}"></a>
                     </div>
-                    <div style="display: flex">
+                    <div style="display: flex; margin-bottom: 7px; width: 100%;">
                         <p th:text="${user.followersCount + ' người theo dõi'}"></p>
                         <p th:text="${user.postsCount + ' bài viết'}"></p>
                     </div>
@@ -84,7 +85,7 @@
 
         </div>
 
-        <div th:if="${postList != null}">
+        <div th:if="${postList != null}" class="search-post-list">
 
             <p th:if="${postList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
             </p>

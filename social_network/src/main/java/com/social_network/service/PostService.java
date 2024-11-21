@@ -54,7 +54,7 @@ public class PostService {
 
     public Page<Post> getPostByFollowingTagsOrFollowingUsers(User user, int page) {
         List<Tag> tags = user.getFollowingTags();
-        List<User> users = followService.getFollowing(user);
+        List<User> users = followService.getFollowers(user);
         String username = securityUtil.getCurrentUser().getUsername();
         User Currentuser = userService.findByUsername(username).get();
         List<Post> authors = postRepository.findByAuthor(Currentuser);

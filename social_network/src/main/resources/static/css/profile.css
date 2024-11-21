@@ -2,12 +2,10 @@
     width: 80%;
     /*max-width: 600px;*/
     margin-top: 20px;
-    background-color: #fff;
     border-radius: 8px;
     padding: 20px;
 
     font-family: Arial, sans-serif;
-    background-color: white;
     color: #333;
     /*display: flex;*/
     justify-content: center;
@@ -138,7 +136,8 @@
 }
 
 .user-post-list {
-    width: 65%;
+    width: 100%;
+
 }
 
 /* Chat Box Styling */

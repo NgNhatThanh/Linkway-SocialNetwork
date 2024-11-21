@@ -1,9 +1,7 @@
 .postpage{
     display: flex;
-    padding-left: 80px;
     padding-top: 10px;
     width: 100%;
-    background: #FAFAFA;
 }
 
 .postpage-maincontent{
@@ -69,7 +67,7 @@
     width: 100%;
     align-item: center;
     justify-content: center;
-    padding: 10px 16px;
+    padding: 8px 16px;
     background: #28a745;
     color: white;
     text-decoration: none;
@@ -581,7 +579,7 @@ h5[th\:if="${comment.wasUpdated}"] {
     width: 33%;
     padding: 10px;
     margin-left: 30px;
-    border-radius: 20px;    background: #F5F5F5;
+    border-radius: 20px;    background: white;
     position: relative;
 }
 .side-container{
@@ -719,8 +717,8 @@ h5[th\:if="${comment.wasUpdated}"] {
 
 .related-posts {
     margin-top: 20px;
-    background: #F5F5F5;
-
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .related-posts-author-name{
     margin-bottom: 10px;
@@ -729,7 +727,6 @@ h5[th\:if="${comment.wasUpdated}"] {
 .related-posts-post-item {
     padding: 15px 0;
     border-bottom: 1px solid #eee;
-    background: #F5F5F5;
     border-bottom: 0.5px solid gray;
 }
 

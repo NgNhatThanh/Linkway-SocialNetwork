@@ -42,12 +42,82 @@
     cursor: pointer;
 }
 
-
-.following{
-    margin-top: 15px;
+/* Following Tags giống Options */
+.following {
+    margin-top: 20px;
     width: 100%;
 }
 
-ul{
+.following h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+}
+
+.following ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.following ul li {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.following ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1rem;
+    font-weight: 500;
+    flex-grow: 1;
+    transition: color 0.3s ease;
+    padding-left: 5px;
+}
+
+.following ul li:hover {
+    background-color: #f8f9fa;
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.following ul li a:hover {
+    color: #007bff;
+.optiontags{
     list-style: inside;
+    list-style-type: none;
+}
+
+.optiontags {
+    width: 100%;
+}
+.optiontags form{
+    width: 100%;
+    cursor: pointer;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.optiontags a{
+    border: none;
+    background-color: #fff;
+    width: 100%;
+    display: flex;
+    padding: 10px 20px;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 15px;
+    text-decoration: none;
+    color: black;
+}
+
+.optiontags a:hover{
+    background-color: #f0f0f0;
+    cursor: pointer;
 }

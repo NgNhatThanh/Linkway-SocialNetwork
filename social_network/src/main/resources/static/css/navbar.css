@@ -32,6 +32,12 @@ body {
 .back-home {
     color: #0079D3;
     text-decoration: none;
+    margin-left: 10px;
+}
+
+.back-home:hover {
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 /*2. Search - input*/
@@ -61,7 +67,7 @@ body {
 }
 
 .button {
-    padding: 10px 10px;
+    padding: 8px 15px;
     border-radius: 20px;
     border: 1px solid #0079D3;
     font-weight: 500;
@@ -143,6 +149,12 @@ body {
 .icon {
     margin-right: 10px;
     font-size: 20px;
+}
+
+.avt-icon {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
 }
 
 .dropdown-item {
