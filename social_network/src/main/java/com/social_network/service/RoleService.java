@@ -19,22 +19,22 @@ public class RoleService {
 
     private AuthoritySevice authoritySevice;
 
-    public Role findByName(String name){
+    public Role findByName(String name) {
         name = name.toLowerCase();
         Role role = roleRepository.findByName(name);
-        if(role == null)
+        if (role == null)
             throw new DataNotFoundException("Cannot find role with name: " + name);
         return role;
     }
 
-    public Role findById(int id){
+    public Role findById(int id) {
         Role role = roleRepository.findById(id);
-        if(role == null)
+        if (role == null)
             throw new DataNotFoundException("Cannot find role with id: " + id);
         return role;
     }
 
-    public List<Role> findAllByAuthority(String authorityName){
+    public List<Role> findAllByAuthority(String authorityName) {
         Authority authority = authoritySevice.findByName(authorityName);
         return roleRepository.findAllByAuthority(authorityName);
     }

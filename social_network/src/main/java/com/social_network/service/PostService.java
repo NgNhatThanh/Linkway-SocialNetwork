@@ -5,6 +5,8 @@ import com.social_network.entity.Post;
 
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
+import com.social_network.util.SecurityUtil;
+
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
@@ -27,6 +29,8 @@ public class PostService {
     private final int POST_PER_PAGE = 10;
     private final TagService tagService;
     private final FollowService followService;
+    private final SecurityUtil securityUtil;
+    private final UserService userService;
 
     private PostRepository postRepository;
 
@@ -51,6 +55,9 @@ public class PostService {
     public Page<Post> getPostByFollowingTagsOrFollowingUsers(User user, int page) {
         List<Tag> tags = user.getFollowingTags();
         List<User> users = followService.getFollowing(user);
+        String username = securityUtil.getCurrentUser().getUsername();
+        User Currentuser = userService.findByUsername(username).get();
+        List<Post> authors = postRepository.findByAuthor(Currentuser);
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
         System.out.println("tags: " + tags);
         System.out.println("users: " + users);
@@ -65,6 +72,8 @@ public class PostService {
 
         Set<Post> combinedPosts = new LinkedHashSet<>(postsByTags);
         combinedPosts.addAll(postsByAuthors);
+        // những post có trong authors thì ko lấy nữa
+        combinedPosts.removeAll(authors);
 
         return new PageImpl<>(new ArrayList<>(combinedPosts), pageable, combinedPosts.size());
     }
