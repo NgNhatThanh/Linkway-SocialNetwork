@@ -22,6 +22,11 @@ body{
 .back-home{
     color: #0079D3;
     text-decoration: none;
+    margin-left: 10px;
+}
+.back-home:hover{
+    color: #0056b3;
+    text-decoration: underline;
 }
 
 /*2. Search - input*/

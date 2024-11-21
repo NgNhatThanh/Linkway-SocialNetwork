@@ -13,7 +13,7 @@
         <h2>Followings:</h2>
         <ul>
             <li th:each="following : ${followings.content}">
-                <a th:href="@{/profile/{username}(username=${following.followed.username})}"
+                <a class="link-item" th:href="@{/profile/{username}(username=${following.followed.username})}"
                     th:text="${following.followed.displayName}">User Name</a>
             </li>
         </ul>
@@ -53,7 +53,7 @@
         </nav>
 
 
-        <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
+        <a class="link-item" th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
     </main>
 </body>
 

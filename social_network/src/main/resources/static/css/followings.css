@@ -26,11 +26,11 @@ h1 {
     font-size: 2rem;
     color: #007bff;
     text-align: center;
+    margin-bottom: 15px;
 }
 h2 {
     font-size: 1.5rem;
     color: #555;
-    margin-bottom: 15px;
 }
 /* Follower list styles */
 ul {
@@ -44,20 +44,6 @@ ul li {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-ul li:last-child {
-    border-bottom: none;
-}
-/* Follower name link */
-ul li a {
-    text-decoration: none;
-    color: #007bff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-ul li a:hover {
-    color: #0056b3;
 }
 /* Empty message */
 p {
@@ -95,8 +81,8 @@ p {
     color: #fff;
     border-color: #007bff;
 }
-/* Back to Profile Link */
-a {
+/* Back to Profile Link and Follower name link */
+.link-item {
     display: inline-block;
     margin-top: 30px;
     text-decoration: none;
@@ -105,7 +91,7 @@ a {
     text-align: center;
     transition: color 0.3s ease;
 }
-a:hover {
+.link-item:hover {
     color: #0056b3;
     text-decoration: underline;
 }
