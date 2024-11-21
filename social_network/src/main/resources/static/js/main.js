@@ -478,7 +478,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const chatPage = document.getElementById("chat-page");
     const recipientId = chatPage.getAttribute("data-recipient-id");
     // Fetch the current user before proceeding with chat setup
-    then(() => {
+    fetchCurrentUser().then(() => {
         if (recipientId) {
             console.log("Recipient ID:", recipientId);
 

@@ -52,10 +52,11 @@ public class PostService {
         List<Tag> tags = user.getFollowingTags();
         List<User> users = followService.getFollowing(user);
         Pageable pageable = PageRequest.of(page - 1, POST_PER_PAGE);
-
-        if (tags.isEmpty() && users.isEmpty()) {
-            return getAll(page);
-        }
+        System.out.println("tags: " + tags);
+        System.out.println("users: " + users);
+        // if (tags.isEmpty() && users.isEmpty()) {
+        // return getAll(page);
+        // }
 
         List<Post> postsByTags = tags.isEmpty() ? Collections.emptyList()
                 : postRepository.findPostByTags(tags, pageable).getContent();

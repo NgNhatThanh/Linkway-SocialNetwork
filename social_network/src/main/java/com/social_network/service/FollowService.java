@@ -90,9 +90,9 @@ public class FollowService {
     }
 
     public List<User> getFollowers(User user) {
-        List<Follow> follows = followRepository.findByFollowed(user);
+        List<Follow> follows = followRepository.findByFollower(user);
         return follows.stream()
-                .map(Follow::getFollower)
+                .map(Follow::getFollowed)
                 .toList();
     }
 
@@ -106,11 +106,10 @@ public class FollowService {
         return followRepository.findByFollower(user, pageable);
     }
 
-
     public List<User> getFollowing(User user) {
-        List<Follow> follows = followRepository.findByFollower(user);
+        List<Follow> follows = followRepository.findByFollowed(user);
         return follows.stream()
-                .map(Follow::getFollowed)
+                .map(Follow::getFollower)
                 .toList();
     }
 }
