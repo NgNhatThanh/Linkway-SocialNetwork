@@ -2,7 +2,6 @@
 
 #tag-search{
     padding: 20px;
-    padding-left: 80px;
     display: flex;
     align-item: center;
 }
@@ -34,13 +33,12 @@
     flex-wrap: wrap; /* Cho phép các phần tử xuống dòng nếu không đủ không gian */
     gap: 20px;       /* Khoảng cách giữa các phần tử */
     padding: 20px;
-    padding-left: 80px;   /* Khoảng đệm bên trong container */
     justify-content: flex-start; /* Sắp xếp các phần tử bắt đầu từ trái sang phải */
 }
 
 /* Each tag card */
 .tag-card {
-    width: 250px;
+    width: 240px;
     background-color: #f9f9f9;
     border: 1px solid #e1e1e1;
     border-radius: 8px;
