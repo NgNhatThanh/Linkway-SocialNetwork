@@ -8,6 +8,7 @@
 
 <body>
     <main class="followers">
+        <link rel="stylesheet" th:href="@{/css/followers.css}">
         <h1 th:text="${user.displayName}">User Name</h1>
         <h2>Followers:</h2>
 
@@ -15,7 +16,7 @@
             <!-- Iterate over the followers content -->
             <li th:each="follow : ${followers.content}">
                 <!-- Access the 'follower' user details -->
-                <a th:href="@{/profile/{username}(username=${follow.follower.username})}"
+                <a class="link-item" th:href="@{/profile/{username}(username=${follow.follower.username})}"
                     th:text="${follow.follower.displayName}">Follower Name</a>
             </li>
         </ul>
@@ -55,7 +56,7 @@
         </nav>
 
         <!-- Back to Profile Link -->
-        <a th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
+        <a class="link-item" th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>
     </main>
 </body>
 
