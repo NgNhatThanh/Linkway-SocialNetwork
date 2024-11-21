@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title> Thẻ </title>
+
 </head>
 <body>
-    <main>
-        <div class="tag-info">
-            <div style="display: flex">
-                <h2 th:text="${tag.name}"></h2>
+
+    <main class="tagpage-container">
+        <link rel="stylesheet" th:href="@{/css/tagpage.css}">
+
+        <div class="tag-info tagpage-tag-info">
+            <div class="tag-header">
+                <h2 class="tag-title" th:text="${tag.name}"></h2>
                 <form method="post" th:action="@{${'/tag/' + tag.name + (isFollowing ? '/unfollow' : '/follow')}}">
-                    <button type="submit" th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}">
+                    <button class="follow-button" type="submit" th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}">
                     </button>
                 </form>
             </div>
@@ -22,9 +26,11 @@
             <p th:text="${tag.shortDescription}"></p>
 
         </div>
-
-        <div th:replace="~{home/postlist.html :: post-section}">
+        <div class="tagpage-list">
+            <div  th:replace="~{home/postlist.html :: post-section}">
+            </div>
         </div>
+
     </main>
 </body>
 </html>

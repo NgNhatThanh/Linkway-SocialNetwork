@@ -55,7 +55,7 @@ body{
     border-color: #0079D3;
 }
 .button {
-    padding: 10px 10px;
+    padding: 8px 15px;
     border-radius: 20px;
     border: 1px solid #0079D3;
     font-weight: 500;
@@ -122,6 +122,11 @@ body{
 .icon{
     margin-right: 10px;
     font-size: 20px;
+}
+.avt-icon{
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
 }
 .dropdown-item {
     font-size: 15px;
