@@ -78,6 +78,7 @@ function connect() {
 function onConnected() {
     stompClient.subscribe(`/user/${username}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/public`, onPublicMessageReceived);
+    stompClient.subscribe(`/user/${username}/notify`, onNotiReceived);
     stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ username, status: 'ONLINE' }));
 }
 
@@ -135,7 +136,7 @@ async function fetchRecentUserChatWith() {
         // Fetch the list of users the current user has chatted with
         const responseUsers = await fetch(`/users/chat`);
         // Fetch the list of users with unread notifications
-        const responseUnread = await fetch(`/notifications/${username}`);
+        const responseUnread = await fetch(`/message/notifications/${username}`);
 
         if (responseUsers.ok && responseUnread.ok) {
             const recentUsers = await responseUsers.json();
@@ -186,7 +187,7 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         // Attempt to mark notifications for the selected user as read
         try {
             const csrfToken = document.getElementById("csrf-token").value;
-            const response = await fetch(`/notifications/${user.username}/${username}/mark-as-read`, {
+            const response = await fetch(`/message/notifications/${user.username}/${username}/mark-as-read`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {
@@ -412,10 +413,10 @@ function highlightUser(username) {
     if (followingUserElement) followingUserElement.classList.add('highlight');
 }
 
-async function fetchNotifications() {
+async function fetchMessageNotifications() {
     try {
         const currentUserId = sessionStorage.getItem('username');
-        const response = await fetch(`/notifications/${currentUserId}`, { credentials: 'include' });
+        const response = await fetch(`/message/notifications/${currentUserId}`, { credentials: 'include' });
         if (response.ok) {
             const notifications = await response.json();
             // notifications.forEach(notification => {
@@ -437,7 +438,7 @@ function onMessageReceived(message) {
     }
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
-    fetchNotifications();
+    fetchMessageNotifications();
 
     // Lưu thông báo vào localStorage để truyền thông tin sang navbar.js
     const notificationData = {
@@ -499,3 +500,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 messageForm.addEventListener('submit', sendMessage);
 logout.addEventListener('click', onLogout);
 // fetchCurrentUser();
+
+function onNotiReceived(noti){
+    const content = JSON.parse(noti.body).content;
+
+    const pp = document.createElement('p');
+    pp.textContent = content;
+
+    document.body.appendChild(pp);
+}

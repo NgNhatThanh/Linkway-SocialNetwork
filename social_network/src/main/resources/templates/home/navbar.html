@@ -24,6 +24,19 @@
 
         <div class="user-div">
             <div th:if="${session.username != null}" class="logged-in">
+
+                <div id="notifications-container">
+                    <button onclick=fetchNotifications()>
+                        <i class='bx bxs-bell'></i>
+                        <span id="unread-notification-count"></span>
+                    </button>
+
+                    <div id="notifications-dropdown">
+                        <ul id="notifications-list">
+                        </ul>
+                    </div>
+                </div>
+
                 <!-- Direct to create post page -->
                 <div>
                     <form th:action="@{/post/edit}">

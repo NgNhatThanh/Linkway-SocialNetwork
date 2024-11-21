@@ -1,5 +1,15 @@
 // Listen for storage events from main.js
 let notificationData = null;
+const currentId = document.getElementById('current-id').value;
+const csrfToken = document.getElementById("csrf-token").value;
+var unreadNotifications;
+
+fetch(`/notifications/${currentId}/unread`)
+    .then(count => count.json())
+    .then(res => {
+        unreadNotifications = res;
+        if(res && res > 0) document.getElementById('unread-notification-count').textContent = unreadNotifications;
+    })
 
 window.addEventListener('storage', (event) => {
     console.log("Storage event detected:", event);
@@ -20,7 +30,22 @@ window.addEventListener('storage', (event) => {
     }
 });
 
-async function fetchNotifications() {
+function fetchNotifications(){
+    fetch(`/notifications/${currentId}`)
+        .then(response => response.json())
+        .then(notiList => {
+            const list = document.getElementById('notifications-list');
+            notiList.forEach(noti =>{
+                const item = document.createElement('li');
+                item.textContent = noti.content;
+                
+            })
+        });
+}
+
+
+
+async function fetchMessageNotifications() {
     try {
         const currentUserId = sessionStorage.getItem('username');
         const response = await fetch(`/notifications/${currentUserId}`, { credentials: 'include' });
@@ -128,5 +153,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Fetch notifications on page load
-    fetchNotifications();
+    fetchMessageNotifications();
 });

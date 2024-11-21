@@ -56,7 +56,7 @@ public class ChatController {
 
         }
 
-        @GetMapping("/notifications/{recipientId}")
+        @GetMapping("/message/notifications/{recipientId}")
         public ResponseEntity<List<ChatNotification>> findUnreadNotifications(@PathVariable String recipientId) {
                 try {
                         // Fetch unread notifications using the service
@@ -69,7 +69,7 @@ public class ChatController {
                 }
         }
 
-        @GetMapping("/notifications/{senderId}/sender")
+        @GetMapping("/message/notifications/{senderId}/sender")
         public ResponseEntity<List<ChatNotification>> findUnreadNotificationsWithSender(@PathVariable String senderId) {
                 try {
                         // Fetch read notifications using the service
@@ -109,7 +109,7 @@ public class ChatController {
                 return "index"; // Return the view for chat UI
         }
 
-        @DeleteMapping("/notifications/{recipientId}/delete")
+        @DeleteMapping("/message/notifications/{recipientId}/delete")
         public ResponseEntity<?> deleteAllNotifications(@PathVariable String recipientId) {
                 try {
                         // Xóa tất cả thông báo của người dùng
@@ -121,7 +121,7 @@ public class ChatController {
                 }
         }
 
-        @PutMapping("/notifications/{recipientId}/mark-as-read")
+        @PutMapping("/message/notifications/{recipientId}/mark-as-read")
         public ResponseEntity<String> markNotificationsAsRead(@PathVariable String recipientId) {
                 try {
                         // Đánh dấu tất cả thông báo là đã đọc
@@ -134,7 +134,7 @@ public class ChatController {
                 }
         }
 
-        @PutMapping("/notifications/{senderId}/{recipientId}/mark-as-read")
+        @PutMapping("/message/notifications/{senderId}/{recipientId}/mark-as-read")
         public ResponseEntity<String> markNotificationsAsReadWithSenderAndRecipient(@PathVariable String senderId,
                         @PathVariable String recipientId) {
                 try {

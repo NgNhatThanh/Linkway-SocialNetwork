@@ -1,5 +1,6 @@
 package com.social_network.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
+    @JsonIgnore
     private User receiver;
 
     @Column(name = "content")
@@ -26,7 +28,7 @@ public class Notification {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @Column(name = "read")
+    @Column(name = "is_read")
     private boolean read;
 
 }
