@@ -12,10 +12,6 @@ const usernameForm = document.querySelector('#usernameForm');
 const errorMessageElement = document.getElementById('error-message');
 const loadingTextElement = document.getElementById('loading-text');
 
-// Notifications container
-// const notificationContainer = document.createElement('div');
-// notificationContainer.classList.add('notifications');
-// document.body.appendChild(notificationContainer);
 
 let stompClient = null;
 let username = null;
@@ -23,9 +19,6 @@ let displayName = null;
 let selectedUserId = null; // Placeholder for selected user ID
 let selectedUserName = null;
 
-// Fetch recipientId from the URL or another source
-// const urlParams = new URLSearchParams(window.location.search);
-// const recipientId = urlParams.get('recipientId'); // Get recipientId from URL query parameters
 
 // Fetch current user from session
 async function fetchCurrentUser() {
@@ -38,7 +31,6 @@ async function fetchCurrentUser() {
                 displayName = currentUser.displayName;
                 sessionStorage.setItem('username', username);
                 sessionStorage.setItem('displayName', displayName);
-                // document.querySelector('#connected-user-displayname').textContent = displayName;
                 connect();
                 fetchRecentUserChatWith();
             } else {
@@ -77,7 +69,6 @@ function connect() {
 // On successful connection, subscribe and register the user
 function onConnected() {
     stompClient.subscribe(`/user/${username}/queue/messages`, onMessageReceived);
-    stompClient.subscribe(`/user/public`, onPublicMessageReceived);
     stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ username, status: 'ONLINE' }));
 }
 
@@ -103,39 +94,13 @@ async function fetchCurrentRecipient(recipientId) {
         showError('Failed to fetch recipient information.');
     }
 }
-// Append a reliable user to the reliable users list and add event listeners
-async function appendReliableUserElement(user, reliableUsersList) {
-    const listItem = document.createElement('li');
-    listItem.classList.add('reliable-item');
-    listItem.id = user.username;
-
-    const userImage = document.createElement('img');
-    userImage.src = `http://localhost:8080${user.avatarImagePath}`;
-
-    const usernameSpan = document.createElement('span');
-    usernameSpan.textContent = user.displayName;
-
-    listItem.appendChild(userImage);
-    listItem.appendChild(usernameSpan);
-
-    // Add an event listener for clicking the reliable user item
-    listItem.addEventListener('click', async () => {
-        selectedUserName = user.displayName; // Store the selected user's name
-        selectedUserId = user.username; // Store the selected user's username
-        loadMessageHistory(selectedUserId); // Fetch message history for selected user
-        updateChatHeader(); // Update the chat header with the selected user's name
-        messageInput.focus();
-    });
-
-    reliableUsersList.appendChild(listItem);
-}
 
 async function fetchRecentUserChatWith() {
     try {
         // Fetch the list of users the current user has chatted with
         const responseUsers = await fetch(`/users/chat`);
         // Fetch the list of users with unread notifications
-        const responseUnread = await fetch(`/notifications/${username}`);
+        const responseUnread = await fetch(`/message/notifications/${username}`);
 
         if (responseUsers.ok && responseUnread.ok) {
             const recentUsers = await responseUsers.json();
@@ -186,7 +151,7 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         // Attempt to mark notifications for the selected user as read
         try {
             const csrfToken = document.getElementById("csrf-token").value;
-            const response = await fetch(`/notifications/${user.username}/${username}/mark-as-read`, {
+            const response = await fetch(`/message/notifications/${user.username}/${username}/mark-as-read`, {
                 method: 'PUT',
                 credentials: 'include',
                 headers: {
@@ -211,54 +176,6 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
     recentUsersList.appendChild(listItem);
 }
 
-
-
-// Fetch and display the list of following users
-async function fetchFollowingUsers() {
-    try {
-        const response = await fetch(`/users/following/${username}`);
-        const followingUsers = await response.json();
-        const followingUsersList = document.getElementById('followingUsers');
-        followingUsersList.innerHTML = '';
-
-        if (followingUsers && followingUsers.length > 0) {
-            followingUsers.forEach(user => appendFollowingUserElement(user, followingUsersList));
-        } else {
-            followingUsersList.innerHTML = '<li>No users followed yet.</li>';
-        }
-    } catch (error) {
-        console.error('Error fetching following users:', error);
-        showError('Failed to load following users.');
-    }
-}
-
-// Append a user to the following list
-function appendFollowingUserElement(user, followingUsersList) {
-    const listItem = document.createElement('li');
-    listItem.classList.add('following-item');
-    listItem.id = user.username;
-
-    // lòad user avatar
-    const userImage = document.createElement('img');
-    userImage.src = `http://localhost:8080${user.avatarImagePath}`;
-
-    const usernameSpan = document.createElement('span');
-    usernameSpan.textContent = user.displayName;
-
-    listItem.appendChild(userImage);
-    listItem.appendChild(usernameSpan);
-
-    listItem.addEventListener('click', () => {
-        selectedUserName = user.displayName; // Store the selected user's name
-        selectedUserId = user.username;
-        updateChatHeader();
-        loadMessageHistory(selectedUserId); // Fetch message history for selected user
-        messageInput.focus();
-    });
-
-    followingUsersList.appendChild(listItem);
-}
-
 // Update the chat header with the name of the user you're chatting with
 function updateChatHeader() {
     const chatHeader = document.getElementById('chat-with-username');
@@ -269,35 +186,6 @@ function updateChatHeader() {
     }
 }
 
-
-// // Initialize chat with the recipient from the URL
-// function initializeChatWithRecipient() {
-//     const recipientInfo = document.getElementById('recipientInfo');
-//     const recipientId = recipientInfo ? recipientInfo.getAttribute('data-recipient-id') : null;
-//     const recipientName = recipientInfo ? recipientInfo.getAttribute('data-recipient-name') : null;
-
-//     if (recipientId && recipientName) {
-//         // Set selected user details
-//         selectedUserId = recipientId;
-//         selectedUserName = recipientName;
-
-//         // Update the chat header
-//         updateChatHeader();
-
-//         // Load message history for the selected user
-//         loadMessageHistory(selectedUserId);
-
-//         // Set focus on the message input field
-//         const messageInput = document.getElementById('messageInput'); // Ensure this element ID is correct
-//         if (messageInput) {
-//             messageInput.focus();
-//         }
-//     } else {
-//         console.error("Recipient information not found.");
-//     }
-// }
-
-// Load message history for selected user
 async function loadMessageHistory(recipientId) {
     try {
         const response = await fetch(`/messages/${username}/${recipientId}`);
@@ -412,32 +300,16 @@ function highlightUser(username) {
     if (followingUserElement) followingUserElement.classList.add('highlight');
 }
 
-async function fetchNotifications() {
-    try {
-        const currentUserId = sessionStorage.getItem('username');
-        const response = await fetch(`/notifications/${currentUserId}`, { credentials: 'include' });
-        if (response.ok) {
-            const notifications = await response.json();
-            // notifications.forEach(notification => {
-            //     showNotification(notification.message, notification.type);
-            // });
-            updateNavbarMessageNotification(notifications.length); // Update the badge with the correct count
-        }
-    } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-    }
-}
-
 // Handle message received event
 function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
     const chatPage = document.getElementById("chat-page");
-    if (chatPage) {
+    if (chatPage && selectedUserId === messageData.senderId) {
         appendMessageToChat(messageData, false);
     }
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
-    fetchNotifications();
+    fetchMessageNotifications();
 
     // Lưu thông báo vào localStorage để truyền thông tin sang navbar.js
     const notificationData = {
@@ -448,33 +320,8 @@ function onMessageReceived(message) {
     localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
 }
 
-
-// Update notification icon on the navbar with the count of unread notifications
-function updateNavbarMessageNotification(count = 0) {
-    const notificationBadge = document.getElementById('message-notification');
-    if (notificationBadge) {
-        if (count > 0) {
-            notificationBadge.style.display = 'inline';
-            notificationBadge.textContent = count;
-        } else {
-            notificationBadge.style.display = 'none';
-        }
-    }
-}
-
-// Handle public messages
-function onPublicMessageReceived(message) {
-    const messageData = JSON.parse(message.body);
-    const chatMessage = document.createElement('div');
-    chatMessage.classList.add('chat-message');
-    chatMessage.textContent = `Public: ${messageData.content}`;
-    chatArea.appendChild(chatMessage);
-    chatArea.scrollTop = chatArea.scrollHeight;
-    showNotification('New public message', 'public');
-}
-
 document.addEventListener("DOMContentLoaded", async () => {
-    fetchCurrentUser();
+    // fetchCurrentUser();
     const chatPage = document.getElementById("chat-page");
     const recipientId = chatPage.getAttribute("data-recipient-id");
     // Fetch the current user before proceeding with chat setup
@@ -497,5 +344,3 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 messageForm.addEventListener('submit', sendMessage);
-logout.addEventListener('click', onLogout);
-// fetchCurrentUser();

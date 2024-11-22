@@ -1,6 +1,7 @@
 package com.social_network.service;
 
 import com.social_network.dao.PostRepository;
+import com.social_network.entity.Notification;
 import com.social_network.entity.Post;
 
 import com.social_network.entity.Tag;
@@ -27,15 +28,34 @@ import java.util.*;
 public class PostService {
 
     private final int POST_PER_PAGE = 10;
+
     private final TagService tagService;
+
     private final FollowService followService;
     private final SecurityUtil securityUtil;
     private final UserService userService;
 
+    private final NotificationService notificationService;
+
     private PostRepository postRepository;
 
     public Post save(Post post) {
-        return postRepository.save(post);
+        boolean isNewPost = post.getId() == 0;
+        Post newPost = postRepository.save(post);
+        if(isNewPost){
+            List<User> followers = followService.getFollowers(post.getAuthor());
+            for(User follower : followers){
+                System.out.println("EFG: " + follower.getDisplayName());
+                Notification notification = new Notification();
+                notification.setSender(post.getAuthor());
+                notification.setReceiver(follower);
+                notification.setContent(post.getAuthor().getDisplayName() + " đã đăng một bài viết mới.");
+                notification.setCreatedAt(Date.from(Instant.now()));
+                notification.setRedirectUrl("/post/" + newPost.getId());
+                notificationService.sendNotification(notification);
+            }
+        }
+        return newPost;
     }
 
     public Page<Post> getAll(int page) {

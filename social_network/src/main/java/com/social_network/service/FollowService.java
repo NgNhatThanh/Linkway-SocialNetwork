@@ -1,5 +1,6 @@
 package com.social_network.service;
 
+import com.social_network.entity.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import com.social_network.exception.FollowException;
 import jakarta.transaction.Transactional;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,10 +22,12 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    public FollowService(FollowRepository followRepository, UserService userService) {
+    public FollowService(FollowRepository followRepository, UserService userService, NotificationService notificationService) {
         this.followRepository = followRepository;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     public boolean isFollowing(String followerUsername, String followedUsername) {
@@ -69,6 +73,14 @@ public class FollowService {
             follow.setFollowed(followed); // Updated to use 'followed'
             follow.setCreatedAt(Instant.now());
             followRepository.save(follow);
+
+            Notification notification = new Notification();
+            notification.setSender(follower);
+            notification.setReceiver(followed);
+            notification.setContent(follower.getDisplayName() + " đã theo dõi bạn.");
+            notification.setCreatedAt(Date.from(Instant.now()));
+            notification.setRedirectUrl("/profile/" + follower.getUsername());
+            notificationService.sendNotification(notification);
         }
     }
 
