@@ -37,17 +37,18 @@ public class CommentService {
         if(comment.getId() == 0){
             Notification notification = new Notification();
             notification.setSender(comment.getAuthor());
-            if(comment.getParentComment() != null){
-                notification.setReceiver(comment.getParentComment().getAuthor());
-                notification.setContent(comment.getAuthor().getDisplayName() + " đã phản hồi bình luận của bạn.");
-            }
-            else{
-                notification.setReceiver(comment.getPost().getAuthor());
-                notification.setContent(comment.getAuthor().getDisplayName() + " đã bình luận ở bài viết của bạn.");
-            }
             notification.setRedirectUrl("/post/" + comment.getPost().getId() + "#post-comments");
             notification.setCreatedAt(Date.from(Instant.now()));
-            notificationService.sendNotification(notification);
+            if(comment.getParentComment() != null && comment.getParentComment().getAuthor() != comment.getAuthor()){
+                notification.setReceiver(comment.getParentComment().getAuthor());
+                notification.setContent(comment.getAuthor().getDisplayName() + " đã phản hồi bình luận của bạn.");
+                notificationService.sendNotification(notification);
+            }
+            else if(comment.getParentComment() == null && comment.getPost().getAuthor() != comment.getAuthor()){
+                notification.setReceiver(comment.getPost().getAuthor());
+                notification.setContent(comment.getAuthor().getDisplayName() + " đã bình luận ở bài viết của bạn.");
+                notificationService.sendNotification(notification);
+            }
         }
 
         commentRepository.save(comment);
