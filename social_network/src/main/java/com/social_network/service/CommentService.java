@@ -36,8 +36,16 @@ public class CommentService {
     public void saveComment(Comment comment){
         if(comment.getId() == 0){
             Notification notification = new Notification();
-            notification.setReceiver(comment.getPost().getAuthor());
-            notification.setContent(comment.getAuthor().getDisplayName() + " đã bình luận ở bài viết của bạn.");
+            notification.setSender(comment.getAuthor());
+            if(comment.getParentComment() != null){
+                notification.setReceiver(comment.getParentComment().getAuthor());
+                notification.setContent(comment.getAuthor().getDisplayName() + " đã phản hồi bình luận của bạn.");
+            }
+            else{
+                notification.setReceiver(comment.getPost().getAuthor());
+                notification.setContent(comment.getAuthor().getDisplayName() + " đã bình luận ở bài viết của bạn.");
+            }
+            notification.setRedirectUrl("/post/" + comment.getPost().getId() + "#post-comments");
             notification.setCreatedAt(Date.from(Instant.now()));
             notificationService.sendNotification(notification);
         }

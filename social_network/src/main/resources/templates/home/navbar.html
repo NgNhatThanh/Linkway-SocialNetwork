@@ -13,7 +13,7 @@
             <a th:href="@{/}"> Home </a>
         </div>
         <!-- Notification Container for Message Popups -->
-        <div id="notification-container"></div>
+
 
         <div>
             <form th:action="@{/search}" method="get" class="search-container">
@@ -25,13 +25,13 @@
         <div class="user-div">
             <div th:if="${session.username != null}" class="logged-in">
 
-                <div id="notifications-container">
-                    <button onclick=fetchNotifications()>
+                <div class="notifications-container">
+                    <button  id="notification-button" class="notification-button" onclick=toggleNotiListVisibility()>
                         <i class='bx bxs-bell'></i>
                         <span id="unread-notification-count"></span>
                     </button>
 
-                    <div id="notifications-dropdown">
+                    <div id="notifications-dropdown" class="notifications-dropdown hidden">
                         <ul id="notifications-list">
                         </ul>
                     </div>
@@ -45,10 +45,10 @@
                 </div>
 
                 <!-- Notification Icon for New Messages -->
-                <div class="notification-icon">
+                <div class="chat-div">
                     <a th:href="@{/chat}" class="chat-button">
-                        Chat
-                        <span id="message-notification" class="notification-badge" style="display: none;">0</span>
+                        <i class='bx bxs-message-dots'></i>
+                        <span id="unread-messages-count" class="notification-badge"></span>
                     </a>
                 </div>
 
@@ -93,7 +93,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script th:src="@{/js/navbar.js}"></script>
-        <script th:src="@{/js/main.js}"></script>
     </div>
 
 </body>

@@ -5,6 +5,10 @@ import com.social_network.entity.Notification;
 import com.social_network.entity.User;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +37,16 @@ public class NotificationService {
                 notification);
     }
 
-    public List<Notification> getNotificationsOfReceiver(User receiver) {
-        return notificationRepository.findByReceiver(receiver);
+    public List<Notification> getNotificationsOfReceiver(User receiver, int lastId, int limit) {
+        Pageable pageable = PageRequest.of(0, limit, Sort.by("id").descending());
+        return notificationRepository.findByReceiverEqualsAndIdLessThan(
+                receiver,
+                lastId,
+                pageable);
+    }
+
+    public void deleteNotification(Notification notification) {
+        notificationRepository.delete(notification);
     }
 
     public Notification findById(int id){
