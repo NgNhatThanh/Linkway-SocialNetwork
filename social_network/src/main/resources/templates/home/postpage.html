@@ -65,8 +65,12 @@
                                 <input class="postIdValue" type="hidden" th:name="postId" th:value="${post.id}">
                                 <input class="authorIdValue" type="hidden" th:name="authorId" th:value="${session.id}">
                                 <input class="parentIdValue" type="hidden" th:name="parentId" th:value="-1">
-                                <textarea placeholder="Viết bình luận..." th:field="*{content}"
-                                    class="comment-textarea"></textarea>
+                                <div style="display: flex">
+                                    <img th:src="${session.avatar}" class="comment-editor-avatar">
+                                    <textarea placeholder="Viết bình luận..." th:field="*{content}"
+                                        class="comment-textarea"></textarea>
+                                </div>
+
 
                                 <div class="editor-extra">
                                     <div class="editor-extra-container">
@@ -75,7 +79,7 @@
 
                                         <button class="submit-button" type="button"
                                             onclick="this.closest('div').querySelector('.imageInput').click()">
-                                            Image
+                                            Ảnh
                                         </button>
 
                                         <div id="comment-form-submit">

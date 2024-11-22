@@ -1,9 +1,6 @@
 let stompClient = null;
 // Listen for storage events from main.js
-const currentId = document.getElementById('current-id').value;
-const currentUsername = document.getElementById('current-username').value;
 var unreadNotifications;
-const csrfToken = document.getElementById('csrf-token').value;
 const maxNotificationsFetch = 5;
 var lastId = 9999999;
 const emptyItem = document.createElement('li');
@@ -29,7 +26,7 @@ function connect() {
 function onConnected() {
     stompClient.subscribe(`/user/${currentUsername}/queue/messages`, onMessageReceived);
     stompClient.subscribe(`/user/${currentUsername}/notify`, onNotificationReceived)
-    stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ currentUsername, status: 'ONLINE' }));
+    stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ username: currentUsername, status: 'ONLINE' }));
 }
 
 function onError(error) {
