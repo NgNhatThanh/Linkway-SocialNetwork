@@ -5,8 +5,6 @@ commentContent[0].addEventListener('input', function() {
     submitButton[0].disabled = commentContent[0].value.trim() === '';
 });
 
-const csrfToken = document.getElementById("csrf-token").value;
-
 function uploadImage(input){
 
     const commentEditor = input.closest(".comment-editor");
@@ -94,28 +92,22 @@ function loadChildComments(parentId){
                                                             </button>
                                                         </form>
                                                     </div>
-                                                    <button type="button" class="action-btn" onclick=loadChildComments(${comment.id}) id=get-replies-${comment.id}> Xem Phản hồi </button>
-                                                    <button class="action-btn" onclick='showReplyForm(${comment.id})'> Phản hồi </button>
-                                                    <button class="action-btn" onclick=showCommentEditForm(${comment.id})> Chỉnh sửa</button>
-                                                </div>
-                                                
-
                                             `;
-//                if(comment.hasChild){
-//                    innerAdd += `<button type="button" class="action-btn"
-//                                onclick=loadChildComments(${comment.id})
-//                                id=get-replies-${comment.id}> Xem Phản hồi </button>`;
-//                }
-//
-//                innerAdd += `<button class="action-btn" onclick='showReplyForm(${comment.id})'>
-//                                    Phản hồi
-//                             </button>`;
-//
-//                if(comment.author.username === currentUsername){
-//                    innerAdd += `<button class="action-btn" onclick=showCommentEditForm(${comment.id})>
-//                                    Chỉnh sửa
-//                                 </button>`;
-//                }
+               if(comment.hasChild){
+                   innerAdd += `<button type="button" class="action-btn"
+                               onclick=loadChildComments(${comment.id})
+                               id=get-replies-${comment.id}> Xem Phản hồi </button>`;
+               }
+
+               innerAdd += `<button class="action-btn" onclick='showReplyForm(${comment.id})'>
+                                   Phản hồi
+                            </button>`;
+
+               if(comment.author.username === currentUsername){
+                   innerAdd += `<button class="action-btn" onclick=showCommentEditForm(${comment.id})>
+                                   Chỉnh sửa
+                                </button>`;
+               }
 
                 innerAdd += `</div>
                         </div>`;
@@ -123,9 +115,6 @@ function loadChildComments(parentId){
                 innerAdd += `
                             <div id="${'reply-form-container-' + comment.id}" class="reply-form"></div>
                             <div id="${'child-comments-'+comment.id}" class="child-comments"></div>
-                        </div>`;
-
-                innerAdd += `
                         </div>`;
 
                 commentElement.innerHTML = innerAdd;
@@ -211,6 +200,7 @@ function showCommentEditForm(commentId){
             commentForm.querySelector('.comment-editor').appendChild(commentIdValue);
 
             const exitButton = document.createElement('button');
+            exitButton.classList.add('action-btn');
             exitButton.textContent = 'Hủy';
             exitButton.onclick = function (){
                 const container = document.getElementById(`comment-container-${commentId}`);
