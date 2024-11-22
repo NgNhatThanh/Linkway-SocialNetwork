@@ -3,10 +3,12 @@
     padding: 0;
     box-sizing: border-box;
 }
-body{
+
+body {
 
     background: white
 }
+
 .nav-bar {
 
     width: 100%;
@@ -18,13 +20,22 @@ body{
     padding: 3px 10px;
 }
 
+/*#notification-container {*/
+/*    position: fixed;*/
+/*    top: 20px;*/
+/*    left: 50%;*/
+/*    transform: translateX(-50%);*/
+/*    z-index: 1000;*/
+/*}*/
+
 /*1. Logo*/
-.back-home{
+.back-home {
     color: #0079D3;
     text-decoration: none;
     margin-left: 10px;
 }
-.back-home:hover{
+
+.back-home:hover {
     color: #0056b3;
     text-decoration: underline;
 }
@@ -54,6 +65,7 @@ body{
     background-color: white;
     border-color: #0079D3;
 }
+
 .button {
     padding: 8px 15px;
     border-radius: 20px;
@@ -61,6 +73,7 @@ body{
     font-weight: 500;
     cursor: pointer;
 }
+
 .button-primary {
     background-color: #0079D3;
     color: white;
@@ -82,6 +95,7 @@ body{
     position: relative;
     display: inline-block;
 }
+
 .avatar {
     width: 30px;
     height: 30px;
@@ -93,7 +107,7 @@ body{
 }
 
 
-.logged-in{
+.logged-in {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -114,29 +128,34 @@ body{
     width: 250px;
     z-index: 1000;
 }
-.menu-item{
+
+.menu-item {
     display: block;
     padding: 7px 15px;
     font-size: 15px;
 }
-.icon{
+
+.icon {
     margin-right: 10px;
     font-size: 20px;
 }
-.avt-icon{
+
+.avt-icon {
     margin-right: 10px;
     width: 20px;
     height: 20px;
 }
+
 .dropdown-item {
     font-size: 15px;
     padding: 8px 16px;
     color: #333;
     text-decoration: none;
-    display :flex;
+    display: flex;
     align-item: center;
     border-radius: 15px;
 }
+
 .dropdown-item:hover {
     background-color: #f3f3f3;
     cursor: pointer;
@@ -147,12 +166,91 @@ body{
     cursor: pointer;
 
 }
-.btn-logout{
+
+.btn-logout {
     border: none;
     background: none;
-    display:flex;
+    display: flex;
     align-item: center;
     font-size: 15px;
     color: #333;
     border-radius: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.notifications-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.notifications-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.read{
+    background-color: grey;
+}
+
+.notifications-dropdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notifications-dropdown li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.notifications-dropdown li:last-child {
+    border-bottom: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.notifcation-thumbnail{
+    border-radius: 50%;
+    width: 20%;
+    height: 100%;
 }

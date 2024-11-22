@@ -1,5 +1,3 @@
-const csrfToken = document.getElementById('csrf-token').value;
-
 const availableTags = [];
 
 let filterTags = [];

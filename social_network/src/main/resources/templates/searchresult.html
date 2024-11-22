@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
     <main class="searchpage">
         <link rel="stylesheet" th:href="@{/css/searchresult.css}">
@@ -19,24 +21,30 @@
             </button>
         </div>
 
-        <form th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'"
-              id="search-filter">
+        <form th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'" id="search-filter">
             <input type="hidden" name="query" th:value="${param.query}">
 
             <input type="hidden" name="type" th:value="${param.type == null ? 'post' : param.type}">
 
             <select name="sortBy">
-                <option value="relevance" th:selected="${param.sortBy} == null or ${#strings.toString(param.sortBy) == 'relevance'}"> Liên quan </option>
+                <option value="relevance"
+                    th:selected="${param.sortBy} == null or ${#strings.toString(param.sortBy) == 'relevance'}"> Liên
+                    quan </option>
                 <option value="newest" th:selected="${#strings.toString(param.sortBy) == 'newest'}"> Mới nhất </option>
                 <option value="hot" th:selected="${#strings.toString(param.sortBy) == 'hot'}"> Phổ biến </option>
             </select>
 
             <select name="date">
-                <option value="everytime" th:selected="${param.date} == null or ${#strings.toString(param.date) == 'everytime'}"> Mọi lúc </option>
+                <option value="everytime"
+                    th:selected="${param.date} == null or ${#strings.toString(param.date) == 'everytime'}"> Mọi lúc
+                </option>
                 <option value="today" th:selected="${#strings.toString(param.date) == 'today'}"> Hôm nay </option>
-                <option value="this_week" th:selected="${#strings.toString(param.date) == 'this_week'}"> Tuần này </option>
-                <option value="this_month" th:selected="${#strings.toString(param.date) == 'this_month'}"> Tháng này </option>
-                <option value="this_year" th:selected="${#strings.toString(param.date) == 'this_year'}"> Năm nay </option>
+                <option value="this_week" th:selected="${#strings.toString(param.date) == 'this_week'}"> Tuần này
+                </option>
+                <option value="this_month" th:selected="${#strings.toString(param.date) == 'this_month'}"> Tháng này
+                </option>
+                <option value="this_year" th:selected="${#strings.toString(param.date) == 'this_year'}"> Năm nay
+                </option>
             </select>
             <button type="submit" onclick="filter()">
                 Lọc
@@ -56,16 +64,16 @@
 
         <div th:if="${userList != null}" class="search-user-list">
 
-            <p th:if="${userList.isEmpty()}"
-               th:text="${'Không tìm thấy kết quả nào: ' + query}">
+            <p th:if="${userList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
             </p>
 
             <div th:each="user : ${userList}" class="user-card">
                 <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
                 <div>
                     <div style="display: flex; align-item: center; width: 100%;">
-                        <h4 th:text="${user.displayName}"></h4>
-                        <p th:text="${user.username}"></p>
+                        <a th:href="@{/profile/{username}(username=${user.username})}"
+                            th:text="${user.displayName}"></a>
+                        <a th:href="@{/profile/{username}(username=${user.username})}" th:text="${user.username}"></a>
                     </div>
                     <div style="display: flex; margin-bottom: 7px; width: 100%;">
                         <p th:text="${user.followersCount + ' người theo dõi'}"></p>
@@ -79,8 +87,7 @@
 
         <div th:if="${postList != null}" class="search-post-list">
 
-            <p th:if="${postList.isEmpty()}"
-                th:text="${'Không tìm thấy kết quả nào: ' + query}">
+            <p th:if="${postList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
             </p>
 
             <div th:replace="~{home/postlist.html :: post-section}">
@@ -91,4 +98,5 @@
         <script th:src="@{/js/searchresult.js}"></script>
     </main>
 </body>
+
 </html>

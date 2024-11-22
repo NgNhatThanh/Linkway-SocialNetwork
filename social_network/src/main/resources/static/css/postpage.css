@@ -39,8 +39,8 @@
     margin-right: 13px;
 }
 .postpage-author-info img{
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 }
 .postpage-author-name {
     text-decoration: none;
@@ -758,4 +758,11 @@ h5[th\:if="${comment.wasUpdated}"] {
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+.comment-editor-avatar{
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 50%;
 }

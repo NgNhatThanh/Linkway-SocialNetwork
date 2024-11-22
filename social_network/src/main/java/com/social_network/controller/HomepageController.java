@@ -11,6 +11,7 @@ import com.social_network.util.MarkdownRenderUtil;
 import com.social_network.util.ModelMapper;
 import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,8 @@ public class HomepageController {
 
     private final TagService tagService;
 
+    private final SecurityUtil securityUtil;
+
     private final FollowService followService;
 
     private PostService postService;
@@ -50,9 +53,16 @@ public class HomepageController {
 
     @GetMapping("/")
     public String showHomePage(Model model,
-                               @RequestParam(value = "page", defaultValue = "1") int page) {
-
-        Page<Post> postList = postService.getAll(page);
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        HttpSession session = securityUtil.getSession();
+        String currentUsername = (String) session.getAttribute("username");
+        Page<Post> postList = null;
+        if (currentUsername != null) {
+            User user = userService.findByUsername(currentUsername).get();
+            postList = postService.getPostByFollowingTagsOrFollowingUsers(user, page);
+        } else {
+            postList = postService.getAll(page);
+        }
 
         try {
             String username = Objects.requireNonNull(SecurityUtil.getCurrentUser()).getUsername();
@@ -67,23 +77,22 @@ public class HomepageController {
 
     @GetMapping("/search")
     public String search(Model model,
-                         @RequestParam(value = "query") String query,
-                         @RequestParam(value = "type", defaultValue = "post") String type,
-                         @RequestParam(value = "sortBy", defaultValue = "relevance") String sortBy,
-                         @RequestParam(value = "date", defaultValue = "everytime") String date,
-                         @RequestParam(value = "tagName", defaultValue = "") List<String> tagNames,
-                         @RequestParam(value = "page", defaultValue = "1") int page){
-        if(type.equals("user")){
+            @RequestParam(value = "query") String query,
+            @RequestParam(value = "type", defaultValue = "post") String type,
+            @RequestParam(value = "sortBy", defaultValue = "relevance") String sortBy,
+            @RequestParam(value = "date", defaultValue = "everytime") String date,
+            @RequestParam(value = "tagName", defaultValue = "") List<String> tagNames,
+            @RequestParam(value = "page", defaultValue = "1") int page) {
+        if (type.equals("user")) {
             Page<User> userList = userService.findByKeyword(query, page);
             Page<UserSearchDTO> userDTOList = userList.map(user -> {
-               UserSearchDTO dto = ModelMapper.getInstance().map(user, UserSearchDTO.class);
-               dto.setFollowersCount(followService.getFollowerCount(user));
-               dto.setPostsCount(postService.countPostsByAuthor(user));
-               return dto;
+                UserSearchDTO dto = ModelMapper.getInstance().map(user, UserSearchDTO.class);
+                dto.setFollowersCount(followService.getFollowerCount(user));
+                dto.setPostsCount(postService.countPostsByAuthor(user));
+                return dto;
             });
             model.addAttribute("userList", userDTOList);
-        }
-        else{
+        } else {
             Page<Post> postList = postService.search(query, page, sortBy, date, tagNames);
             model.addAttribute("postList", postList);
         }

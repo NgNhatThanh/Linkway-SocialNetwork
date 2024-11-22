@@ -21,36 +21,38 @@
         <p th:if="${#lists.isEmpty(followings.content)}">No followings to display.</p>
 
         <!-- Pagination -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <!-- Previous button -->
-                <li class="page-item" th:classappend="${followings.number == 0 ? 'disabled' : ''}">
-                    <a class="page-link"
-                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number})}"
-                        aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
+        <div th:if="${!#lists.isEmpty(followings.content) && followings.totalPages > 1}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <!-- Previous button -->
+                    <li class="page-item" th:classappend="${followings.number == 0 ? 'disabled' : ''}">
+                        <a class="page-link"
+                            th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number})}"
+                            aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
 
-                <!-- Page number buttons -->
-                <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, followings.totalPages)}"
-                    th:classappend="${pageNumber == followings.number + 1 ? 'active' : ''}">
-                    <a class="page-link"
-                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${pageNumber})}"
-                        th:text="${pageNumber}"></a>
-                </li>
+                    <!-- Page number buttons -->
+                    <li class="page-item" th:each="pageNumber : ${#numbers.sequence(1, followings.totalPages)}"
+                        th:classappend="${pageNumber == followings.number + 1 ? 'active' : ''}">
+                        <a class="page-link"
+                            th:href="@{/followings/{username}(username=${user.username}, followingPage=${pageNumber})}"
+                            th:text="${pageNumber}"></a>
+                    </li>
 
-                <!-- Next button -->
-                <li class="page-item"
-                    th:classappend="${followings.number + 1 == followings.totalPages ? 'disabled' : ''}">
-                    <a class="page-link"
-                        th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number + 2})}"
-                        aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+                    <!-- Next button -->
+                    <li class="page-item"
+                        th:classappend="${followings.number + 1 == followings.totalPages ? 'disabled' : ''}">
+                        <a class="page-link"
+                            th:href="@{/followings/{username}(username=${user.username}, followingPage=${followings.number + 2})}"
+                            aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
 
         <a class="link-item" th:href="@{/profile/{username}(username=${user.username})}">Back to Profile</a>

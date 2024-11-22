@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+
 <body>
     <main class="postpage">
         <link rel="stylesheet" th:href="@{/css/postpage.css}">
@@ -39,12 +41,10 @@
                         <img th:src="@{${post.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
                     </a>
                     <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
-                       th:text="*{post.getAuthor().getDisplayName()}" class="postpage-author-name"></a>
+                        th:text="*{post.getAuthor().getDisplayName()}" class="postpage-author-name"></a>
                 </div>
                 <div class="postpage-tags">
-                    <a th:each="tag : ${post.getTags()}"
-                       th:href="@{#}"
-                       th:text="*{tag.getName()}"></a>
+                    <a th:each="tag : ${post.getTags()}" th:href="@{#}" th:text="*{tag.getName()}"></a>
                 </div>
 
             </div>
@@ -55,35 +55,39 @@
                     <hr style="margin-bottom: 20px; opacity: 0.5;">
                     <h2 style="font-size: 1.5em; color: #333; margin: 20px 0 10px;"> Bình luận: </h2>
                     <div class="comment-form-all">
-                        <form th:action="@{${'/post/' + post.getId() + '/comment'}}"
-                              class="comment-form"
-                              th:object="${userComment}" method="post">
-<!--                            <a th:href="@{${'/profile/' + session.username}}">-->
-<!--                                <img th:src="@{${session.avatar}}" class="author-mini-avatar">-->
-<!--                            </a>-->
+                        <form th:action="@{${'/post/' + post.getId() + '/comment'}}" class="comment-form"
+                            th:object="${userComment}" method="post">
+                            <!--                            <a th:href="@{${'/profile/' + session.username}}">-->
+                            <!--                                <img th:src="@{${session.avatar}}" class="author-mini-avatar">-->
+                            <!--                            </a>-->
 
                             <div class="comment-editor">
                                 <input class="postIdValue" type="hidden" th:name="postId" th:value="${post.id}">
                                 <input class="authorIdValue" type="hidden" th:name="authorId" th:value="${session.id}">
                                 <input class="parentIdValue" type="hidden" th:name="parentId" th:value="-1">
-                                <textarea placeholder="Viết bình luận..."
-                                          th:field="*{content}"
-                                          class="comment-textarea"></textarea>
+                                <div style="display: flex">
+                                    <img th:src="${session.avatar}" class="comment-editor-avatar">
+                                    <textarea placeholder="Viết bình luận..." th:field="*{content}"
+                                        class="comment-textarea"></textarea>
+                                </div>
+
 
                                 <div class="editor-extra">
                                     <div class="editor-extra-container">
-                                        <input type="file" class="imageInput" accept="image/*" style="display: none;" onchange="uploadImage(this)">
+                                        <input type="file" class="imageInput" accept="image/*" style="display: none;"
+                                            onchange="uploadImage(this)">
 
-                                        <button class="submit-button" type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
-                                            Image
+                                        <button class="submit-button" type="button"
+                                            onclick="this.closest('div').querySelector('.imageInput').click()">
+                                            Ảnh
                                         </button>
 
                                         <div id="comment-form-submit">
-                                            <button  type="submit" class="submit-button"> Bình luận </button>
+                                            <button type="submit" class="submit-button"> Bình luận </button>
                                         </div>
 
                                         <button class="submit-button" type="button"
-                                                onclick="showPreview(this, this.closest('form').querySelector('.comment-textarea').value)">
+                                            onclick="showPreview(this, this.closest('form').querySelector('.comment-textarea').value)">
                                             Xem trước
                                         </button>
 
@@ -98,22 +102,27 @@
 
 
                     <div class="comment-thread">
-                        <div th:each="comment : ${rootComments}" class="root-comment" th:id="${'comment-container-' + comment.id}">
+                        <div th:each="comment : ${rootComments}" class="root-comment"
+                            th:id="${'comment-container-' + comment.id}">
                             <div class="comment-meta">
                                 <div class="comment-info">
                                     <div class="comment-author-info">
                                         <div style="display: flex; align-item: center;">
-                                            <a class="comment-author-img" th:href="@{${'/profile/' + comment.getAuthor().getUsername()}}">
-                                                <img th:src="@{*{comment.getAuthor().getAvatarImagePath}}" class="author-mini-avatar">
+                                            <a class="comment-author-img"
+                                                th:href="@{${'/profile/' + comment.getAuthor().getUsername()}}">
+                                                <img th:src="@{*{comment.getAuthor().getAvatarImagePath}}"
+                                                    class="author-mini-avatar">
                                             </a>
-                                            <a class="comment-author-name" th:href="@{${'/profile/' + comment.getAuthor().getUsername()}}"
-                                               th:text="${comment.getAuthor().getDisplayName()}"></a>
+                                            <a class="comment-author-name"
+                                                th:href="@{${'/profile/' + comment.getAuthor().getUsername()}}"
+                                                th:text="${comment.getAuthor().getDisplayName()}"></a>
                                         </div>
                                         <div>
                                             <div class="comment-date" style="display: flex">
                                                 <p th:text="*{#dates.format(comment.getCreatedAt(), 'yyyy/MM/dd HH:mm')}"
-                                                   class="date"></p>
-                                                <h5 style="margin-left: 5px" th:if="${comment.wasUpdated}"> Đã chỉnh sửa </h5>
+                                                    class="date"></p>
+                                                <h5 style="margin-left: 5px" th:if="${comment.wasUpdated}"> Đã chỉnh sửa
+                                                </h5>
                                             </div>
 
                                         </div>
@@ -126,34 +135,32 @@
 
                                 <div class="comment-vote">
                                     <div class="vote-buttons">
-                                        <form th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
-                                              method="post">
+                                        <form
+                                            th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
+                                            method="post">
                                             <button type="submit" data-rel="back" class="vote-btn up">
                                                 <span th:text="${comment.upvotes}" class="upvote-count"></span>
                                             </button>
                                         </form>
-                                        <form th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"
-                                              method="post">
+                                        <form
+                                            th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"
+                                            method="post">
                                             <button type="submit" class="vote-btn down">
                                                 <span th:text="${comment.downvotes}" class="downvote-count"></span>
                                             </button>
                                         </form>
                                     </div>
 
-                                    <button class="action-btn"
-                                            th:if="${comment.hasChild}"
-                                            type="button"
-                                            th:onclick="'loadChildComments(' + ${comment.id} + ')'"
-                                            th:id="${'get-replies-' + comment.id}"> Xem phản hồi </button>
+                                    <button class="action-btn" th:if="${comment.hasChild}" type="button"
+                                        th:onclick="'loadChildComments(' + ${comment.id} + ')'"
+                                        th:id="${'get-replies-' + comment.id}"> Xem phản hồi </button>
 
-                                    <button class="action-btn"
-                                            th:onclick="'showReplyForm(' + ${comment.id} + ')'">
+                                    <button class="action-btn" th:onclick="'showReplyForm(' + ${comment.id} + ')'">
                                         Phản hồi
                                     </button>
 
-                                    <button class="action-btn"
-                                            th:if="${comment.author.username == session.username}"
-                                            th:onclick="'showCommentEditForm(' + ${comment.id} + ')'">
+                                    <button class="action-btn" th:if="${comment.author.username == session.username}"
+                                        th:onclick="'showCommentEditForm(' + ${comment.id} + ')'">
                                         Chỉnh sửa
                                     </button>
                                 </div>
@@ -180,11 +187,9 @@
         <div class="side-div">
             <div class="side-container">
                 <div class="profile-section">
-                    <img th:src="@{${post.getAuthor().getAvatarImagePath()}}"
-                         class="profile-image">
+                    <img th:src="@{${post.getAuthor().getAvatarImagePath()}}" class="profile-image">
                     <a th:href="@{${'/profile/' + post.getAuthor().getUsername()}}"
-                       th:text="${post.getAuthor().getDisplayName()}"
-                       class="profile-name"></a>
+                        th:text="${post.getAuthor().getDisplayName()}" class="profile-name"></a>
                     <!--                <p th:text="${post.getAuthor().getUsername()}"></p>-->
                     <p th:text="${authorFollowers + ' followers'}"></p>
 
@@ -195,24 +200,28 @@
                         </button>
 
                         <!-- Follow/Unfollow Button for Other Users -->
-                        <form th:if="${not isCurrentUser}" th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}"
-                              method="post">
+                        <form th:if="${not isCurrentUser}"
+                            th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}" method="post">
                             <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
-                            <button class="subFollow" type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                            <button class="subFollow" type="submit"
+                                th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
                         </form>
                     </div>
                     <div class="vote-section">
-                        <form th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
-                              method="post">
+                        <form
+                            th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
+                            method="post">
                             <button class="vote-btn up" aria-label="Upvote" type="submit">
                                 <!--                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>-->
-                                <span class="vote-count" th:text="${post.getUpvotes()}" ></span>
+                                <span class="vote-count" th:text="${post.getUpvotes()}"></span>
                             </button>
                         </form>
-                        <form th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"  method="post">
+                        <form
+                            th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"
+                            method="post">
                             <button class="vote-btn down" type="submit" aria-label="Downvote">
                                 <!--                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>-->
-                                <span class="vote-count" th:text="${post.getDownvotes()}" ></span>
+                                <span class="vote-count" th:text="${post.getDownvotes()}"></span>
                             </button>
                         </form>
 
@@ -220,9 +229,11 @@
                 </div>
 
                 <div class="related-posts">
-                    <h3 class="related-posts-author-name" th:text="${'Bài viết từ: ' + post.getAuthor().getDisplayName()}"></h3>
+                    <h3 class="related-posts-author-name"
+                        th:text="${'Bài viết từ: ' + post.getAuthor().getDisplayName()}"></h3>
                     <div class="related-posts-post-item" th:each="post, iter : ${coauthorPosts}">
-                        <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}" th:text="${post.title}"></a>
+                        <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}"
+                            th:text="${post.title}"></a>
                         <div>
                             <p th:text="${post.views + ' views'}"></p>
                             <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
@@ -237,4 +248,5 @@
         <script th:src="@{/js/postpage.js}"></script>
     </main>
 </body>
+
 </html>
