@@ -32,7 +32,7 @@ public class UserController {
 
     // Fetch current user details from the session
     @GetMapping("/current-user")
-    public ResponseEntity<UserDTO> getCurrentUser() {
+    public ResponseEntity<User> getCurrentUser() {
         HttpSession session = securityUtil.getSession();
         String username = (String) session.getAttribute("username");
 
@@ -48,7 +48,7 @@ public class UserController {
         User user = userOptional.get();
         // Use service to convert User to UserDTO
         UserDTO userDTO = userService.convertToDTO(user);
-        return ResponseEntity.ok(userDTO);
+        return ResponseEntity.ok(user);
     }
 
     @MessageMapping("/user.updateStatus")
@@ -131,7 +131,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{username}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable String username) {
+    public ResponseEntity<User> getUser(@PathVariable String username) {
         try {
             Optional<User> userOptional = userService.findByUsername(username);
             if (userOptional.isEmpty()) {
@@ -139,7 +139,7 @@ public class UserController {
             }
             User user = userOptional.get();
             UserDTO userDTO = userService.convertToDTO(user);
-            return ResponseEntity.ok(userDTO);
+            return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -147,7 +147,7 @@ public class UserController {
 
     // Fetch all users that the current logged-in user is following
     @GetMapping("/users/following/{username}")
-    public ResponseEntity<List<UserDTO>> getFollowingUsers() {
+    public ResponseEntity<List<User>> getFollowingUsers() {
         try {
             HttpSession session = securityUtil.getSession();
             String username = (String) session.getAttribute("username");
@@ -167,7 +167,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No followers
             }
             List<UserDTO> followingUserDTOs = userService.convertToDTOList(followingUsers);
-            return ResponseEntity.ok(followingUserDTOs);
+            return ResponseEntity.ok(followingUsers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -175,7 +175,7 @@ public class UserController {
 
     // Fetch all online users (users with ONLINE status)
     @GetMapping("/users/online")
-    public ResponseEntity<List<UserDTO>> getOnlineUsers() {
+    public ResponseEntity<List<User>> getOnlineUsers() {
         try {
             // Get the list of users who are online
             List<User> onlineUsers = userService.findConnectedUsers();
@@ -183,14 +183,14 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No online users
             }
             List<UserDTO> onlineUserDTOs = userService.convertToDTOList(onlineUsers);
-            return ResponseEntity.ok(onlineUserDTOs);
+            return ResponseEntity.ok(onlineUsers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @GetMapping("/users/chat")
-    public ResponseEntity<List<UserDTO>> getChatUsers() {
+    public ResponseEntity<List<User>> getChatUsers() {
         try {
             HttpSession session = securityUtil.getSession();
             String username = (String) session.getAttribute("username");
@@ -210,7 +210,7 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No chat users
             }
             List<UserDTO> chatUserDTOs = userService.convertToDTOList(chatUsers);
-            return ResponseEntity.ok(chatUserDTOs);
+            return ResponseEntity.ok(chatUsers);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

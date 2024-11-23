@@ -1,6 +1,4 @@
 'use strict';
-
-// Select page elements
 const usernamePage = document.querySelector('#username-page');
 const chatPage = document.querySelector('#chat-page');
 const messageForm = document.querySelector('#messageForm');
@@ -16,11 +14,10 @@ const loadingTextElement = document.getElementById('loading-text');
 let stompClient = null;
 let username = null;
 let displayName = null;
-let selectedUserId = null; // Placeholder for selected user ID
+let selectedUserId = null;
 let selectedUserName = null;
 
 
-// Fetch current user from session
 async function fetchCurrentUser() {
     try {
         const response = await fetch('/current-user', { credentials: 'include' });
@@ -45,7 +42,6 @@ async function fetchCurrentUser() {
     }
 }
 
-// Show error message and optionally redirect if unauthorized
 function showError(message) {
     loadingTextElement.style.display = 'none';
     errorMessageElement.textContent = message;
@@ -55,7 +51,6 @@ function showError(message) {
     }
 }
 
-// Connect to WebSocket server
 function connect() {
     const socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
@@ -66,20 +61,17 @@ function connect() {
     }
 }
 
-// On successful connection, subscribe and register the user
 function onConnected() {
     stompClient.subscribe(`/user/${username}/queue/messages`, onMessageReceived);
     stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ username, status: 'ONLINE' }));
 }
 
-// Handle WebSocket connection errors
 function onError(error) {
     console.error('WebSocket error:', error);
     showError('Could not connect to WebSocket server. Please refresh the page and try again.');
     connectingElement.classList.add('hidden');
 }
 
-// Fetch data for the current recipient (selected user)
 async function fetchCurrentRecipient(recipientId) {
     try {
         const response = await fetch(`/users/${recipientId}`);
@@ -87,7 +79,7 @@ async function fetchCurrentRecipient(recipientId) {
             throw new Error('Failed to fetch recipient data');
         }
         const user = await response.json();
-        selectedUserName = user.displayName; // Store the selected user's name
+        selectedUserName = user.displayName;
         updateChatHeader(user);
     } catch (error) {
         console.error('Error fetching recipient data:', error);
@@ -97,16 +89,12 @@ async function fetchCurrentRecipient(recipientId) {
 
 async function fetchRecentUserChatWith() {
     try {
-        // Fetch the list of users the current user has chatted with
         const responseUsers = await fetch(`/users/chat`);
-        // Fetch the list of users with unread notifications
         const responseUnread = await fetch(`/message/notifications/${username}`);
 
         if (responseUsers.ok && responseUnread.ok) {
             const recentUsers = await responseUsers.json();
             const unreadNotifications = await responseUnread.json();
-
-            // Extract sender IDs with unread notifications
             const unreadSenderIds = new Set(unreadNotifications.map(notification => notification.senderId));
 
             const recentUsersList = document.getElementById('RecentUsers');
@@ -129,27 +117,25 @@ async function fetchRecentUserChatWith() {
 }
 
 function appendRecentUserElement(user, recentUsersList, hasUnread) {
-    const listItem = document.createElement('li');
+    const listItem = document.createElement('div');
     listItem.classList.add('Recent-item');
     listItem.id = user.username;
     listItem.textContent = user.displayName;
-    listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
+    listItem.innerHTML = `<img src="${user.avatarImagePath}" alt="${user.displayName}" class="profile-image" style = "width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">`;
+    listItem.innerHTML += `<span>${user.displayName}</span>`;
 
-    // Highlight the user if they have unread notifications
     if (hasUnread) {
         listItem.classList.add('highlight');
     }
 
-    // Add a click event listener
     listItem.addEventListener('click', async () => {
         selectedUserName = user.displayName;
         selectedUserId = user.username;
         updateChatHeader();
-        document.getElementById('messageForm').style="display: block";
+        document.getElementById('messageForm').style = "display: block";
         loadMessageHistory(selectedUserId);
         messageInput.focus();
 
-        // Attempt to mark notifications for the selected user as read
         try {
             const csrfToken = document.getElementById("csrf-token").value;
             const response = await fetch(`/message/notifications/${user.username}/${username}/mark-as-read`, {
@@ -162,7 +148,7 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
 
             if (response.ok) {
                 console.log(`Notifications for ${selectedUserId} marked as read.`);
-                listItem.classList.remove('highlight'); // Remove the highlight if successful
+                listItem.classList.remove('highlight');
             } else {
                 console.error(`Failed to mark notifications for ${selectedUserId} as read. Status: ${response.status}`);
             }
@@ -171,15 +157,12 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         } catch (error) {
             console.error("Error while marking notifications as read:", error);
         }
-        // Remove the highlight class when clicked
         listItem.classList.remove('highlight');
     });
 
-    // Append the list item to the recent users list
     recentUsersList.appendChild(listItem);
 }
 
-// Update the chat header with the name of the user you're chatting with
 function updateChatHeader() {
     const chatHeader = document.getElementById('chat-with-username');
     if (selectedUserName) {
@@ -193,7 +176,7 @@ var lastMessageId = -1;
 var isFetchingMoreMessages = false;
 
 async function loadMessageHistory(recipientId, more = false) {
-    if(!more){
+    if (!more) {
         lastMessageId = -1;
         isFetchingMoreMessages = false;
     }
@@ -206,7 +189,7 @@ async function loadMessageHistory(recipientId, more = false) {
         const messages = await response.json();
 
         if (Array.isArray(messages)) {
-            if(!more) chatArea.innerHTML = ''; // Clear chat area before loading message history
+            if (!more) chatArea.innerHTML = '';
             messages.forEach(message => {
                 lastMessageId = message.id;
                 addMessageToChat(message, message.senderId === username, true);
@@ -221,12 +204,11 @@ async function loadMessageHistory(recipientId, more = false) {
     }
 }
 
-// Send a chat message
 function sendMessage(event) {
     event.preventDefault();
     const messageContent = messageInput.value.trim();
     const imagesContainer = document.getElementById('images-container');
-    if(imagesContainer.children.length === 0 && !messageContent){
+    if (imagesContainer.children.length === 0 && !messageContent) {
         console.log('Message cannot be empty or no recipient selected');
         return;
     }
@@ -252,9 +234,9 @@ function sendMessage(event) {
         localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
     }
 
-    if(imagesContainer.children.length > 0){
+    if (imagesContainer.children.length > 0) {
         console.log("Child: " + imagesContainer.children.length);
-        for(let imageContainer of imagesContainer.children){
+        for (let imageContainer of imagesContainer.children) {
             const chatMessage = {
                 senderId: username,
                 recipientId: selectedUserId,
@@ -276,20 +258,16 @@ function sendMessage(event) {
     fetchRecentUserChatWith();
 }
 
-// Append message to the chat area
-// Append message to the chat area with different alignment for sent and received messages
 function addMessageToChat(messageData, isSent, prepend = false) {
     const chatMessage = document.createElement('div');
     chatMessage.classList.add('chat-message');
 
-    // Add the 'sent' class for sender's message, 'received' for reply's message
     chatMessage.classList.add(isSent ? 'sent' : 'received');
 
-    // Create the message content element
     const messageContent = document.createElement('div');
     messageContent.classList.add('message-content');
 
-    switch (messageData.type){
+    switch (messageData.type) {
         case 'text':
             messageContent.textContent = `${messageData.content}`;
             break;
@@ -302,42 +280,35 @@ function addMessageToChat(messageData, isSent, prepend = false) {
             break;
     }
 
-    // Append message content to the chat message div
     chatMessage.appendChild(messageContent);
     chatMessage.title = formatDate(new Date(messageData.sentAt));
 
-    // Add the chat message to the chat area
-    if(!prepend) chatArea.appendChild(chatMessage);
+
+    if (!prepend) chatArea.appendChild(chatMessage);
     else chatArea.prepend(chatMessage);
     chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// Display a notification with a timeout
 function showNotification(message, type = 'info', timeout = 5000) {
-    // Create the notification element
     const notification = document.createElement('div');
     notification.classList.add('notification', type);
     notification.textContent = message;
 
-    // Append the notification to the notification container
     const notificationContainer = document.getElementById('notification-container');
     notificationContainer.appendChild(notification);
 
-    // Automatically remove the notification after the timeout period
     setTimeout(() => {
         notification.remove();
     }, timeout);
 }
 
 
-
-// Logout and disconnect from WebSocket
 function onLogout() {
     if (stompClient) {
         stompClient.send("/app/user.updateStatus", {}, JSON.stringify({ username, status: 'OFFLINE' }));
         stompClient.disconnect(() => {
             console.log('Disconnected from WebSocket');
-            fetchOnlineUsers(); // Refresh the online users list after logout
+            fetchOnlineUsers();
         });
     }
     usernamePage.classList.remove('hidden');
@@ -352,7 +323,6 @@ function highlightUser(username) {
     if (followingUserElement) followingUserElement.classList.add('highlight');
 }
 
-// Handle message received event
 function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
     const chatPage = document.getElementById("chat-page");
@@ -364,7 +334,6 @@ function onMessageReceived(message) {
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
 
-    // Lưu thông báo vào localStorage để truyền thông tin sang navbar.js
     const notificationData = {
         senderId: messageData.senderId,
         recipientId: messageData.recipientId,
@@ -374,22 +343,18 @@ function onMessageReceived(message) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-    // fetchCurrentUser();
     const chatPage = document.getElementById("chat-page");
     const recipientId = chatPage.getAttribute("data-recipient-id");
-    // Fetch the current user before proceeding with chat setup
     fetchCurrentUser().then(() => {
         if (recipientId) {
             console.log("Recipient ID:", recipientId);
-            document.getElementById('messageForm').style="display: block";
-            // Initialize the chat with the specific recipient
+            document.getElementById('messageForm').style = "display: block";
             selectedUserId = recipientId;
-            fetchCurrentRecipient(selectedUserId); // Fetch recipient data
-            loadMessageHistory(selectedUserId);  // Assuming loadMessageHistory takes recipientId
-            updateChatHeader(); // Update the chat header to show recipient's name
+            fetchCurrentRecipient(selectedUserId);
+            loadMessageHistory(selectedUserId);
+            updateChatHeader();
             messageInput.focus();
         } else {
-            // Fetch the list of following users if no specific recipient is selected
             fetchRecentUserChatWith();
         }
     }).catch((error) => {
@@ -401,11 +366,11 @@ messageForm.addEventListener('submit', sendMessage);
 const chatMessages = document.getElementById('chat-messages');
 
 chatMessages.addEventListener('scroll', async () => {
-    if(chatMessages.scrollTop === 0 && !isFetchingMoreMessages){
+    if (chatMessages.scrollTop === 0 && !isFetchingMoreMessages) {
         const oldH = chatMessages.scrollHeight;
         isFetchingMoreMessages = true;
         await loadMessageHistory(selectedUserId, true);
-        if(chatMessages.scrollHeight !== oldH){
+        if (chatMessages.scrollHeight !== oldH) {
             chatMessages.scrollTop = chatMessages.scrollHeight - oldH;
             isFetchingMoreMessages = false;
         }
@@ -438,7 +403,7 @@ function uploadImage(input) {
         .catch(error => console.log("Err: " + error))
 }
 
-function deletePreview(icon){
+function deletePreview(icon) {
     icon.closest('div').remove();
 }
 
@@ -446,7 +411,7 @@ document.querySelector('.popup-image span').onclick = () => {
     document.querySelector('.popup-image').style.display = 'none';
 }
 
-function showPopupImage(img){
+function showPopupImage(img) {
     document.querySelector('.popup-image').style.display = 'block';
     document.querySelector('.popup-image img').src = img.src;
 }
