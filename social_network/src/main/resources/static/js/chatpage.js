@@ -166,6 +166,8 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
             } else {
                 console.error(`Failed to mark notifications for ${selectedUserId} as read. Status: ${response.status}`);
             }
+
+            chatArea.scrollTop = chatArea.scrollHeight;
         } catch (error) {
             console.error("Error while marking notifications as read:", error);
         }
@@ -223,19 +225,22 @@ async function loadMessageHistory(recipientId, more = false) {
 function sendMessage(event) {
     event.preventDefault();
     const messageContent = messageInput.value.trim();
-
-    if (messageContent && stompClient && selectedUserId) {
+    const imagesContainer = document.getElementById('images-container');
+    if(imagesContainer.children.length === 0 && !messageContent){
+        console.log('Message cannot be empty or no recipient selected');
+        return;
+    }
+    if (messageContent) {
         const chatMessage = {
             senderId: username,
             recipientId: selectedUserId,
             content: messageContent,
-            type: 'CHAT'
+            type: 'text'
         };
 
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
         messageInput.value = '';
         messageInput.focus();
-        fetchRecentUserChatWith();
         addMessageToChat(chatMessage, true);
         const notificationData = {
             senderId: chatMessage.senderId,
@@ -243,9 +248,29 @@ function sendMessage(event) {
             message: `New message from ${chatMessage.senderId}`
         };
         localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
-    } else {
-        console.log('Message cannot be empty or no recipient selected');
     }
+
+    if(imagesContainer.children.length > 0){
+        console.log("Child: " + imagesContainer.children.length);
+        for(let imageContainer of imagesContainer.children){
+            const chatMessage = {
+                senderId: username,
+                recipientId: selectedUserId,
+                content: imageContainer.querySelector('.message-preview-img').src,
+                type: 'media'
+            };
+            stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+            addMessageToChat(chatMessage, true);
+            const notificationData = {
+                senderId: chatMessage.senderId,
+                recipientId: chatMessage.recipientId,
+                message: `New message from ${chatMessage.senderId}`
+            };
+            localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
+        }
+        imagesContainer.innerHTML = '';
+    }
+    fetchRecentUserChatWith();
 }
 
 // Append message to the chat area
@@ -260,10 +285,23 @@ function addMessageToChat(messageData, isSent, prepend = false) {
     // Create the message content element
     const messageContent = document.createElement('div');
     messageContent.classList.add('message-content');
-    messageContent.textContent = `${isSent ? 'You' : messageData.senderId}: ${messageData.content}`;
+
+    switch (messageData.type){
+        case 'text':
+            messageContent.textContent = `${messageData.content}`;
+            break;
+        case 'media':
+            const img = document.createElement('img');
+            img.src = messageData.content;
+            img.className = 'message-img';
+            img.onclick = () => showPopupImage(img);
+            messageContent.appendChild(img);
+            break;
+    }
 
     // Append message content to the chat message div
     chatMessage.appendChild(messageContent);
+    chatMessage.title = formatDate(new Date(messageData.sentAt));
 
     // Add the chat message to the chat area
     if(!prepend) chatArea.appendChild(chatMessage);
@@ -315,12 +353,13 @@ function highlightUser(username) {
 function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
     const chatPage = document.getElementById("chat-page");
+
+    console.log(messageData);
     if (chatPage && selectedUserId === messageData.senderId) {
         addMessageToChat(messageData, false);
     }
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
-    fetchMessageNotifications();
 
     // Lưu thông báo vào localStorage để truyền thông tin sang navbar.js
     const notificationData = {
@@ -369,3 +408,42 @@ chatMessages.addEventListener('scroll', async () => {
         }
     }
 })
+
+
+
+function uploadImage(input) {
+    var file = input.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(response => {
+            const imageContainer = document.getElementById('images-container');
+            const container = document.createElement('div');
+            container.className = 'message-preview-img-container';
+            container.innerHTML = `<img src="/img/x-circle-regular-24.png" class="delete-preview-icon" onclick=deletePreview(this)>
+                                    <img src=${response.imageUrl} class="message-preview-img">`
+            imageContainer.appendChild(container);
+        })
+        .catch(error => console.log("Err: " + error))
+}
+
+function deletePreview(icon){
+    icon.closest('div').remove();
+}
+
+document.querySelector('.popup-image span').onclick = () => {
+    document.querySelector('.popup-image').style.display = 'none';
+}
+
+function showPopupImage(img){
+    document.querySelector('.popup-image').style.display = 'block';
+    document.querySelector('.popup-image img').src = img.src;
+}

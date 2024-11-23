@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.social_network.service.UserService;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -29,6 +31,7 @@ public class ChatController {
         @MessageMapping("/chat.sendMessage")
         public void processMessage(@Payload ChatMessage chatMessage) {
                 // Save message to the database (or memory)
+                chatMessage.setSentAt(Date.from(Instant.now()));
                 ChatMessage savedMsg = chatMessageService.save(chatMessage);
 
                 chatNotificationService.sendNotification(
@@ -39,11 +42,7 @@ public class ChatController {
                 // Send a notification to the recipient's queue
                 messagingTemplate.convertAndSendToUser(
                                 chatMessage.getRecipientId(), "/queue/messages",
-                                new ChatNotification(
-                                                savedMsg.getId(),
-                                                savedMsg.getSenderId(),
-                                                savedMsg.getRecipientId(),
-                                                savedMsg.getContent(), false));
+                                chatMessage);
 
         }
 
