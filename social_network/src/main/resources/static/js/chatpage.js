@@ -186,18 +186,27 @@ function updateChatHeader() {
     }
 }
 
-async function loadMessageHistory(recipientId) {
+var lastMessageId = -1;
+var isFetchingMoreMessages = false;
+
+async function loadMessageHistory(recipientId, more = false) {
+    if(!more){
+        lastMessageId = -1;
+        isFetchingMoreMessages = false;
+    }
     try {
-        const response = await fetch(`/messages/${username}/${recipientId}`);
+        const api = `/messages/${username}/${recipientId}?lastMessageId=${lastMessageId}`;
+        const response = await fetch(api);
         if (!response.ok) {
             throw new Error(`Error fetching messages: ${response.status}`);
         }
         const messages = await response.json();
 
         if (Array.isArray(messages)) {
-            chatArea.innerHTML = ''; // Clear chat area before loading message history
+            if(!more) chatArea.innerHTML = ''; // Clear chat area before loading message history
             messages.forEach(message => {
-                appendMessageToChat(message, message.senderId === username);
+                lastMessageId = message.id;
+                addMessageToChat(message, message.senderId === username, true);
             });
         } else {
             console.error('Unexpected response format:', messages);
@@ -226,7 +235,7 @@ function sendMessage(event) {
         messageInput.value = '';
         messageInput.focus();
         fetchRecentUserChatWith();
-        appendMessageToChat(chatMessage, true);
+        addMessageToChat(chatMessage, true);
         const notificationData = {
             senderId: chatMessage.senderId,
             recipientId: chatMessage.recipientId,
@@ -240,7 +249,7 @@ function sendMessage(event) {
 
 // Append message to the chat area
 // Append message to the chat area with different alignment for sent and received messages
-function appendMessageToChat(messageData, isSent) {
+function addMessageToChat(messageData, isSent, prepend = false) {
     const chatMessage = document.createElement('div');
     chatMessage.classList.add('chat-message');
 
@@ -256,7 +265,8 @@ function appendMessageToChat(messageData, isSent) {
     chatMessage.appendChild(messageContent);
 
     // Add the chat message to the chat area
-    chatArea.appendChild(chatMessage);
+    if(!prepend) chatArea.appendChild(chatMessage);
+    else chatArea.prepend(chatMessage);
     chatArea.scrollTop = chatArea.scrollHeight;
 }
 
@@ -305,7 +315,7 @@ function onMessageReceived(message) {
     const messageData = JSON.parse(message.body);
     const chatPage = document.getElementById("chat-page");
     if (chatPage && selectedUserId === messageData.senderId) {
-        appendMessageToChat(messageData, false);
+        addMessageToChat(messageData, false);
     }
     showNotification(`New message from ${messageData.senderId}`, 'message');
     highlightUser(messageData.senderId);
@@ -344,3 +354,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 });
 messageForm.addEventListener('submit', sendMessage);
+
+const chatMessages = document.getElementById('chat-messages');
+
+chatMessages.addEventListener('scroll', async () => {
+    if(chatMessages.scrollTop === 0 && !isFetchingMoreMessages){
+        const oldH = chatMessages.scrollHeight;
+        isFetchingMoreMessages = true;
+        await loadMessageHistory(selectedUserId, true);
+        if(chatMessages.scrollHeight !== oldH){
+            chatMessages.scrollTop = chatMessages.scrollHeight - oldH;
+            isFetchingMoreMessages = false;
+        }
+    }
+})

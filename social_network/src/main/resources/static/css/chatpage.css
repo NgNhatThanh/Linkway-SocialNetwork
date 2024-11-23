@@ -56,17 +56,18 @@ body {
     box-sizing: border-box;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    overflow-y: auto;
     padding-bottom: 60px;
     /* Add space at the bottom to create gap between last message and input field */
 }
 
 #chat-messages {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
     padding: 0 10px;
     margin-bottom: 10px;
+    overflow-y: auto;
     /* Optional: Add margin between messages and the input area */
 }
 

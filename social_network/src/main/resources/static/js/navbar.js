@@ -1,5 +1,5 @@
 let stompClient = null;
-// Listen for storage events from main.js
+// Listen for storage events from chatpage.js
 var unreadNotifications;
 const maxNotificationsFetch = 5;
 var lastId = 9999999;
