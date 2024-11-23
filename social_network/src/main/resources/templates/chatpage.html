@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/chatpage.css">
     <title>Chat Application</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
 <body>
@@ -43,12 +44,24 @@
             </div>
 
             <div id="chat-messages" class="chat-messages"></div> <!-- Messages will be added here -->
-            <form id="messageForm" name="messageForm">
+            <div style="display: flex; overflow-x: auto" id="images-container">
+            </div>
+            <form id="messageForm" name="messageForm" style="display: none">
                 <div class="message-input">
                     <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+                    <input type="file" class="imageInput" accept="image/*" style="display: none;"
+                           onchange="uploadImage(this)">
+                    <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
+                        <i class='bx bx-image-alt' ></i>
+                    </button>
                     <button type="submit">Send</button>
                 </div>
             </form>
+        </div>
+
+        <div class="popup-image" style="display: none">
+            <span>&times;</span>
+            <img>
         </div>
     </div>
     <!-- Notification Container -->
@@ -56,7 +69,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="/js/general.js"></script>
+    <script src="/js/chatpage.js"></script>
 
 </body>
 

@@ -33,6 +33,9 @@ public class ChatMessage {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "timestamp")
-    private Date timestamp;
+    @Column(name = "sent_at")
+    private Date sentAt;
+
+    @Column(name = "type")
+    private String type;
 }

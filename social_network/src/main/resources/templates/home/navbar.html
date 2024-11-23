@@ -26,7 +26,7 @@
             <div th:if="${session.username != null}" class="logged-in">
 
                 <div class="notifications-container">
-                    <button  id="notification-button" class="notification-button" onclick=toggleNotiListVisibility()>
+                    <button id="notification-button" class="notification-button" onclick=toggleNotiListVisibility()>
                         <i class='bx bxs-bell'></i>
                         <span id="unread-notification-count"></span>
                     </button>
@@ -64,9 +64,9 @@
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a th:href="@{/settings}" class="dropdown-item">
+                            <a th:href="@{/change-password}" class="dropdown-item">
                                 <i class='bx bx-cog icon'></i>
-                                <span>Settings</span>
+                                <span>Change Password</span>
                             </a>
                         </div>
                         <div class="menu-item">

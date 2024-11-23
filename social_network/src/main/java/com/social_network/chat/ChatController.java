@@ -9,21 +9,14 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.social_network.entity.User;
 import com.social_network.service.UserService;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,6 +31,7 @@ public class ChatController {
         @MessageMapping("/chat.sendMessage")
         public void processMessage(@Payload ChatMessage chatMessage) {
                 // Save message to the database (or memory)
+                chatMessage.setSentAt(Date.from(Instant.now()));
                 ChatMessage savedMsg = chatMessageService.save(chatMessage);
 
                 chatNotificationService.sendNotification(
@@ -48,11 +42,7 @@ public class ChatController {
                 // Send a notification to the recipient's queue
                 messagingTemplate.convertAndSendToUser(
                                 chatMessage.getRecipientId(), "/queue/messages",
-                                new ChatNotification(
-                                                savedMsg.getId(),
-                                                savedMsg.getSenderId(),
-                                                savedMsg.getRecipientId(),
-                                                savedMsg.getContent(), false));
+                                chatMessage);
 
         }
 
@@ -85,9 +75,12 @@ public class ChatController {
         // Get the chat messages between two users
         @GetMapping("/messages/{senderId}/{recipientId}")
         public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable String senderId,
-                        @PathVariable String recipientId) {
+                                                                  @PathVariable String recipientId,
+                                                                  @RequestParam(value = "lastMessageId", defaultValue = "-1") long lastMessageId) {
                 // Retrieve chat messages from the database
-                List<ChatMessage> messages = chatMessageService.findChatMessages(senderId, recipientId);
+                List<ChatMessage> messages;
+                if(lastMessageId == -1) messages = chatMessageService.findChatMessages(senderId, recipientId);
+                else messages = chatMessageService.findChatMessagesBeforeId(senderId, recipientId, lastMessageId);
                 return ResponseEntity.ok(messages);
         }
 
@@ -96,7 +89,7 @@ public class ChatController {
                 try {
                         // Thêm recipientId vào model để frontend có thể sử dụng
                         model.addAttribute("recipientId", recipientId);
-                        return "index"; // Trả về giao diện chat giữa hai người
+                        return "chatpage"; // Trả về giao diện chat giữa hai người
                 } catch (Exception e) {
                         model.addAttribute("error", "Không thể mở giao diện chat.");
                         return "error"; // Trả về trang lỗi nếu không thể mở giao diện chat
@@ -106,7 +99,7 @@ public class ChatController {
         // Show the chat page (Frontend will display this page)
         @GetMapping("/chat")
         public String showChatPage() {
-                return "index"; // Return the view for chat UI
+                return "chatpage"; // Return the view for chat UI
         }
 
         @DeleteMapping("/message/notifications/{recipientId}/delete")
