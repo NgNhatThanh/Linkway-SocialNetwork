@@ -230,12 +230,14 @@ function sendMessage(event) {
         console.log('Message cannot be empty or no recipient selected');
         return;
     }
+    const sendTime = new Date();
     if (messageContent) {
         const chatMessage = {
             senderId: username,
             recipientId: selectedUserId,
             content: messageContent,
-            type: 'text'
+            type: 'text',
+            sentAt: sendTime
         };
 
         stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
@@ -257,7 +259,8 @@ function sendMessage(event) {
                 senderId: username,
                 recipientId: selectedUserId,
                 content: imageContainer.querySelector('.message-preview-img').src,
-                type: 'media'
+                type: 'media',
+                sentAt: sendTime
             };
             stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
             addMessageToChat(chatMessage, true);
