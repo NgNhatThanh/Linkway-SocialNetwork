@@ -81,7 +81,7 @@ body {
     /* Optional: Customize the background color */
     padding: 10px;
     /* Optional: Adds padding for aesthetics */
-    z-index: 1000;
+    z-index: 1;
     /* Keeps the header on top of other elements */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     /* Optional: Adds a shadow */
@@ -205,6 +205,7 @@ body {
 }
 
 .message-input button {
+    margin: 5px;
     padding: 10px;
     border: none;
     background-color: #3498db;
@@ -245,3 +246,75 @@ a.logout {
         border-radius: 0;
     }
 }
+
+.message-preview-img-container{
+    position: relative;
+    max-width: 15%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    margin: 5px;
+}
+
+.message-preview-img{
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+}
+
+.message-preview-img-container .delete-preview-icon{
+    background-color: white;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 2;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.message-img{
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+.popup-image{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, .9);
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    /*display: none;*/
+}
+
+.popup-image span{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.popup-image img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid #fff;
+    border-radius: 5px;
+    max-height: 100%;
+    max-width: 70%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}
+
