@@ -190,4 +190,10 @@ public class UserService {
         // Trả về danh sách người dùng đã từng nhắn tin với user hiện tại
         return users;
     }
+
+    public void changePassword(User user, String newPassword) {
+        String encodedPassword = BCryptEncoder.getInstance().encode(newPassword);
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+    }
 }

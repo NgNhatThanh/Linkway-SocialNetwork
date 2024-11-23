@@ -12,6 +12,10 @@ import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +29,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private UserService userService;
     private SecurityUtil securityUtil;
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String showLoginPage(Model model) {
@@ -71,6 +76,51 @@ public class AuthController {
 
         userService.addUser(registerDTO);
         redirectAttributes.addFlashAttribute("redirectParam", "Đăng ký thành công");
+        return "redirect:/login";
+    }
+
+    @GetMapping("/change-password")
+    public String showChangePasswordPage(Model model) {
+        model.addAttribute("changePassword", new ChangePasswordDTO());
+        return "changepassword";
+    }
+
+    @PostMapping("/change-password")
+    public String handleChangePassword(@ModelAttribute("changePassword") @Valid ChangePasswordDTO changePasswordDTO,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            return "auth/changepassword";
+        }
+
+        HttpSession session = securityUtil.getSession();
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            redirectAttributes.addFlashAttribute("error", "Phiên làm việc không hợp lệ.");
+            return "redirect:/login";
+        }
+
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "Người dùng không tồn tại.");
+            return "redirect:/change-password";
+        }
+
+        User user = optionalUser.get();
+
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu cũ không đúng.");
+            return "redirect:/change-password";
+        }
+
+        if (passwordEncoder.matches(changePasswordDTO.getNewPassword(), user.getPassword())) {
+            redirectAttributes.addFlashAttribute("error", "Mật khẩu mới không được trùng với mật khẩu cũ.");
+            return "redirect:/change-password";
+        }
+
+        userService.changePassword(user, changePasswordDTO.getNewPassword());
+        redirectAttributes.addFlashAttribute("redirectParam", "Đổi mật khẩu thành công. Vui lòng đăng nhập lại.");
         return "redirect:/login";
     }
 
