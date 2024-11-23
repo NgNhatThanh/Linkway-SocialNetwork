@@ -9,58 +9,88 @@ body {
     height: 100vh;
     flex-direction: column;
 }
-
 .chat-container {
+    width: 100%;
     display: flex;
-    max-width: 800px;
-    min-width: 800px;
-    min-height: 600px;
-    max-height: 600px;
-    margin: 20px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
+    height: 100vh;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .users-list {
-    flex: 1;
-    border-right: 1px solid #ccc;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: #3498db;
-    color: #fff;
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
+    width: 23%;
+    background-color: #f0f2f5;
+    border-right: 1px solid #e4e6eb;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    padding: 20px;
 }
-
-.users-list-container {
-    height: 100%;
-    overflow-y: scroll;
+.users-list-container{
+    height: 96%;
 }
-
 .users-list h3 {
-    font-size: 1.25rem;
-    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #65676b;
+    margin-top: 0;
+}
+
+.users-list ul {
+    list-style-type: none;
+    padding-left: 15px;
+}
+
+.users-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.users-list li p{
+    margin: 0px;
+}
+.users-list li:hover {
+    background-color: #e4e6eb;
+}
+
+.users-list li img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.back-to-home {
+    display: inline-block;
+    margin-top: auto;
+    padding: 3px 3px;
+    font-size: 27px;
+    background-color: #1877f2;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s;
 }
 
 .chat-area {
     flex: 3;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 5px 10px;
+    padding-left: 20px;
     box-sizing: border-box;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    padding-bottom: 60px;
     /* Add space at the bottom to create gap between last message and input field */
+    height: 100%;
 }
 
 #chat-messages {
+    height: 100%;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -87,13 +117,9 @@ body {
     /* Optional: Adds a shadow */
 }
 
-.chat-container {
-    margin-top: 60px;
-    /* Adjust this based on the header height */
-    overflow-y: auto;
-    /* Enables scrolling for the chat area */
-    height: calc(100vh - 60px);
-    /* Keeps the chat area within the viewport */
+.chat-with-usernameh3{
+    border-bottom: 0.5px solid gray;
+    padding-bottom: 10px;
 }
 
 #notification-container {
@@ -128,7 +154,7 @@ body {
 }
 
 .highlight {
-    background-color: #ffeb3b;
+    /*background-color: #ffeb3b;*/
     /* Yellow color for notification */
     font-weight: bold;
 }
@@ -163,7 +189,7 @@ body {
 }
 
 .sent {
-    background-color: #3498db;
+    background-color: #1877f2;
     color: #fff;
     padding: 8px 15px;
     border-radius: 12px;
@@ -189,29 +215,31 @@ body {
 }
 
 .message-input {
-    margin-top: auto;
     display: flex;
     padding: 10px;
-    background-color: #fff;
-    /* Ensure input area has a white background */
+    border-top: 1px solid #e4e6eb;
+    padding-left: 0px;
+    font-size: 20px;
 }
-
+.message-input .icon-img{
+    font-size: 18px;
+}
 .message-input input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+    border: 1px solid #e4e6eb;
+    border-radius: 20px;
+    outline: none;
 }
 
 .message-input button {
-    margin: 5px;
-    padding: 10px;
+    background-color: #0084ff;
+    color: white;
     border: none;
-    background-color: #3498db;
-    color: #fff;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border-radius: 20px;
     cursor: pointer;
+    margin-left: 10px;
 }
 
 /* Optional: styling for logout and additional elements */

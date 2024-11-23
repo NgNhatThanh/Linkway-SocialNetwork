@@ -130,10 +130,13 @@ async function fetchRecentUserChatWith() {
 
 function appendRecentUserElement(user, recentUsersList, hasUnread) {
     const listItem = document.createElement('li');
+    listItem.style.display = 'flex';
+    listItem.innerHTML = `<img src=${user.avatarImagePath}>
+                        <p> ${user.displayName} </p>`
     listItem.classList.add('Recent-item');
-    listItem.id = user.username;
-    listItem.textContent = user.displayName;
-    listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
+//    listItem.id = user.username;
+//    listItem.textContent = user.displayName;
+//    listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
 
     // Highlight the user if they have unread notifications
     if (hasUnread) {
