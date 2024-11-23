@@ -67,6 +67,9 @@ body{
     font-size: 15px;
 }
 
+.button-primary:hover {
+    opacity: 0.7;
+}
 
 /*3. Create:*/
 .button-secondary {
@@ -155,4 +158,34 @@ body{
     font-size: 15px;
     color: #333;
     border-radius: 15px;
+}
+
+
+.nav-login-bar {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.auth-button {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.auth-button.login {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.auth-button.register {
+    background-color: #0079D3;
+    color: white;
+}
+
+.auth-button:hover {
+    opacity: 0.7;
 }
