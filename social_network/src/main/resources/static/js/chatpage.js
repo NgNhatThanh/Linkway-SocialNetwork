@@ -145,6 +145,7 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         selectedUserName = user.displayName;
         selectedUserId = user.username;
         updateChatHeader();
+        document.getElementById('messageForm').style="display: block";
         loadMessageHistory(selectedUserId);
         messageInput.focus();
 
@@ -338,7 +339,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     fetchCurrentUser().then(() => {
         if (recipientId) {
             console.log("Recipient ID:", recipientId);
-
+            document.getElementById('messageForm').style="display: block";
             // Initialize the chat with the specific recipient
             selectedUserId = recipientId;
             fetchCurrentRecipient(selectedUserId); // Fetch recipient data
