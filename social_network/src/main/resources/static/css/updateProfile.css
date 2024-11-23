@@ -1,10 +1,8 @@
-body {
+.updateProfile body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     background-color: #f4f4f9;
     color: #333;
-    padding: 20px;
-    margin-top: 10px;
 }
 
 /* Main Layout */
@@ -34,6 +32,32 @@ body {
     margin-bottom: 15px;
     text-align: center;
 }
+/* Avatar Section */
+.avatar-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar-section img {
+    display: block;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    width: 150px;
+    height: 150px;
+}
+
+.avatar-section label {
+    font-weight: bold;
+    color: #555;
+}
+
+.avatar-section input[type="file"] {
+    margin-top: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
 
 /* Form Styles */
 .updateForm {
