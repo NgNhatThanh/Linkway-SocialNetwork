@@ -142,3 +142,23 @@ function prepareTagsForSubmit() {
         hiddenTagsContainer.appendChild(hiddenInput);
     });
 }
+
+function uploadImage(input) {
+    var file = input.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    fetch('/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => response.json())
+        .then(response => {
+            document.getElementById('post-thumbnail').src = response.imageUrl;
+            document.getElementById('post-thumbnail-input').value = response.imageUrl;
+        })
+        .catch(error => console.log("Err: " + error))
+}

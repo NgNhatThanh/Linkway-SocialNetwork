@@ -22,7 +22,7 @@
                     <p th:text="${#dates.format(post.getCreatedAt(), 'yyyy/MM/dd HH:mm')}"></p>
                     <p th:if="${post.getUpdatedAt() != null}"
                         th:text="${'Đã chỉnh sửa vào ' + #dates.format(post.getUpdatedAt(), 'yyyy/MM/dd HH:mm')}"></p>
-                    <p th:text="${post.getViews() + ' views'}"></p>
+                    <p th:text="${post.getViews() + ' lượt xem'}"></p>
                 </div>
                 <br>
                 <div style=" display: flex; justify-content: space-between;margin-bottom: 15px;">
@@ -235,9 +235,9 @@
                         <a class="related-posts-post-title" th:href="@{${'/post/' + post.id}}"
                             th:text="${post.title}"></a>
                         <div>
-                            <p th:text="${post.views + ' views'}"></p>
+                            <p th:text="${post.views + ' lượt xem'}"></p>
                             <p th:text="${post.upvotes + post.downvotes + ' votes'}"></p>
-                            <p th:text="${post.comments.size() + ' comments'}"></p>
+                            <p th:text="${post.comments.size() + ' bình luận'}"></p>
                         </div>
                     </div>
                 </div>
