@@ -8,6 +8,7 @@
 
 <body>
     <main class="updateProfile">
+        <link rel="stylesheet" th:href="@{/css/updateProfile.css}">
         <h1>Update Profile</h1>
 
         <!-- Display error message if any -->
@@ -16,7 +17,7 @@
         </div>
 
         <!-- Profile Update Form -->
-        <form th:action="@{/updateProfile}" th:object="${userDTO}" method="post">
+        <form th:action="@{/updateProfile}" class="updateForm" th:object="${userDTO}" method="post">
             <!-- Display Name -->
             <input type="hidden" th:field="*{id}" th:value="*{id}">
             <div>
