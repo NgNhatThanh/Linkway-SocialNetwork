@@ -16,9 +16,9 @@ public class ChangePasswordDTO {
 
     private String repeatPassword;
 
-    @AssertTrue(message = "Mật khẩu không trùng khớp")
-    private boolean isEqual(){
-        return newPassword.equals(repeatPassword);
-    }
+    // @AssertTrue(message = "Mật khẩu xác nhận không khớp.")
+    // private boolean isEqual() {
+    // return newPassword != null && newPassword.equals(repeatPassword);
+    // }
 
 }

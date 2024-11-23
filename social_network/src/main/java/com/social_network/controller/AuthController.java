@@ -91,7 +91,7 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "auth/changepassword";
+            return "changepassword";
         }
 
         HttpSession session = securityUtil.getSession();
@@ -110,13 +110,18 @@ public class AuthController {
         User user = optionalUser.get();
 
         if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", "Mật khẩu cũ không đúng.");
-            return "redirect:/change-password";
+            bindingResult.rejectValue("oldPassword", "password.invalid", "Mật khẩu cũ không đúng.");
+            return "changepassword";
         }
 
         if (passwordEncoder.matches(changePasswordDTO.getNewPassword(), user.getPassword())) {
-            redirectAttributes.addFlashAttribute("error", "Mật khẩu mới không được trùng với mật khẩu cũ.");
-            return "redirect:/change-password";
+            bindingResult.rejectValue("newPassword", "password.same", "Mật khẩu mới không được trùng với mật khẩu cũ.");
+            return "changepassword";
+        }
+
+        if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getRepeatPassword())) {
+            bindingResult.rejectValue("repeatPassword", "password.mismatch", "Mật khẩu xác nhận không khớp.");
+            return "changepassword";
         }
 
         userService.changePassword(user, changePasswordDTO.getNewPassword());
