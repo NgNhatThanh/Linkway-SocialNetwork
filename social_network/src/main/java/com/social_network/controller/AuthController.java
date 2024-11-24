@@ -148,7 +148,8 @@ public class AuthController {
 
         emailService.sendEmail(dto.getEmail(),
                 "noreply",
-                "Hãy truy cập vào link sau để đặt lại mật khẩu: " + link);
+                "Hãy truy cập vào link sau để đặt lại mật khẩu: " + link
+                + "\nLink sẽ hết hạn trong 10 phút.");
         redirectAttributes.addFlashAttribute("redirectParam", "Email khôi phục đã được gửi đến địa chỉ của bạn");
         return "redirect:/forgot-password";
     }
@@ -193,6 +194,7 @@ public class AuthController {
         }
         String hassPw = BCryptEncoder.getInstance().encode(dto.getNewPassword());
         token.getRequestor().setPassword(hassPw);
+        token.setUsed(true);
         userService.save(token.getRequestor());
         redirectAttributes.addFlashAttribute("redirectParam", "Đặt lại mật khẩu thành công");
         return "redirect:/login";
