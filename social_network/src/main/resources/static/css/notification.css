@@ -1,0 +1,95 @@
+/* NotiCard Container */
+.noti-redirect {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    text-decoration: none;
+    color: #333;
+    margin-bottom: 12px;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.noti-redirect:hover {
+    background-color: #f9f9f9;
+}
+.notification-item.read  {
+    background-color: #f5f5f5;
+}
+/* Read notification styles */
+.notification-item.read .noti-redirect {
+    background-color: #f5f5f5;
+}
+
+.notification-item.read .noti-redirect p:first-child {
+    color: #666;
+    font-weight: normal;
+}
+
+.notification-item.read .noti-redirect:hover {
+    background-color: #efefef;
+}
+
+/* Avatar Thumbnail */
+.notifcation-thumbnail {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ddd; /* Placeholder color if no image */
+    margin-right: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+/* Notification Content */
+.noti-redirect div {
+    flex-grow: 1;
+}
+
+.noti-redirect p {
+    margin: 0;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.noti-redirect p:first-child {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.noti-redirect p:last-child {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Action Buttons */
+.noti-redirect + div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.noti-redirect + div button {
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.noti-redirect + div button:hover {
+    background-color: #f0f0f0;
+    color: #007bff;
+}
+
+.noti-redirect + div button i {
+    pointer-events: none;
+}
+/* has read */

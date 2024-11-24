@@ -14,17 +14,17 @@ import java.util.Optional;
 public interface FollowRepository extends JpaRepository<Follow, Integer> {
     List<Follow> findByFollower(User follower);
 
-    Page<Follow> findByFollower(User follower, Pageable pageable); // Added this line
+    Page<Follow> findByFollower(User follower, Pageable pageable);
 
-    Page<Follow> findByFollowed(User followed, Pageable pageable); // Added this line
+    Page<Follow> findByFollowed(User followed, Pageable pageable);
 
     List<Follow> findByFollowed(User followed);
 
-    Optional<Follow> findByFollowerAndFollowed(User follower, User followed); // Changed to "followed"
+    Optional<Follow> findByFollowerAndFollowed(User follower, User followed);
 
-    int countByFollowed(User user); // To count followers, now counts how many users follow this user
+    int countByFollowed(User user);
 
-    int countByFollower(User user); // To count how many users this user is following
+    int countByFollower(User user);
 
-    void deleteByFollowerAndFollowed(User follower, User followed); // Use "followed" here as well
+    void deleteByFollowerAndFollowed(User follower, User followed);
 }

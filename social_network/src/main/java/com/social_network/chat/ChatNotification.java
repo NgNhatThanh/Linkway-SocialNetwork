@@ -16,8 +16,8 @@ import jakarta.persistence.*;
 public class ChatNotification {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // ID sẽ được tự động sinh ra trong MySQL
-    private Long id; // Thay String thành Long nếu ID tự sinh trong cơ sở dữ liệu
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "sender_id")
     private String senderId;
@@ -29,5 +29,5 @@ public class ChatNotification {
     private String content;
 
     @Column(name = "read_status", nullable = false)
-    private boolean read; // New column to track the read/unread status
+    private boolean read;
 }

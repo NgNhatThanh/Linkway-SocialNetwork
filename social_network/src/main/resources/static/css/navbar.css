@@ -122,8 +122,6 @@ body {
     justify-content: center;
 }
 
-
-
 /*6. Dropdown menu*/
 .dropdown-menu {
     display: none;
@@ -254,4 +252,17 @@ body {
     border-radius: 50%;
     width: 20%;
     height: 100%;
+}
+
+.load-more{
+    display: flex;
+    justify-content: center;
+}
+
+.load-more button{
+    cursor: pointer;
+    border: 1px solid blue;
+    border-radius: 15px;
+    background: lightblue;
+    padding: 5px;
 }

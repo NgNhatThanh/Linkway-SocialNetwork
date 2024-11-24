@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Đăng nhập</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="../static/css/login-style.css" th:href="@{/css/login-style.css}" rel="stylesheet" />
 </head>
@@ -20,10 +20,10 @@
             </div>
 
             <div th:if="${redirectParam != null}">
-                <p th:text="${redirectParam}"> </p>
+                <p class="redirect-param" th:text="${redirectParam}"> </p>
             </div>
 
-            <h1 class="login-header">Login</h1>
+            <h1 class="login-header">Đăng nhập</h1>
 
             <div class="input-box">
                 <input type="text" th:field="*{username}" id="user" class="input-field" required>
@@ -45,8 +45,13 @@
             </div>
 
             <div class="register">
+                <a href="/forgot-password"> Quên mật khẩu ? </a>
+            </div>
+
+            <div class="register">
                 <p>Don't have account? <a th:href="@{/register}">Register</a></p>
             </div>
+
 
         </form>
     </div>

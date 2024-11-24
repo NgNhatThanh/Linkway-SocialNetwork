@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/chatpage.css">
-    <title>Chat Application</title>
+    <title>Linkway Chat</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -15,10 +15,10 @@
 
     <!-- User Form for entering the chat -->
     <div class="user-form" id="username-page">
-        <h3>Enter Chatroom</h3>
+        <h3>Vào kênh chat</h3>
         <form id="usernameForm">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="csrf-token" />
-            <p id="loading-text">Loading user information...</p>
+            <p id="loading-text">Tải thông tin người dùng...</p>
             <p id="error-message" style="color: red; display: none;">Failed to retrieve user information.</p>
         </form>
     </div>
@@ -28,7 +28,7 @@
         <div class="users-list">
             <div id="notification-area" class="notification-area"></div>
             <div class="users-list-container">
-                <h3 class="userlist-title">Your RecentUsers</h3>
+                <h3 class="userlist-title">Gần đây</h3>
                 <ul id="RecentUsers"></ul> <!-- Following list -->
             </div>
             <div style="width: 100%;">
@@ -48,7 +48,7 @@
             </div>
             <form id="messageForm" name="messageForm" style="display: none">
                 <div class="message-input">
-                    <input autocomplete="off" type="text" id="message" placeholder="Type your message...">
+                    <input autocomplete="off" type="text" id="message" placeholder="Nhập tin nhắn...">
                     <input type="file" class="imageInput" accept="image/*" style="display: none;"
                            onchange="uploadImage(this)">
                     <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">

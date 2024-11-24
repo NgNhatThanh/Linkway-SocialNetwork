@@ -53,7 +53,6 @@ function onMessageReceived(message) {
 }
 
 
-// Update notification icon on the navbar with the count of unread notifications
 function increaseUnreadMessageCount() {
     const unreadMessageCount = document.getElementById('unread-messages-count');
     if (unreadMessageCount) {
@@ -66,25 +65,26 @@ function increaseUnreadMessageCount() {
     }
 }
 
-function toggleNotiListVisibility(){
+function toggleNotiListVisibility() {
     document.getElementById('notifications-dropdown').classList.toggle('hidden');
 }
 
-function onNotificationReceived(notification){
+function onNotificationReceived(notification) {
     const unreadCount = document.getElementById('unread-notification-count');
     unreadCount.textContent = unreadCount.textContent === '' ? '1' : parseInt(unreadCount.textContent) + 1;
     const noti = JSON.parse(notification.body);
-    if(notificationsList.contains(emptyItem)) notificationsList.removeChild(emptyItem);
+    if (notificationsList.contains(emptyItem)) notificationsList.removeChild(emptyItem);
     addNotiToList(noti, true);
     showFlowNotification(noti.content, 'info', 5000);
 }
 
-function addNotiToList(noti, prepend = false){
+function addNotiToList(noti, prepend = false) {
     noti.createdAt = formatDate(new Date(noti.createdAt));
     const item = document.createElement('li');
+    item.className = 'notification-item'; // Thêm class "notification-item"
     item.style = "display: flex";
     item.id = `notification-item-${noti.id}`;
-    if(noti.read) item.classList.add('read');
+    if (noti.read) item.classList.add('read');
     const notiCard = `    <a style="display: flex" href=${noti.redirectUrl + '?ref=notif&notifId=' + noti.id} class="noti-redirect">
                                     <img src=${noti.sender.avatarImagePath} class="notifcation-thumbnail">
                                     <div>
@@ -101,46 +101,47 @@ function addNotiToList(noti, prepend = false){
                                     </button>\
                                 </div>`;
     item.innerHTML = notiCard;
-    if(prepend) notificationsList.prepend(item);
+    if (prepend) notificationsList.prepend(item);
     else notificationsList.appendChild(item);
 }
 
-function getUnreadNotifications(){
+function getUnreadNotifications() {
     fetch(`/notifications/${currentId}/unread`)
         .then(count => count.json())
         .then(res => {
             unreadNotifications = res;
-            if(res && res > 0) document.getElementById('unread-notification-count').textContent = unreadNotifications;
+            if (res && res > 0) document.getElementById('unread-notification-count').textContent = unreadNotifications;
         })
 }
 
 
-function fetchNotifications(){
+function fetchNotifications() {
     fetch(`/notifications/${currentId}/${lastId}/${maxNotificationsFetch}`)
         .then(res => res.json())
         .then(notiList => {
             notificationsList.removeChild(notificationsList.lastChild);
-            notiList.forEach(noti =>{
+            notiList.forEach(noti => {
                 lastId = noti.id;
                 addNotiToList(noti);
             })
 
-            if(notiList.length === maxNotificationsFetch){
+            if (notiList.length === maxNotificationsFetch) {
                 const item = document.createElement('li');
+                item.className = 'load-more';
                 item.innerHTML = `<button onclick=fetchNotifications()>
                                     Hiển thị thêm
                                 </button>`;
                 notificationsList.appendChild(item);
             }
 
-            if(notificationsList.children.length === 0) notificationsList.appendChild(emptyItem);
+            if (notificationsList.children.length === 0) notificationsList.appendChild(emptyItem);
         });
 }
 
-function markNotificationAsRead(notiId){
-    fetch(`/notifications/${notiId}/markAsRead`,{
+function markNotificationAsRead(notiId) {
+    fetch(`/notifications/${notiId}/markAsRead`, {
         method: 'POST',
-        headers:{
+        headers: {
             'X-CSRF-TOKEN': csrfToken
         }
     })
@@ -152,10 +153,10 @@ function markNotificationAsRead(notiId){
         })
 }
 
-function deleteNotification(notiId){
-    fetch(`/notifications/${notiId}/delete`,{
+function deleteNotification(notiId) {
+    fetch(`/notifications/${notiId}/delete`, {
         method: 'DELETE',
-        headers:{
+        headers: {
             'X-CSRF-TOKEN': csrfToken
         }
     })
@@ -164,7 +165,7 @@ function deleteNotification(notiId){
             item.remove();
             const unreadCount = document.getElementById('unread-notification-count');
             unreadCount.textContent = unreadCount.textContent === '1' ? '' : parseInt(unreadCount.textContent) - 1;
-            if(notificationsList.children.length === 0){
+            if (notificationsList.children.length === 0) {
                 notificationsList.appendChild(emptyItem);
             }
         })
@@ -174,12 +175,12 @@ function getUnreadMessagesCount() {
     fetch(`/message/notifications/${currentUsername}`)
         .then(response => response.json())
         .then(notifications => {
-            if(notifications.length > 0) document.getElementById('unread-messages-count').textContent = notifications.length;
+            if (notifications.length > 0) document.getElementById('unread-messages-count').textContent = notifications.length;
         })
         .catch(error => console.log(error));
 }
 
-if(currentUsername){
+if (currentUsername) {
     connect();
     getUnreadNotifications();
     fetchNotifications();
@@ -197,7 +198,7 @@ if(currentUsername){
         if (!avatarIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
             dropdownMenu.style.display = "none";
         }
-        if(!notiDropdown.contains(event.target) && !notiButton.contains(event.target)){
+        if (!notiDropdown.contains(event.target) && !notiButton.contains(event.target)) {
             document.getElementById('notifications-dropdown').classList.add('hidden');
         }
     });
