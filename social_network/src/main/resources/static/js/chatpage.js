@@ -152,6 +152,13 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         loadMessageHistory(selectedUserId);
         messageInput.focus();
 
+        // Add background for userchatting
+        document.querySelectorAll('.Recent-item.selected').forEach(item => {
+                item.classList.remove('selected');
+        });
+        listItem.classList.add('selected');
+
+
         // Attempt to mark notifications for the selected user as read
         try {
             const csrfToken = document.getElementById("csrf-token").value;
@@ -181,7 +188,6 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
     // Append the list item to the recent users list
     recentUsersList.appendChild(listItem);
 }
-
 // Update the chat header with the name of the user you're chatting with
 function updateChatHeader() {
     const chatHeader = document.getElementById('chat-with-username');
