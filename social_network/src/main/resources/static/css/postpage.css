@@ -385,8 +385,8 @@
 .vote-btn.up.active::before {
     color: #1a73e8;
 }
-.vote-btn .down.active::before {
-    color: #1a73e8;
+.vote-btn.down.active::before {
+    color: red;
 }
 .vote-btn:hover::before {
     color: #1a73e8;

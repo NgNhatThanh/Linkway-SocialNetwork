@@ -138,14 +138,14 @@
                                         <form
                                             th:action="@{${comment.upvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/upvote'}}"
                                             method="post">
-                                            <button type="submit" data-rel="back" class="vote-btn up">
+                                            <button type="submit" data-rel="back" th:class="${'vote-btn up' + (comment.upvoted ? ' active' : '')}">
                                                 <span th:text="${comment.upvotes}" class="upvote-count"></span>
                                             </button>
                                         </form>
                                         <form
                                             th:action="@{${comment.downvoted ? '/comment/' + comment.id + '/unvote' : '/comment/' + comment.id + '/downvote'}}"
                                             method="post">
-                                            <button type="submit" class="vote-btn down">
+                                            <button type="submit" th:class="${'vote-btn down' + (comment.downvoted ? ' active' : '')}">
                                                 <span th:text="${comment.downvotes}" class="downvote-count"></span>
                                             </button>
                                         </form>
@@ -211,7 +211,7 @@
                         <form
                             th:action="@{${upvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/upvote'}}"
                             method="post">
-                            <button class="vote-btn up" aria-label="Upvote" type="submit">
+                            <button th:class="${'vote-btn up' + (upvoted ? ' active' : '')}" aria-label="Upvote" type="submit">
                                 <!--                            <i th:class="${upvoted ? 'bx bxs-upvote' : 'bx bx-upvote'}"></i>-->
                                 <span class="vote-count" th:text="${post.getUpvotes()}"></span>
                             </button>
@@ -219,7 +219,7 @@
                         <form
                             th:action="@{${downvoted ? '/post/' + post.getId() + '/unvote' : '/post/' + post.getId() + '/downvote'}}"
                             method="post">
-                            <button class="vote-btn down" type="submit" aria-label="Downvote">
+                            <button th:class="${'vote-btn down' + (downvoted ? ' active' : '')}" type="submit" aria-label="Downvote">
                                 <!--                            <i th:class="${downvoted ? 'bx bxs-downvote' : 'bx bx-downvote'}"></i>-->
                                 <span class="vote-count" th:text="${post.getDownvotes()}"></span>
                             </button>
