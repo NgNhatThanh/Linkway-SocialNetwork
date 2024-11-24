@@ -30,6 +30,10 @@
                     </a>
                 </div>
 
+                <div th:if="${post.thumbnailUrl != null}" class="post-image">
+                    <img th:src="*{post.thumbnailUrl}">
+                </div>
+
                 <div class="post-stats">
                     <div class="vote-group">
                         <!--                        <button class="vote-up"><i class='bx bx-up-arrow-circle'></i></button>-->

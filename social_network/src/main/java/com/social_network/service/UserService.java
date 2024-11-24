@@ -80,6 +80,10 @@ public class UserService {
         return user;
     }
 
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     public List<User> findByUsernameOrDisplayName(String query) {
         List<User> allUsers = userRepository.findAll();
         return allUsers.stream()
