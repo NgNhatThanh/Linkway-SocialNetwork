@@ -82,6 +82,7 @@ function onNotificationReceived(notification){
 function addNotiToList(noti, prepend = false){
     noti.createdAt = formatDate(new Date(noti.createdAt));
     const item = document.createElement('li');
+    item.className = 'notification-item'; // Thêm class "notification-item"
     item.style = "display: flex";
     item.id = `notification-item-${noti.id}`;
     if(noti.read) item.classList.add('read');
