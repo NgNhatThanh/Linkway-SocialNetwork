@@ -240,7 +240,7 @@ function sendMessage(event) {
         const notificationData = {
             senderId: chatMessage.senderId,
             recipientId: chatMessage.recipientId,
-            message: `New message from ${chatMessage.senderId}`
+            message: `Tin nhắn mới từ ${chatMessage.senderId}`
         };
         localStorage.setItem('newMessageNotification', JSON.stringify(notificationData));
     }
