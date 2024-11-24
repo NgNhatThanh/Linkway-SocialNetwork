@@ -159,11 +159,12 @@ body {
 }
 
 .highlight {
-    /*background-color: #ffeb3b;*/
     /* Yellow color for notification */
     font-weight: bold;
 }
-
+.Recent-item.selected {
+    background-color: #e0e0e0; /* or any darker color you prefer */
+}
 @keyframes fadeInOut {
     0% {
         opacity: 0;

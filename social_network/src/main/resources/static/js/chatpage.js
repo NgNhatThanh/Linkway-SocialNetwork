@@ -139,6 +139,14 @@ function appendRecentUserElement(user, recentUsersList, hasUnread) {
         loadMessageHistory(selectedUserId);
         messageInput.focus();
 
+        // Add background for userchatting
+        document.querySelectorAll('.Recent-item.selected').forEach(item => {
+                item.classList.remove('selected');
+        });
+        listItem.classList.add('selected');
+
+
+        // Attempt to mark notifications for the selected user as read
         try {
             const csrfToken = document.getElementById("csrf-token").value;
             const response = await fetch(`/message/notifications/${user.username}/${username}/mark-as-read`, {
