@@ -67,7 +67,6 @@ body {
 }
 
 .button {
-    padding: 8px 15px;
     border-radius: 20px;
     border: 1px solid #0079D3;
     font-weight: 500;
@@ -83,27 +82,37 @@ body {
 
 /*3. Create:*/
 .button-secondary {
+    padding: 8px 15px;
     background-color: white;
     color: #0079D3;
     font-size: 15px;
     margin-right: 20px;
 }
-
+.button-secondary2 {
+    padding: 8px 10px;
+    background-color: white;
+    color: #0079D3;
+    font-size: 15px;
+    margin-right: 12px;
+}
 
 /*4. avatar*/
 .avatar-container {
     position: relative;
     display: inline-block;
+    margin-right: 10px;
+    margin-left: 20px;
+    width: 40px;
+    height: 100%;
 }
 
 .avatar {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid #ddd;
-    margin-right: 10px;
-    margin-left: 20px;
+
 }
 
 
@@ -112,8 +121,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
-
 
 /*6. Dropdown menu*/
 .dropdown-menu {
@@ -125,7 +132,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
-    width: 250px;
+    width: 270px;
     z-index: 1000;
 }
 
@@ -140,10 +147,10 @@ body {
     font-size: 20px;
 }
 
-.avt-icon {
+.avatar-icon2 {
     margin-right: 10px;
-    width: 20px;
-    height: 20px;
+    width: 12px;
+    height: 12px;
 }
 
 .dropdown-item {
@@ -194,14 +201,6 @@ body {
     display: inline-block;
 }
 
-.notification-button {
-    cursor: pointer;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-}
 
 .badge {
     background-color: red;

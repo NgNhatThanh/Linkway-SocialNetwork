@@ -21,17 +21,16 @@ public class MarkdownRenderUtil {
 
         MutableDataSet options = new MutableDataSet();
 
-        // Enable the TOC and AnchorLink extensions
         options.set(Parser.EXTENSIONS, Arrays.asList(TocExtension.create(), AnchorLinkExtension.create()));
 
         options.set(TocExtension.LIST_CLASS, "toc-list");
         options.set(TocExtension.TITLE, "Table of Contents");
-        options.set(TocExtension.IS_NUMBERED, true); // Optional numbering for TOC
-        options.set(TocExtension.IS_HTML, true); // Generates the TOC in HTML format
-        options.set(TocExtension.LEVELS, 3); // Depth of headers in the TOC (optional)
+        options.set(TocExtension.IS_NUMBERED, true);
+        options.set(TocExtension.IS_HTML, true);
+        options.set(TocExtension.LEVELS, 3);
 
         options.set(AnchorLinkExtension.ANCHORLINKS_WRAP_TEXT, false);
-        options.set(AnchorLinkExtension.ANCHORLINKS_SET_ID, true);  // Adds `id` attributes to headings
+        options.set(AnchorLinkExtension.ANCHORLINKS_SET_ID, true);
 
         this.parser = Parser.builder(options)
                 .extensions(List.of(TablesExtension.create()))
