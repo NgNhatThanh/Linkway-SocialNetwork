@@ -26,13 +26,16 @@
             <div th:if="${session.username != null}" class="logged-in">
 
                 <div class="notifications-container">
-                    <button id="notification-button" class="notification-button" onclick=toggleNotiListVisibility()>
+                    <link rel="stylesheet" th:href="@{/css/notification.css}">
+                    <button id="notification-button" class="notification-button" onclick="toggleNotiListVisibility()">
                         <i class='bx bxs-bell'></i>
-                        <span id="unread-notification-count"></span>
+                        <!-- Số lượng thông báo chưa đọc -->
+                        <span id="unread-notification-count">5</span>
                     </button>
 
                     <div id="notifications-dropdown" class="notifications-dropdown hidden">
                         <ul id="notifications-list">
+                            <!-- Các thông báo sẽ được thêm vào đây -->
                         </ul>
                     </div>
                 </div>
