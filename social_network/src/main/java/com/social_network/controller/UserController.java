@@ -30,7 +30,6 @@ public class UserController {
     private final SecurityUtil securityUtil;
     private final FollowService followService;
 
-    // Fetch current user details from the session
     @GetMapping("/current-user")
     public ResponseEntity<User> getCurrentUser() {
         HttpSession session = securityUtil.getSession();
@@ -46,7 +45,6 @@ public class UserController {
         }
 
         User user = userOptional.get();
-        // Use service to convert User to UserDTO
         UserDTO userDTO = userService.convertToDTO(user);
         return ResponseEntity.ok(user);
     }
@@ -58,22 +56,19 @@ public class UserController {
             throw new IllegalArgumentException("Invalid user data");
         }
 
-        // Log the received payload
         System.out.println("Received update status for user: " + user.getUsername());
 
-        // Fetch existing user from the database and update status
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
             User currentUser = existingUser.get();
-            currentUser.setStatus(user.getStatus()); // Update the status field
-            userService.saveUser(currentUser); // Save updated user
+            currentUser.setStatus(user.getStatus());
+            userService.saveUser(currentUser);
             return currentUser;
         } else {
             throw new IllegalArgumentException("User not found");
         }
     }
 
-    // WebSocket method to add user and set status to ONLINE
     @MessageMapping("/user.addUser")
     @SendTo("/user/queue/status")
     public User addUser(@Payload User user) {
@@ -81,13 +76,11 @@ public class UserController {
             throw new IllegalArgumentException("Invalid user data");
         }
 
-        // Log the received payload
         System.out.println("Adding user: " + user.getUsername());
 
-        // Check if the user exists
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
-            // Update the user's status to ONLINE
+
             User updatedUser = existingUser.get();
             updatedUser.setStatus(Status.ONLINE);
             userService.saveUser(updatedUser);
@@ -97,18 +90,14 @@ public class UserController {
         }
     }
 
-    // WebSocket method to disconnect the user and set status to OFFLINE
     @MessageMapping("/user.disconnectUser")
-    @SendTo("/user//queue/status") // Updated to user-specific destination
+    @SendTo("/user//queue/status")
     public User disconnectUser(@Payload User user) {
         if (user == null || user.getId() == 0) {
             throw new IllegalArgumentException("Invalid user data");
         }
 
-        // Log the received payload
         System.out.println("Disconnecting user: " + user.getUsername());
-
-        // Update the user's status to offline
         User existingUser = userService.findById(user.getId());
         if (existingUser != null) {
             existingUser.setStatus(Status.OFFLINE);
@@ -119,7 +108,6 @@ public class UserController {
         }
     }
 
-    // Fetch all connected users
     @GetMapping("/users")
     public ResponseEntity<List<User>> findConnectedUsers() {
         try {
@@ -145,7 +133,6 @@ public class UserController {
         }
     }
 
-    // Fetch all users that the current logged-in user is following
     @GetMapping("/users/following/{username}")
     public ResponseEntity<List<User>> getFollowingUsers() {
         try {
@@ -164,7 +151,7 @@ public class UserController {
             User user = userOptional.get();
             List<User> followingUsers = followService.getFollowing(user);
             if (followingUsers.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No followers
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
             List<UserDTO> followingUserDTOs = userService.convertToDTOList(followingUsers);
             return ResponseEntity.ok(followingUsers);
@@ -173,14 +160,12 @@ public class UserController {
         }
     }
 
-    // Fetch all online users (users with ONLINE status)
     @GetMapping("/users/online")
     public ResponseEntity<List<User>> getOnlineUsers() {
         try {
-            // Get the list of users who are online
             List<User> onlineUsers = userService.findConnectedUsers();
             if (onlineUsers.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No online users
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
             List<UserDTO> onlineUserDTOs = userService.convertToDTOList(onlineUsers);
             return ResponseEntity.ok(onlineUsers);
@@ -207,7 +192,7 @@ public class UserController {
             User user = userOptional.get();
             List<User> chatUsers = userService.findUsersChattedWith(username);
             if (chatUsers.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null); // No chat users
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
             List<UserDTO> chatUserDTOs = userService.convertToDTOList(chatUsers);
             return ResponseEntity.ok(chatUsers);
@@ -217,7 +202,6 @@ public class UserController {
         }
     }
 
-    // Global exception handler for IllegalArgumentException
     @org.springframework.web.bind.annotation.ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

@@ -21,7 +21,7 @@ public class ChatMessageService {
     public ChatMessage save(ChatMessage chatMessage) {
         var chatId = chatRoomService
                 .getChatRoomId(chatMessage.getSenderId(), chatMessage.getRecipientId(), true)
-                .orElseThrow(() -> new RuntimeException("Chat room not found")); // Throw a specific exception
+                .orElseThrow(() -> new RuntimeException("Chat room not found"));
         chatMessage.setChatId(chatId);
         repository.save(chatMessage);
         return chatMessage;
@@ -30,7 +30,8 @@ public class ChatMessageService {
     public List<ChatMessage> findChatMessages(String senderId, String recipientId) {
         var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
         System.out.println("ABCEEF: " + chatId);
-        if(chatId.isEmpty()) return new ArrayList<>();
+        if (chatId.isEmpty())
+            return new ArrayList<>();
         Pageable pageable = PageRequest.of(0, MESSAGE_PER_FETCH, Sort.by(Sort.Direction.DESC, "id"));
         return repository.findByChatId(chatId.get(), pageable);
     }

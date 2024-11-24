@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserDTO {
-    // Fields
     private String username;
     private String displayName;
     // private String avatarImagePath;

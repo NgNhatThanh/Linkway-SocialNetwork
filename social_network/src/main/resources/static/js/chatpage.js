@@ -117,12 +117,15 @@ async function fetchRecentUserChatWith() {
 }
 
 function appendRecentUserElement(user, recentUsersList, hasUnread) {
-    const listItem = document.createElement('div');
+    const listItem = document.createElement('li');
+    listItem.style.display = 'flex';
     listItem.classList.add('Recent-item');
     listItem.id = user.username;
-    listItem.textContent = user.displayName;
-    listItem.innerHTML = `<img src="${user.avatarImagePath}" alt="${user.displayName}" class="profile-image" style = "width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">`;
-    listItem.innerHTML += `<span>${user.displayName}</span>`;
+    listItem.textContent = user.displayName; listItem.innerHTML = `<img src=${user.avatarImagePath}>
+                        <p> ${user.displayName} </p>`
+    //    listItem.id = user.username;
+    //    listItem.textContent = user.displayName;
+    //    listItem.style.backgroundImage = `url(http://localhost:8080${user.avatarImagePath})`;
 
     if (hasUnread) {
         listItem.classList.add('highlight');

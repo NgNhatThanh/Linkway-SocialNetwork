@@ -45,7 +45,7 @@ const easyMDE = new EasyMDE({
             .then(response => response.json())
             .then(data => {
                 if (data.imageUrl) {
-                    onSuccess(data.imageUrl); // Use the uploaded image URL
+                    onSuccess(data.imageUrl);
                 } else {
                     onError("Upload failed");
                 }
@@ -58,8 +58,8 @@ const tagInput = document.getElementById("tag-input");
 const tagSuggestions = document.getElementById("tag-suggestions");
 
 tagInput.addEventListener("input", function () {
-    const query = tagInput.value.split(" ").pop(); // Get the current word
-    tagSuggestions.innerHTML = ""; // Clear previous suggestions
+    const query = tagInput.value.split(" ").pop();
+    tagSuggestions.innerHTML = "";
 
     if (query.length > 0) {
         const matchedTags = availableTags.filter(tag => tag.toLowerCase().includes(query.toLowerCase()));
@@ -132,7 +132,7 @@ function showErrorMessage(id, message) {
 
 function prepareTagsForSubmit() {
     const hiddenTagsContainer = document.getElementById('hidden-tags');
-    hiddenTagsContainer.innerHTML = ''; // Clear previous hidden inputs
+    hiddenTagsContainer.innerHTML = '';
 
     addedTags.forEach(tag => {
         const hiddenInput = document.createElement('input');

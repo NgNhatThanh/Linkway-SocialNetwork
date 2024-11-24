@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Builder
 @Entity
 @Table(name = "chat_messages")
-@JsonIgnoreProperties(ignoreUnknown = true) // Ignore unknown JSON fields
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
