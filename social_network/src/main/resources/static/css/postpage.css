@@ -613,7 +613,7 @@ h5[th\:if="${comment.wasUpdated}"] {
 .subFollow{
     margin-top: 10px;
     width: 75px;
-    height: 30px;
+    height: auto;
     padding: 5px 10px;
     background: #0066cc;
     color: white;

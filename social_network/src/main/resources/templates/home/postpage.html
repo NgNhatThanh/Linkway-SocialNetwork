@@ -44,7 +44,7 @@
                         th:text="*{post.getAuthor().getDisplayName()}" class="postpage-author-name"></a>
                 </div>
                 <div class="postpage-tags">
-                    <a th:each="tag : ${post.getTags()}" th:href="@{#}" th:text="*{tag.getName()}"></a>
+                    <a th:each="tag : ${post.getTags()}" th:href="@{'/tag/' + *{tag.name}}" th:text="*{tag.getName()}"></a>
                 </div>
 
             </div>
@@ -204,7 +204,7 @@
                             th:action="@{${'/profile/' + post.getAuthor().getUsername() + '/follow'}}" method="post">
                             <input type="hidden" name="username" th:value="${post.getAuthor().getUsername()}" />
                             <button class="subFollow" type="submit"
-                                th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                                th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}"></button>
                         </form>
                     </div>
                     <div class="vote-section">

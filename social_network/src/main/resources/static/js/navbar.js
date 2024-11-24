@@ -127,6 +127,7 @@ function fetchNotifications() {
 
             if (notiList.length === maxNotificationsFetch) {
                 const item = document.createElement('li');
+                item.className = 'load-more';
                 item.innerHTML = `<button onclick=fetchNotifications()>
                                     Hiển thị thêm
                                 </button>`;

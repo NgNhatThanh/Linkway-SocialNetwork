@@ -13,7 +13,7 @@
             <form th:action="@{/}">
                 <button type="submit">
                     <i class='bx bx-home' ></i>
-                    <span>Home</span>
+                    <span>Trang chủ</span>
                 </button>
             </form>
 
@@ -21,7 +21,7 @@
             <form th:action="@{/}">
                 <button type="submit">
                     <i class='bx bx-right-top-arrow-circle'></i>
-                    <span>Popular</span>
+                    <span>Phổ biến</span>
                 </button>
             </form>
 
@@ -29,7 +29,7 @@
             <form th:action="@{/tags}">
                 <button type="submit">
                     <i class='bx bx-purchase-tag-alt' ></i>
-                    <span>Tags</span>
+                    <span>Thẻ</span>
                 </button>
             </form>
         </div>
@@ -39,7 +39,7 @@
         <div class="following">
             <!-- Hiện các tag đang follow-->
             <div th:if="${session.username != null}">
-                <h3> Following Tags </h3>
+                <h3> Thẻ đang theo dõi </h3>
                 <ul th:each="tag : ${followingTags}" class="optiontags">
                     <li>
                         <a th:href="@{${'/tag/' + tag.name}}" th:text="*{tag.getName()}"></a>

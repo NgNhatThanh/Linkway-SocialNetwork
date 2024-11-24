@@ -16,35 +16,35 @@
             </div>
 
             <!-- Display Username and Email -->
-            <h1 th:text="${user.displayName}">User Name</h1>
-            <h2 th:text="${user.email}">User Email</h2>
+            <h1 th:text="${user.displayName}"></h1>
+            <h2 th:text="${user.email}"></h2>
 
             <!-- Follower and Following Counts -->
             <div>
-                <p>Followers: <a th:href="@{/followers/{username}(username=${user.username})}"
+                <p>Người theo dõi: <a th:href="@{/followers/{username}(username=${user.username})}"
                         th:text="${followersCount}">0</a>
                 </p>
-                <p>Following: <a th:href="@{/followings/{username}(username=${user.username})}"
+                <p>Đang theo dõi: <a th:href="@{/followings/{username}(username=${user.username})}"
                         th:text="${followingsCount}">0</a>
                 </p>
             </div>
             <!-- Conditionally Display "Edit Profile" or "Follow/Unfollow" -->
             <div>
                 <!-- Edit Profile Button for Current User -->
-                <a th:if="${isCurrentUser}" th:href="@{/updateProfile}" class="btn">Edit Profile</a>
+                <a th:if="${isCurrentUser}" th:href="@{/updateProfile}" class="btn">Chỉnh sửa hồ sơ</a>
 
                 <!-- Follow/Unfollow Button for Other Users -->
                 <form th:if="${not isCurrentUser}" th:action="@{/profile/{username}/follow(username=${user.username})}"
                     method="post">
                     <input type="hidden" name="username" th:value="${user.username}" />
-                    <button type="submit" th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></button>
+                    <button type="submit" th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}"></button>
                 </form>
             </div>
         </div>
 
         <!-- Add Chat Button Here -->
         <div th:if="${not isCurrentUser}" class="chat-button">
-            <a th:href="@{/chat/{recipientId}(recipientId=${user.username})}" class="btn">Chat with this user</a>
+            <a th:href="@{/chat/{recipientId}(recipientId=${user.username})}" class="btn">Nhắn tin</a>
         </div>
 
 
