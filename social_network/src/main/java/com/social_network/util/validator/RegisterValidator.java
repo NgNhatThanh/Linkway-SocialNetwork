@@ -17,8 +17,6 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
 
     @Override
     public boolean isValid(RegisterDTO user, ConstraintValidatorContext context) {
-
-        // Check if password fields match
         if (!user.getPassword().equals(user.getConfirmPassword())) {
             context.buildConstraintViolationWithTemplate("Mật khẩu không trùng khớp")
                     .addPropertyNode("confirmPassword")
@@ -35,8 +33,6 @@ public class RegisterValidator implements ConstraintValidator<RegisterChecked, R
             return false;
         }
 
-        // Additional validations can be added here
-        // check email
         if (this.userRepository.existsByEmail(user.getEmail())) {
             context.buildConstraintViolationWithTemplate("Email đã tồn tại")
                     .addPropertyNode("email")

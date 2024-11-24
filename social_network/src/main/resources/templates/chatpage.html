@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 
 <body>
 
-    <h2>Chat Box</h2>
+<!--    <h2>Chat Box</h2>-->
 
     <!-- User Form for entering the chat -->
     <div class="user-form" id="username-page">
@@ -28,20 +28,20 @@
         <div class="users-list">
             <div id="notification-area" class="notification-area"></div>
             <div class="users-list-container">
-                <h3>Your RecentUsers</h3>
+                <h3 class="userlist-title">Your RecentUsers</h3>
                 <ul id="RecentUsers"></ul> <!-- Following list -->
             </div>
-            <div>
+            <div style="width: 100%;">
                 <p id="connected-user-displayname"></p>
-                <a href="/" class="btn">Back to Home</a>
+                <a href="/" class="back-to-home"><i class='bx bx-exit bx-rotate-180' ></i></a>
             </div>
         </div>
 
         <div class="chat-area">
             <!-- Display the name of the person you are chatting with -->
-            <div id="chat-with-user" class="chat-with-user">
-                <h3>Chatting with: <span id="chat-with-username"></span></h3>
-            </div>
+<!--            <div id="chat-with-user" class="chat-with-user">-->
+                <h3 class="chat-with-usernameh3">Chatting with: <span id="chat-with-username"></span></h3>
+<!--            </div>-->
 
             <div id="chat-messages" class="chat-messages"></div> <!-- Messages will be added here -->
             <div style="display: flex; overflow-x: auto" id="images-container">
@@ -52,9 +52,9 @@
                     <input type="file" class="imageInput" accept="image/*" style="display: none;"
                            onchange="uploadImage(this)">
                     <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
-                        <i class='bx bx-image-alt' ></i>
+                        <i class='bx bx-image-alt icon-img' ></i>
                     </button>
-                    <button type="submit">Send</button>
+                    <button type="submit"><i class='bx bx-send icon-img'></i></button>
                 </div>
             </form>
         </div>

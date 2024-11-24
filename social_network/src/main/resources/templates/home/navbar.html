@@ -24,10 +24,24 @@
 
         <div class="user-div">
             <div th:if="${session.username != null}" class="logged-in">
+                <!-- Direct to create post page -->
+                <div>
+                    <form th:action="@{/post/edit}">
+                        <button class="button button-secondary2"> <i class='bx bx-plus'></i> </button>
+                    </form>
+                </div>
+                <!-- Notification Icon for New Messages -->
+                <div class="chat-div">
+                    <a th:href="@{/chat}" class="chat-button button button-secondary2">
+                        <i class='bx bxs-message-dots'></i>
+                        <span id="unread-messages-count" class="notification-badge"></span>
+                    </a>
+                </div>
 
                 <div class="notifications-container">
                     <link rel="stylesheet" th:href="@{/css/notification.css}">
-                    <button id="notification-button" class="notification-button" onclick="toggleNotiListVisibility()">
+                    <button id="notification-button" class="notification-button button button-secondary2"
+                        onclick=toggleNotiListVisibility()>
                         <i class='bx bxs-bell'></i>
                         <!-- Số lượng thông báo chưa đọc -->
                         <span id="unread-notification-count"></span>
@@ -40,20 +54,6 @@
                     </div>
                 </div>
 
-                <!-- Direct to create post page -->
-                <div>
-                    <form th:action="@{/post/edit}">
-                        <button class="button button-primary"> Create </button>
-                    </form>
-                </div>
-
-                <!-- Notification Icon for New Messages -->
-                <div class="chat-div">
-                    <a th:href="@{/chat}" class="chat-button">
-                        <i class='bx bxs-message-dots'></i>
-                        <span id="unread-messages-count" class="notification-badge"></span>
-                    </a>
-                </div>
 
                 <!-- Avatar and Dropdown Menu -->
                 <div class="avatar-container">

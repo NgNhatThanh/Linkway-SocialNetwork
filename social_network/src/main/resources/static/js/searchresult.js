@@ -25,9 +25,9 @@ fetch('/api/tags')
         console.log(error);
     });
 
-tagInput.addEventListener("input", function() {
-    const query = tagInput.value.split(" ").pop(); // Get the current word
-    tagSuggestions.innerHTML = ""; // Clear previous suggestions
+tagInput.addEventListener("input", function () {
+    const query = tagInput.value.split(" ").pop();
+    tagSuggestions.innerHTML = "";
 
     if (query.length > 0) {
         const matchedTags = availableTags.filter(tag => tag.toLowerCase().includes(query.toLowerCase()));
@@ -41,7 +41,7 @@ tagInput.addEventListener("input", function() {
     }
 });
 
-function selectTag(tag){
+function selectTag(tag) {
     tagInput.value = '';
     filterTags.push(tag);
     var idx = availableTags.indexOf(tag);
@@ -69,10 +69,9 @@ function removeTag(tag, index) {
     renderTags();
 }
 
-function filter(){
+function filter() {
     const hiddenTagsContainer = document.getElementById('filter-hidden-tags');
-    hiddenTagsContainer.innerHTML = ''; // Clear previous hidden inputs
-
+    hiddenTagsContainer.innerHTML = '';
     filterTags.forEach(tag => {
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';

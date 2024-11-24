@@ -24,7 +24,8 @@ public class FollowService {
     private final UserService userService;
     private final NotificationService notificationService;
 
-    public FollowService(FollowRepository followRepository, UserService userService, NotificationService notificationService) {
+    public FollowService(FollowRepository followRepository, UserService userService,
+            NotificationService notificationService) {
         this.followRepository = followRepository;
         this.userService = userService;
         this.notificationService = notificationService;
@@ -45,7 +46,7 @@ public class FollowService {
     }
 
     public int getFollowerCount(User user) {
-        return followRepository.countByFollowed(user); // Updated to count followers
+        return followRepository.countByFollowed(user);
     }
 
     public void followUser(User follower, User followed) {
@@ -70,7 +71,7 @@ public class FollowService {
         if (!isFollowing(followerUsername, followedUsername)) {
             Follow follow = new Follow();
             follow.setFollower(follower);
-            follow.setFollowed(followed); // Updated to use 'followed'
+            follow.setFollowed(followed);
             follow.setCreatedAt(Instant.now());
             followRepository.save(follow);
 
@@ -91,14 +92,14 @@ public class FollowService {
         User followed = userService.findByUsername(followedUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Followed user not found"));
 
-        followRepository.deleteByFollowerAndFollowed(follower, followed); // Updated to use 'followed'
+        followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
     public void unfollowUser(User follower, User followed) {
         if (follower.getId() == followed.getId()) {
             throw new FollowException("Cannot unfollow yourself.");
         }
-        followRepository.deleteByFollowerAndFollowed(follower, followed); // Updated to use 'followed'
+        followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
     public List<User> getFollowers(User user) {

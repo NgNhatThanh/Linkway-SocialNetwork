@@ -20,7 +20,7 @@
             </div>
 
             <div th:if="${redirectParam != null}">
-                <p th:text="${redirectParam}"> </p>
+                <p class="redirect-param" th:text="${redirectParam}"> </p>
             </div>
 
             <h1 class="login-header">Login</h1>
@@ -47,6 +47,11 @@
             <div class="register">
                 <p>Don't have account? <a th:href="@{/register}">Register</a></p>
             </div>
+
+            <div class="register">
+                <a href="/forgot-password"> Quên mật khẩu ? </a>
+            </div>
+
 
         </form>
     </div>
