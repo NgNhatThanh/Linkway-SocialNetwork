@@ -187,6 +187,13 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followers", followers);
             int totalPages = followers.getTotalPages();
+            if (totalPages == 0) {
+                return "followers";
+            }
+            if (followerPage > totalPages) {
+                followerPage = totalPages;
+                return "redirect:/followers/" + username + "?followerPage=" + followerPage;
+            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()
@@ -214,6 +221,13 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followings", followings);
             int totalPages = followings.getTotalPages();
+            if (totalPages == 0) {
+                return "followings";
+            }
+            if (followingPage > totalPages) {
+                followingPage = totalPages;
+                return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()
