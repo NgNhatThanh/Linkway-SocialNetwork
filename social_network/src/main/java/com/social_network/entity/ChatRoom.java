@@ -1,4 +1,4 @@
-package com.social_network.chatroom;
+package com.social_network.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

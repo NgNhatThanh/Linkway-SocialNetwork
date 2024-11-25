@@ -46,7 +46,7 @@ public class EditPostController {
     @GetMapping("/post/edit")
     public String showCreatePostPage(Model model){
         model.addAttribute("postDTO", new PostDTO());
-        return "editpost";
+        return "home/editpost";
     }
 
     @GetMapping("/post/edit/{postId}")
@@ -57,7 +57,7 @@ public class EditPostController {
             postDTO.getTagNames().add(tag.getName());
         }
         model.addAttribute("postDTO", postDTO);
-        return "editpost";
+        return "home/editpost";
     }
 
     @PostMapping("/post/update")

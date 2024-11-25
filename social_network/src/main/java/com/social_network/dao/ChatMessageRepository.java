@@ -1,5 +1,6 @@
-package com.social_network.chat;
+package com.social_network.dao;
 
+import com.social_network.entity.ChatMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

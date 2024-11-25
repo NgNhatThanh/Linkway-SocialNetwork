@@ -68,7 +68,7 @@ public class AuthController {
     @GetMapping("/change-password")
     public String showChangePasswordPage(Model model) {
         model.addAttribute("changePassword", new ChangePasswordDTO());
-        return "changepassword";
+        return "user/changepassword";
     }
 
     @PostMapping("/change-password")
@@ -77,7 +77,7 @@ public class AuthController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "changepassword";
+            return "user/changepassword";
         }
 
         HttpSession session = securityUtil.getSession();
@@ -97,17 +97,17 @@ public class AuthController {
 
         if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), user.getPassword())) {
             bindingResult.rejectValue("oldPassword", "password.invalid", "Mật khẩu cũ không đúng.");
-            return "changepassword";
+            return "user/changepassword";
         }
 
         if (passwordEncoder.matches(changePasswordDTO.getNewPassword(), user.getPassword())) {
             bindingResult.rejectValue("newPassword", "password.same", "Mật khẩu mới không được trùng với mật khẩu cũ.");
-            return "changepassword";
+            return "user/changepassword";
         }
 
         if (!changePasswordDTO.getNewPassword().equals(changePasswordDTO.getRepeatPassword())) {
             bindingResult.rejectValue("repeatPassword", "password.mismatch", "Mật khẩu xác nhận không khớp.");
-            return "changepassword";
+            return "user/changepassword";
         }
 
         userService.changePassword(user, changePasswordDTO.getNewPassword());

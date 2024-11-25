@@ -1,7 +1,9 @@
-package com.social_network.chat;
+package com.social_network.service;
 
 import java.util.List;
 
+import com.social_network.dao.ChatNotificationRepository;
+import com.social_network.entity.ChatNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

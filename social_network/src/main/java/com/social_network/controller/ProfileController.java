@@ -37,7 +37,6 @@ public class ProfileController {
     private final PostService postService;
     private final SecurityUtil securityUtil;
     private final FollowService followService;
-    private TagService tagService;
 
     @ModelAttribute("followingTags")
     public List<Tag> getFollowingTags() {
@@ -71,7 +70,7 @@ public class ProfileController {
             model.addAttribute("isCurrentUser", true);
             model.addAttribute("followingsCount", followService.getFollowingCount(user));
             model.addAttribute("followersCount", followService.getFollowerCount(user));
-            return "profile";
+            return "user/profile";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
@@ -100,7 +99,7 @@ public class ProfileController {
             model.addAttribute("isFollowing", followService.isFollowing(currentUsername, username));
             model.addAttribute("followingsCount", followService.getFollowingCount(user));
             model.addAttribute("followersCount", followService.getFollowerCount(user));
-            return "profile";
+            return "user/profile";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
@@ -153,7 +152,7 @@ public class ProfileController {
             model.addAttribute("error", "User not found");
             return "error";
         }
-        return "updateProfile";
+        return "user/updateProfile";
     }
 
     @PostMapping("/updateProfile")
@@ -161,7 +160,7 @@ public class ProfileController {
             BindingResult bindingResult,
             HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return "updateProfile";
+            return "user/updateProfile";
         }
         User user = userService.findById(userDTO.getId());
         user.setDisplayName(userDTO.getDisplayName());
@@ -188,7 +187,7 @@ public class ProfileController {
             model.addAttribute("followers", followers);
             int totalPages = followers.getTotalPages();
             if (totalPages == 0) {
-                return "followers";
+                return "user/followers";
             }
             if (followerPage > totalPages) {
                 followerPage = totalPages;
@@ -200,7 +199,7 @@ public class ProfileController {
                         .collect(Collectors.toList());
                 model.addAttribute("pageNumbers", pageNumbers);
             }
-            return "followers";
+            return "user/followers";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
@@ -222,7 +221,7 @@ public class ProfileController {
             model.addAttribute("followings", followings);
             int totalPages = followings.getTotalPages();
             if (totalPages == 0) {
-                return "followings";
+                return "user/followings";
             }
             if (followingPage > totalPages) {
                 followingPage = totalPages;
@@ -234,7 +233,7 @@ public class ProfileController {
                         .collect(Collectors.toList());
                 model.addAttribute("pageNumbers", pageNumbers);
             }
-            return "followings";
+            return "user/followings";
         } else {
             model.addAttribute("error", "User not found");
             return "error";

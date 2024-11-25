@@ -1,27 +1,19 @@
 package com.social_network.controller;
 
-import com.social_network.dto.request.CommentDTO;
 import com.social_network.dto.response.UserSearchDTO;
-import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
 import com.social_network.entity.Tag;
 import com.social_network.entity.User;
 import com.social_network.service.*;
-import com.social_network.util.MarkdownRenderUtil;
 import com.social_network.util.ModelMapper;
 import com.social_network.util.SecurityUtil;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,8 +22,6 @@ import java.util.Objects;
 public class HomepageController {
 
     private final UserService userService;
-
-    private final TagService tagService;
 
     private final SecurityUtil securityUtil;
 
@@ -98,6 +88,6 @@ public class HomepageController {
         }
         model.addAttribute("query", query);
         model.addAttribute("tagNames", tagNames);
-        return "searchresult";
+        return "home/searchresult";
     }
 }

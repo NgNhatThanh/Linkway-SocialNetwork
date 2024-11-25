@@ -1,6 +1,7 @@
-package com.social_network.chat;
+package com.social_network.service;
 
-import com.social_network.chatroom.ChatRoomService;
+import com.social_network.dao.ChatMessageRepository;
+import com.social_network.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

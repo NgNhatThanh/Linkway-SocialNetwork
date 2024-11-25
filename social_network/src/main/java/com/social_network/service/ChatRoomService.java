@@ -1,5 +1,7 @@
-package com.social_network.chatroom;
+package com.social_network.service;
 
+import com.social_network.dao.ChatRoomRepository;
+import com.social_network.entity.ChatRoom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

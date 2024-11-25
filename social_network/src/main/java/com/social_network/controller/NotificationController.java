@@ -1,18 +1,10 @@
 package com.social_network.controller;
 
 import com.social_network.entity.Notification;
-import com.social_network.entity.User;
 import com.social_network.service.NotificationService;
 import com.social_network.service.UserService;
-import jakarta.persistence.Column;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.converter.SimpleMessageConverter;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,13 +16,10 @@ public class NotificationController {
 
     private final UserService userService;
 
-    private SimpMessagingTemplate messagingTemplate;
-
     private NotificationService notificationService;
 
     @GetMapping("/notifications/{userId}/unread")
-    public ResponseEntity<Integer> getUnreadNotifications(@PathVariable int userId,
-            HttpServletRequest request) {
+    public ResponseEntity<Integer> getUnreadNotifications(@PathVariable int userId) {
         return ResponseEntity.ok(notificationService.countUnreadNotifications(
                 userService.findById(userId)
         ));

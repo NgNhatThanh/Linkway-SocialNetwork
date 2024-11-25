@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.social_network.dto.UserDTO;
-import com.social_network.entity.Follow;
 import com.social_network.entity.Status;
 import com.social_network.entity.User;
 import com.social_network.service.FollowService;
@@ -45,7 +43,6 @@ public class UserController {
         }
 
         User user = userOptional.get();
-        UserDTO userDTO = userService.convertToDTO(user);
         return ResponseEntity.ok(user);
     }
 
@@ -126,7 +123,6 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
             User user = userOptional.get();
-            UserDTO userDTO = userService.convertToDTO(user);
             return ResponseEntity.ok(user);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -153,7 +149,6 @@ public class UserController {
             if (followingUsers.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
-            List<UserDTO> followingUserDTOs = userService.convertToDTOList(followingUsers);
             return ResponseEntity.ok(followingUsers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -167,7 +162,6 @@ public class UserController {
             if (onlineUsers.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
-            List<UserDTO> onlineUserDTOs = userService.convertToDTOList(onlineUsers);
             return ResponseEntity.ok(onlineUsers);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
@@ -189,12 +183,10 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
             }
 
-            User user = userOptional.get();
             List<User> chatUsers = userService.findUsersChattedWith(username);
             if (chatUsers.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
-            List<UserDTO> chatUserDTOs = userService.convertToDTOList(chatUsers);
             return ResponseEntity.ok(chatUsers);
 
         } catch (Exception e) {

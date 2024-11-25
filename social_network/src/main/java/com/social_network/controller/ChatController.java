@@ -1,5 +1,9 @@
-package com.social_network.chat;
+package com.social_network.controller;
 
+import com.social_network.entity.ChatMessage;
+import com.social_network.service.ChatMessageService;
+import com.social_network.entity.ChatNotification;
+import com.social_network.service.ChatNotificationService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -10,8 +14,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import com.social_network.service.UserService;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -24,12 +26,10 @@ public class ChatController {
         private final SimpMessagingTemplate messagingTemplate;
         private final ChatMessageService chatMessageService;
         private final ChatNotificationService chatNotificationService;
-        private final UserService userService;
 
         @MessageMapping("/chat.sendMessage")
         public void processMessage(@Payload ChatMessage chatMessage) {
                 chatMessage.setSentAt(Date.from(Instant.now()));
-                ChatMessage savedMsg = chatMessageService.save(chatMessage);
 
                 chatNotificationService.sendNotification(
                                 chatMessage.getSenderId(),

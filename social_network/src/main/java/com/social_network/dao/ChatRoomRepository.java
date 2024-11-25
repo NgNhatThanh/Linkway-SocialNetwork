@@ -1,5 +1,6 @@
-package com.social_network.chatroom;
+package com.social_network.dao;
 
+import com.social_network.entity.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 import java.util.List;

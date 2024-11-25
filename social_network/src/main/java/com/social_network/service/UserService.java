@@ -1,8 +1,6 @@
 package com.social_network.service;
 
-import com.social_network.chat.ChatMessage;
-import com.social_network.chatroom.ChatRoom;
-import com.social_network.chatroom.ChatRoomService;
+import com.social_network.entity.ChatRoom;
 import com.social_network.dao.UserRepository;
 import com.social_network.dto.PageResponse;
 import com.social_network.dto.UserDTO;
@@ -11,13 +9,11 @@ import com.social_network.dto.response.UserResponseDTO;
 import com.social_network.entity.Role;
 import com.social_network.entity.Status;
 import com.social_network.entity.User;
-import com.social_network.exception.DataExistedException;
 import com.social_network.exception.DataNotFoundException;
 import com.social_network.util.BCryptEncoder;
 import com.social_network.util.ModelMapper;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,18 +23,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Date;
-import java.util.HashSet;
 
 @Service
 @AllArgsConstructor
 public class UserService {
 
-    private final ResourcePatternResolver resourcePatternResolver;
     private UserRepository userRepository;
 
     private RoleService roleService;

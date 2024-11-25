@@ -1,7 +1,8 @@
-package com.social_network.chat;
+package com.social_network.dao;
 
 import java.util.List;
 
+import com.social_network.entity.ChatNotification;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;

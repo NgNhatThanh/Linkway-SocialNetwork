@@ -1,6 +1,5 @@
 package com.social_network.controller;
 
-import com.cloudinary.Cloudinary;
 import com.social_network.dto.request.CommentDTO;
 import com.social_network.entity.Comment;
 import com.social_network.entity.Post;
@@ -39,8 +38,6 @@ public class PostpageController {
     private VoteService voteService;
 
     private CommentService commentService;
-
-    private TagService tagService;
 
     @ModelAttribute("followingTags")
     public List<Tag> getFollowingTags() {
