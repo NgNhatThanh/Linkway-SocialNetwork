@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>okee</title>
+  <title>Linkway</title>
   <link rel="stylesheet" th:href="@{/css/homepage.css}">
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
@@ -13,6 +13,9 @@
   <input id="csrf-token" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
   <input id="current-username" type="hidden" th:name="${session.username}" th:value="${session.username}"/>
   <input id="current-avatar" type="hidden" th:name="${session.avatar}" th:value="${session.avatar}"/>
+  <input id="current-id" type="hidden" th:name="${session.id}" th:value="${session.id}"/>
+
+  <script th:src="@{/js/general.js}"></script>
 
   <div th:insert="~{home/navbar.html :: navbar}" class="nav">
   </div>
@@ -28,8 +31,9 @@
       </div>
     </div>
 
-  </div>
+    <div id="notification-container"></div>
 
+  </div>
 
 </body>
 

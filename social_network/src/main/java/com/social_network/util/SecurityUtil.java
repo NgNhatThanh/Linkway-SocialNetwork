@@ -9,11 +9,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 import java.util.Collection;
 import java.util.Optional;
 
 @Component
 public class SecurityUtil {
+
+    private final HttpServletRequest request;
+
+    public SecurityUtil(HttpServletRequest request) {
+        this.request = request;
+
+    }
 
     public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
@@ -31,34 +41,35 @@ public class SecurityUtil {
         return null;
     }
 
-    // Method to get the current user from the security context
     public static UserDetails getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             return (UserDetails) principal;
         }
-        return null; // return null if not authenticated
+        return null;
     }
 
-    // Method to get the first role of the current user
     public static String getRole() {
         UserDetails user = getCurrentUser();
         if (user != null) {
             Collection<? extends GrantedAuthority> authorities = user.getAuthorities();
             if (!authorities.isEmpty()) {
-                return authorities.iterator().next().getAuthority(); // Get the first role
+                return authorities.iterator().next().getAuthority();
             }
         }
-        return null; // Return null if user is null or has no roles
+        return null;
     }
 
-    // Optional: Method to get all roles as a List
     public static Collection<? extends GrantedAuthority> getRoles() {
         UserDetails user = getCurrentUser();
         if (user != null) {
-            return user.getAuthorities(); // Return all roles
+            return user.getAuthorities();
         }
-        return null; // Return null if user is null
+        return null;
+    }
+
+    public HttpSession getSession() {
+        return request.getSession();
     }
 
 }

@@ -20,6 +20,8 @@ public class PostDTO {
 
     private List<String> tagNames;
 
+    private String thumbnailUrl;
+
     public PostDTO() {
         tagNames = new ArrayList<>();
     }

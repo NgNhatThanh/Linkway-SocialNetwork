@@ -12,10 +12,12 @@
         <div class="home-div">
             <a class="back-home" th:href="@{/}"> Home </a>
         </div>
+        <!-- Notification Container for Message Popups -->
+
 
         <div>
             <form th:action="@{/search}" method="get" class="search-container">
-                <input type="text" name="query" placeholder="Tìm kiếm ..." required class="search-input"/>
+                <input type="text" name="query" placeholder="Tìm kiếm ..." required class="search-input" />
                 <button class="button button-secondary" type="submit">Search</button>
             </form>
         </div>
@@ -23,31 +25,60 @@
         <div class="user-div">
             <div th:if="${session.username != null}" class="logged-in">
                 <!-- Direct to create post page -->
-                <div>
+                <div title="Tạo bài viết">
                     <form th:action="@{/post/edit}">
-                        <button class="button button-primary"> Create </button>
+                        <button class="button button-secondary2"> <i class='bx bx-plus'></i> </button>
                     </form>
                 </div>
+                <!-- Notification Icon for New Messages -->
+                <div class="chat-div" title="Chat">
+                    <a th:href="@{/chat}" class="chat-button button button-secondary2">
+                        <i class='bx bxs-message-dots'></i>
+                        <span id="unread-messages-count" class="notification-badge"></span>
+                    </a>
+                </div>
 
+                <div class="notifications-container" title="Thông báo">
+                    <link rel="stylesheet" th:href="@{/css/notification.css}">
+                    <button id="notification-button" class="notification-button button button-secondary2"
+                        onclick=toggleNotiListVisibility()>
+                        <i class='bx bxs-bell'></i>
+                        <!-- Số lượng thông báo chưa đọc -->
+                        <span id="unread-notification-count"></span>
+                    </button>
+
+                    <div id="notifications-dropdown" class="notifications-dropdown hidden">
+                        <ul id="notifications-list">
+                            <!-- Các thông báo sẽ được thêm vào đây -->
+                        </ul>
+                    </div>
+                </div>
+
+
+                <!-- Avatar and Dropdown Menu -->
                 <div class="avatar-container">
                     <img th:src="${session.avatar}" alt="Avatar" class="avatar" id="avatar-icon">
                     <div class="dropdown-menu" id="dropdown-menu">
                         <div class="menu-item">
                             <a th:href="@{/profile}" class="dropdown-item">
-                                <img th:src="${session.avatar}" alt="A" class="avt-icon" id="avatar-icon2">
-                                <span>Profile Page</span>
+                                <img th:src="${session.avatar}" alt="A" class="icon" id="avatar-icon2"
+                                    style="width: 30px; height: 30px; border-radius: 50%;">
+                                <div>
+                                    <h4 th:text="${session.username}"></h4>
+                                    <span>Trang cá nhân</span>
+                                </div>
                             </a>
                         </div>
                         <div class="menu-item">
-                            <a th:href="@{/settings}" class="dropdown-item">
+                            <a th:href="@{/change-password}" class="dropdown-item">
                                 <i class='bx bx-cog icon'></i>
-                                <span>Settings</span>
+                                <span>Đổi mật khẩu</span>
                             </a>
                         </div>
                         <div class="menu-item">
                             <form th:action="@{/logout}" method="post" class="dropdown-item">
                                 <button class="btn-logout" type="submit">
-                                    <i class='bx bx-exit icon'  ></i>
+                                    <i class='bx bx-exit icon'></i>
                                     <span>Đăng xuất</span>
                                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                                 </button>
@@ -63,8 +94,13 @@
             </div>
         </div>
 
+
+        <!-- Linking JS files -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
         <script th:src="@{/js/navbar.js}"></script>
     </div>
+
 </body>
 
 </html>

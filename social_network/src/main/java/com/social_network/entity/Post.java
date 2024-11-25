@@ -34,6 +34,9 @@ public class Post {
     @JoinColumn(name = "author_id")
     private User author;
 
+    @Column(name = "thumbnail_url")
+    private String thumbnailUrl;
+
     @Column(name = "created_at")
     private Date createdAt;
 

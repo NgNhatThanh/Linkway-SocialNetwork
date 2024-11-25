@@ -1,0 +1,145 @@
+.updateProfile body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Main Layout */
+.updateProfile {
+    max-width: 600px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.updateProfile h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #444;
+}
+
+/* Error Message */
+.error-message {
+    background: #ffe6e6;
+    border: 1px solid #ff4d4d;
+    color: #d8000c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+/* Avatar Section */
+.avatar-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.avatar-section img {
+    display: block;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    width: 150px;
+    height: 150px;
+}
+
+.avatar-section label {
+    font-weight: bold;
+    color: #555;
+}
+
+.avatar-section input[type="file"] {
+    margin-top: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
+
+/* Form Styles */
+.updateForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.updateForm div {
+    display: flex;
+    flex-direction: column;
+}
+
+.updateForm label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.updateForm input, form textarea {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background: #f9f9f9;
+    transition: border-color 0.3s ease;
+}
+
+.updateForm input:focus, form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.updateForm textarea {
+    resize: none;
+}
+
+/* Error Feedback */
+.updateForm p {
+    font-size: 12px;
+    color: #ff4d4d;
+    margin-top: 5px;
+}
+
+/* Avatar Section */
+#avatar {
+    margin-top: 10px;
+}
+
+#user-avatar {
+    display: block;
+    margin: 10px auto;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+
+/* Buttons */
+.updateForm button {
+    background: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.updateForm button:hover {
+    background: #0056b3;
+}
+
+.updateProfile a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007bff;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.updateProfile a:hover {
+    color: #0056b3;
+}

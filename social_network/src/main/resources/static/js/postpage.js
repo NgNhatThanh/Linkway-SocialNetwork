@@ -1,19 +1,17 @@
 const commentContent = document.getElementsByClassName('comment-textarea');
 const submitButton = document.getElementsByClassName('submit-button');
 
-commentContent[0].addEventListener('input', function() {
+commentContent[0].addEventListener('input', function () {
     submitButton[0].disabled = commentContent[0].value.trim() === '';
 });
 
-const csrfToken = document.getElementById("csrf-token").value;
-
-function uploadImage(input){
+function uploadImage(input) {
 
     const commentEditor = input.closest(".comment-editor");
     const commentContent = commentEditor.querySelector(".comment-textarea");
 
     var file = input.files[0];
-    if(!file || !file.type.startsWith('image/')) return;
+    if (!file || !file.type.startsWith('image/')) return;
 
     const formData = new FormData();
     formData.append('image', file);
@@ -27,12 +25,12 @@ function uploadImage(input){
     })
         .then(response => response.json())
         .then(response => {
-            commentContent.value += `\n![](${response.imageUrl})`;
+            commentContent.value += `\n\n![](${response.imageUrl})`;
         })
         .catch(error => console.log("Err: " + error))
 }
 
-function loadChildComments(parentId){
+function loadChildComments(parentId) {
 
     const button = document.getElementById(`get-replies-${parentId}`);
     button.onclick = () => hideChildComments(parentId);
@@ -94,38 +92,29 @@ function loadChildComments(parentId){
                                                             </button>
                                                         </form>
                                                     </div>
-                                                    <button type="button" class="action-btn" onclick=loadChildComments(${comment.id}) id=get-replies-${comment.id}> Xem Phản hồi </button>
-                                                    <button class="action-btn" onclick='showReplyForm(${comment.id})'> Phản hồi </button>
-                                                    <button class="action-btn" onclick=showCommentEditForm(${comment.id})> Chỉnh sửa</button>
-                                                </div>
-                                                
-
                                             `;
-//                if(comment.hasChild){
-//                    innerAdd += `<button type="button" class="action-btn"
-//                                onclick=loadChildComments(${comment.id})
-//                                id=get-replies-${comment.id}> Xem Phản hồi </button>`;
-//                }
-//
-//                innerAdd += `<button class="action-btn" onclick='showReplyForm(${comment.id})'>
-//                                    Phản hồi
-//                             </button>`;
-//
-//                if(comment.author.username === currentUsername){
-//                    innerAdd += `<button class="action-btn" onclick=showCommentEditForm(${comment.id})>
-//                                    Chỉnh sửa
-//                                 </button>`;
-//                }
+                if (comment.hasChild) {
+                    innerAdd += `<button type="button" class="action-btn"
+                               onclick=loadChildComments(${comment.id})
+                               id=get-replies-${comment.id}> Xem Phản hồi </button>`;
+                }
+
+                innerAdd += `<button class="action-btn" onclick='showReplyForm(${comment.id})'>
+                                   Phản hồi
+                            </button>`;
+
+                if (comment.author.username === currentUsername) {
+                    innerAdd += `<button class="action-btn" onclick=showCommentEditForm(${comment.id})>
+                                   Chỉnh sửa
+                                </button>`;
+                }
 
                 innerAdd += `</div>
                         </div>`;
 
                 innerAdd += `
                             <div id="${'reply-form-container-' + comment.id}" class="reply-form"></div>
-                            <div id="${'child-comments-'+comment.id}" class="child-comments"></div>
-                        </div>`;
-
-                innerAdd += `
+                            <div id="${'child-comments-' + comment.id}" class="child-comments"></div>
                         </div>`;
 
                 commentElement.innerHTML = innerAdd;
@@ -135,7 +124,7 @@ function loadChildComments(parentId){
         .catch(error => console.error('Error loading child comments:', error));
 }
 
-function hideChildComments(parentId){
+function hideChildComments(parentId) {
     const button = document.getElementById(`get-replies-${parentId}`);
     button.onclick = () => loadChildComments(parentId);
     button.textContent = 'Xem phản hồi';
@@ -143,7 +132,7 @@ function hideChildComments(parentId){
     childCommentsContainer.innerHTML = '';
 }
 
-function showReplyForm(parentId){
+function showReplyForm(parentId) {
     const replyContainer = document.getElementById(`reply-form-container-${parentId}`);
     const commentForm = (document.getElementsByClassName('comment-form-all'))[0].cloneNode(true);
     const parentIdValue = commentForm.querySelector(".parentIdValue");
@@ -154,7 +143,7 @@ function showReplyForm(parentId){
 
     const submitButton = commentForm.querySelector('.submit-button');
     submitButton.disabled = true;
-    textArea.addEventListener('input', function() {
+    textArea.addEventListener('input', function () {
         submitButton.disabled = textArea.value.trim() === '';
     });
 
@@ -165,8 +154,8 @@ function showReplyForm(parentId){
     replyContainer.appendChild(commentForm);
 }
 
-function showPreview(button, content){
-    if(content.trim() === '') return;
+function showPreview(button, content) {
+    if (content.trim() === '') return;
     fetch('/transfer', {
         method: 'POST',
         body: content,
@@ -181,7 +170,7 @@ function showPreview(button, content){
         })
 }
 
-function showCommentEditForm(commentId){
+function showCommentEditForm(commentId) {
     const commentForm = (document.getElementsByClassName('comment-form-all'))[0].cloneNode(true);
     const commentContainer = document.getElementById(`comment-container-${commentId}`);
     const commentMeta = commentContainer.querySelector('.comment-meta');
@@ -211,16 +200,17 @@ function showCommentEditForm(commentId){
             commentForm.querySelector('.comment-editor').appendChild(commentIdValue);
 
             const exitButton = document.createElement('button');
+            exitButton.classList.add('action-btn');
             exitButton.textContent = 'Hủy';
-            exitButton.onclick = function (){
+            exitButton.onclick = function () {
                 const container = document.getElementById(`comment-container-${commentId}`);
                 commentForm.replaceWith(commentMeta);
             }
-            commentForm.appendChild(exitButton) ;
+            commentForm.appendChild(exitButton);
 
             const submitButton = commentForm.querySelector('.submit-button');
             submitButton.disabled = true;
-            textArea.addEventListener('input', function() {
+            textArea.addEventListener('input', function () {
                 submitButton.disabled = textArea.value.trim() === '';
             });
 
@@ -230,13 +220,4 @@ function showCommentEditForm(commentId){
             // commentContainer.appendChild(commentForm);
         })
         .catch(error => console.log("Error: " + error));
-}
-
-function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours() % 12 || 12).padStart(2, '0'); // For 12-hour format
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${year}/${month}/${day} ${hours}:${minutes}`;
 }

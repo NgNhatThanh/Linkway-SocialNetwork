@@ -126,3 +126,7 @@ body{
 .register a.hover{
     text-decoration: underline;
 }
+
+.redirect-param{
+    color: #4CAF50;
+}

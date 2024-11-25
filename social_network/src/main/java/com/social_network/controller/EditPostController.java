@@ -7,6 +7,7 @@ import com.social_network.entity.User;
 import com.social_network.service.PostService;
 import com.social_network.service.TagService;
 import com.social_network.service.UserService;
+import com.social_network.util.ModelMapper;
 import com.social_network.util.SecurityUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -45,21 +46,18 @@ public class EditPostController {
     @GetMapping("/post/edit")
     public String showCreatePostPage(Model model){
         model.addAttribute("postDTO", new PostDTO());
-        return "editpost";
+        return "home/editpost";
     }
 
     @GetMapping("/post/edit/{postId}")
     public String showEditPostPage(Model model, @PathVariable int postId){
         Post post = postService.findById(postId);
-        PostDTO postDTO = new PostDTO();
-        postDTO.setId(post.getId());
-        postDTO.setTitle(post.getTitle());
-        postDTO.setContent(post.getContent());
+        PostDTO postDTO = ModelMapper.getInstance().map(post, PostDTO.class);
         for(Tag tag : post.getTags()){
             postDTO.getTagNames().add(tag.getName());
         }
         model.addAttribute("postDTO", postDTO);
-        return "editpost";
+        return "home/editpost";
     }
 
     @PostMapping("/post/update")
@@ -79,6 +77,7 @@ public class EditPostController {
             newPost.setCreatedAt(Date.from(Instant.now()));
         }
 
+        newPost.setThumbnailUrl(postDTO.getThumbnailUrl());
         newPost.setTitle(postDTO.getTitle());
         newPost.setContent(postDTO.getContent());
         List<Tag> tags = new ArrayList<>();

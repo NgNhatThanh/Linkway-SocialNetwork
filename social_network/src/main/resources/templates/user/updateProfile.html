@@ -8,6 +8,7 @@
 
 <body>
     <main class="updateProfile">
+        <link rel="stylesheet" th:href="@{/css/updateProfile.css}">
         <h1>Update Profile</h1>
 
         <!-- Display error message if any -->
@@ -16,7 +17,18 @@
         </div>
 
         <!-- Profile Update Form -->
-        <form th:action="@{/updateProfile}" th:object="${userDTO}" method="post">
+        <form th:action="@{/updateProfile}" class="updateForm" th:object="${userDTO}" method="post">
+            <!-- Avatar Upload -->
+            <div>
+                <label for="avatar">Ảnh đại diện:</label>
+                <input id="avatar-path" th:field="*{avatarImagePath}" type="hidden">
+                <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onchange="uploadImage(this)"/>
+                <div>
+                    <img id="user-avatar" th:src="@{${userDTO.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
+                </div>
+
+            </div>
+
             <!-- Display Name -->
             <input type="hidden" th:field="*{id}" th:value="*{id}">
             <div>
@@ -39,16 +51,7 @@
                 <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid email</p>
             </div>
 
-            <!-- Avatar Upload -->
-            <div>
-                <label for="avatar">Ảnh đại diện:</label>
-                <input id="avatar-path" th:field="*{avatarImagePath}" type="hidden">
-                <input type="file" id="avatar" name="avatar" accept=".png, .jpg, .jpeg" onchange="uploadImage(this)"/>
-                <div>
-                    <img id="user-avatar" th:src="@{${userDTO.avatarImagePath}}" alt="User Avatar" width="150" height="150" />
-                </div>
 
-            </div>
 
             <div>
                 <button type="submit">Update Profile</button>

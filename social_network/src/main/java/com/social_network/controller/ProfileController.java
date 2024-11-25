@@ -37,7 +37,6 @@ public class ProfileController {
     private final PostService postService;
     private final SecurityUtil securityUtil;
     private final FollowService followService;
-    private TagService tagService;
 
     @ModelAttribute("followingTags")
     public List<Tag> getFollowingTags() {
@@ -51,7 +50,6 @@ public class ProfileController {
         return followingTags;
     }
 
-    // Show the current user's profile page
     @GetMapping("/profile")
     public String showCurrentUserProfile(Model model,
             @RequestParam(value = "page", defaultValue = "1") int page,
@@ -69,19 +67,16 @@ public class ProfileController {
             model.addAttribute("postList", posts);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
-            model.addAttribute("isCurrentUser", true); // Indicate that this is the current user's profile
-            model.addAttribute("followingsCount", followService.getFollowingCount(user)); // Add followings count
-            model.addAttribute("followersCount", followService.getFollowerCount(user)); // Add followers count
-            return "profile"; // Matches profile.html template for the current user
+            model.addAttribute("isCurrentUser", true);
+            model.addAttribute("followingsCount", followService.getFollowingCount(user));
+            model.addAttribute("followersCount", followService.getFollowerCount(user));
+            return "user/profile";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
         }
     }
 
-    // Similar changes for the showUserProfile method
-
-    // Show another user's profile by their username
     @GetMapping("/profile/{username}")
     public String showUserProfile(@PathVariable("username") String username,
             Model model,
@@ -100,22 +95,21 @@ public class ProfileController {
             model.addAttribute("postList", posts);
             model.addAttribute("followings", followings);
             model.addAttribute("followers", followers);
-            model.addAttribute("isCurrentUser", username.equals(currentUsername)); // Check if this is the current user
-            model.addAttribute("isFollowing", followService.isFollowing(currentUsername, username)); // Following status
-            model.addAttribute("followingsCount", followService.getFollowingCount(user)); // Add followings count
-            model.addAttribute("followersCount", followService.getFollowerCount(user)); // Add followers count
-            return "profile"; // Matches profile.html template for other user profiles as well
+            model.addAttribute("isCurrentUser", username.equals(currentUsername));
+            model.addAttribute("isFollowing", followService.isFollowing(currentUsername, username));
+            model.addAttribute("followingsCount", followService.getFollowingCount(user));
+            model.addAttribute("followersCount", followService.getFollowerCount(user));
+            return "user/profile";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
         }
     }
 
-    // Follow/unfollow a user
     @PostMapping("/profile/{username}/follow")
     public String toggleFollowUser(@PathVariable("username") String username,
-                                   Model model,
-                                   HttpServletRequest request) {
+            Model model,
+            HttpServletRequest request) {
         String currentUsername = securityUtil.getCurrentUser().getUsername();
         String prevPath = request.getHeader("Referer");
 
@@ -126,7 +120,6 @@ public class ProfileController {
 
         Optional<User> optionalUser = userService.findByUsername(username);
         if (optionalUser.isPresent()) {
-            // Check if the current user is already following the target user
             boolean isFollowing = followService.isFollowing(currentUsername, username);
 
             if (isFollowing) {
@@ -156,19 +149,18 @@ public class ProfileController {
             userDTO.setAvatarImagePath(user.getAvatarImagePath());
             model.addAttribute("userDTO", userDTO);
         } else {
-            // Handle the case when the user is not found
             model.addAttribute("error", "User not found");
-            return "error"; // Or redirect to an error page
+            return "error";
         }
-        return "updateProfile";
+        return "user/updateProfile";
     }
 
     @PostMapping("/updateProfile")
     public String updateProfile(@ModelAttribute("userDTO") @Valid UserUpdateDTO userDTO,
-                                BindingResult bindingResult,
-                                HttpServletRequest request) {
+            BindingResult bindingResult,
+            HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
-            return "updateProfile";
+            return "user/updateProfile";
         }
         User user = userService.findById(userDTO.getId());
         user.setDisplayName(userDTO.getDisplayName());
@@ -194,13 +186,20 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followers", followers);
             int totalPages = followers.getTotalPages();
+            if (totalPages == 0) {
+                return "user/followers";
+            }
+            if (followerPage > totalPages) {
+                followerPage = totalPages;
+                return "redirect:/followers/" + username + "?followerPage=" + followerPage;
+            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()
                         .collect(Collectors.toList());
                 model.addAttribute("pageNumbers", pageNumbers);
             }
-            return "followers"; // Template to show followers
+            return "user/followers";
         } else {
             model.addAttribute("error", "User not found");
             return "error";
@@ -221,13 +220,20 @@ public class ProfileController {
             model.addAttribute("user", user);
             model.addAttribute("followings", followings);
             int totalPages = followings.getTotalPages();
+            if (totalPages == 0) {
+                return "user/followings";
+            }
+            if (followingPage > totalPages) {
+                followingPage = totalPages;
+                return "redirect:/followings/" + username + "?followingPage=" + followingPage;
+            }
             if (totalPages > 0) {
                 List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                         .boxed()
                         .collect(Collectors.toList());
                 model.addAttribute("pageNumbers", pageNumbers);
             }
-            return "followings"; // Template to show followings
+            return "user/followings";
         } else {
             model.addAttribute("error", "User not found");
             return "error";

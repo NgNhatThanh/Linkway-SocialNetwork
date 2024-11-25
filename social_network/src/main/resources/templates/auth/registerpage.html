@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th = "https://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Đăng ký</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link href="../static/css/register-style.css" th:href="@{/css/register-style.css}" rel="stylesheet" />
 
@@ -12,7 +12,7 @@
         <form th:action="@{/register}" th:object="${registerUser}" method="POST" class="register-box">
             <a th:href="@{/}" class="backhome"><i class='bx bxl-reddit'></i></a>
 
-            <h2 class="register-header"> Register </h2>
+            <h2 class="register-header"> Đăng ký </h2>
             <div class="invalid-feedback"
                  th:if="${#fields.hasErrors('username')}"
                  th:errors="*{username}"></div>

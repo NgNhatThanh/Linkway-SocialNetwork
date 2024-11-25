@@ -13,32 +13,37 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    Page<Post> findAll(Pageable pageable);
+        Page<Post> findAll(Pageable pageable);
 
-    Page<Post> findByAuthor(User author, Pageable pageable);
+        Page<Post> findByAuthor(User author, Pageable pageable);
 
-    List<Post> findByAuthor(User author);
+        List<Post> findByAuthor(User author);
 
-    Post findById(int id);
+        Post findById(int id);
 
-    Page<Post> findPostByTags(List<Tag> tags, Pageable pageable);
+        @Query("SELECT p FROM Post p JOIN p.tags t WHERE t IN :tags")
+        Page<Post> findPostByTags(@Param("tags") List<Tag> tags, Pageable pageable);
 
-    int countByAuthor(User author);
+        int countByAuthor(User author);
 
-    Page<Post> findPostsByTitleContainingIgnoreCaseAndCreatedAtBetween(String query,
-                                                                       Date from,
-                                                                       Date to,
-                                                                       Pageable pageable);
+        Page<Post> findPostsByTitleContainingIgnoreCaseAndCreatedAtBetween(String query,
+                        Date from,
+                        Date to,
+                        Pageable pageable);
 
-    Page<Post> findPostsByTitleContainingIgnoreCaseAndCreatedAtBetweenAndTagsIn(String query,
-                                                                Date dateFrom,
-                                                                Date dateTo,
-                                                                List<Tag> tags,
-                                                                Pageable pageable);
+        Page<Post> findPostsByTitleContainingIgnoreCaseAndCreatedAtBetweenAndTagsIn(String query,
+                        Date dateFrom,
+                        Date dateTo,
+                        List<Tag> tags,
+                        Pageable pageable);
+
+        @Query("SELECT p FROM Post p WHERE p.author IN :authors")
+        Page<Post> findPostsByAuthors(List<User> authors, Pageable pageable);
 
 }

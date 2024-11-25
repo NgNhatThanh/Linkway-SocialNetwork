@@ -36,6 +36,20 @@
             <div id="post-content-container">
                 <textarea id="post-content" th:field="*{content}" th:value="*{content}"></textarea>
             </div>
+
+            <div class="post-thumbnail-edit" style="display: flex; position: relative">
+                <input id="post-thumbnail-input" type="hidden" th:field="*{thumbnailUrl}" th:value="*{thumbnailUrl}">
+                <div>
+                    <input type="file" class="imageInput" accept="image/*" style="display: none;"
+                           onchange="uploadImage(this)">
+                    <button type="button" class="post-button"
+                            onclick="this.closest('div').querySelector('.imageInput').click()">
+                        Đổi ảnh đại diện (tùy chọn)
+                    </button>
+                </div>
+                <img th:src="*{thumbnailUrl}" id="post-thumbnail">
+            </div>
+
             <div style="width: 100%; display: flex; justify-content: center;">
                 <button id="submit-button" type="submit" class="post-button">
                     Đăng bài

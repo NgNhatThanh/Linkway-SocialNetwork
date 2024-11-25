@@ -1,5 +1,6 @@
 package com.social_network.service;
 
+import com.social_network.entity.Notification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import com.social_network.exception.FollowException;
 import jakarta.transaction.Transactional;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,10 +22,13 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
 
-    public FollowService(FollowRepository followRepository, UserService userService) {
+    public FollowService(FollowRepository followRepository, UserService userService,
+            NotificationService notificationService) {
         this.followRepository = followRepository;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     public boolean isFollowing(String followerUsername, String followedUsername) {
@@ -41,7 +46,7 @@ public class FollowService {
     }
 
     public int getFollowerCount(User user) {
-        return followRepository.countByFollowed(user); // Updated to count followers
+        return followRepository.countByFollowed(user);
     }
 
     public void followUser(User follower, User followed) {
@@ -66,9 +71,17 @@ public class FollowService {
         if (!isFollowing(followerUsername, followedUsername)) {
             Follow follow = new Follow();
             follow.setFollower(follower);
-            follow.setFollowed(followed); // Updated to use 'followed'
+            follow.setFollowed(followed);
             follow.setCreatedAt(Instant.now());
             followRepository.save(follow);
+
+            Notification notification = new Notification();
+            notification.setSender(follower);
+            notification.setReceiver(followed);
+            notification.setContent(follower.getDisplayName() + " đã theo dõi bạn.");
+            notification.setCreatedAt(Date.from(Instant.now()));
+            notification.setRedirectUrl("/profile/" + follower.getUsername());
+            notificationService.sendNotification(notification);
         }
     }
 
@@ -79,20 +92,20 @@ public class FollowService {
         User followed = userService.findByUsername(followedUsername)
                 .orElseThrow(() -> new IllegalArgumentException("Followed user not found"));
 
-        followRepository.deleteByFollowerAndFollowed(follower, followed); // Updated to use 'followed'
+        followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
     public void unfollowUser(User follower, User followed) {
         if (follower.getId() == followed.getId()) {
             throw new FollowException("Cannot unfollow yourself.");
         }
-        followRepository.deleteByFollowerAndFollowed(follower, followed); // Updated to use 'followed'
+        followRepository.deleteByFollowerAndFollowed(follower, followed);
     }
 
     public List<User> getFollowers(User user) {
-        List<Follow> follows = followRepository.findByFollowed(user);
+        List<Follow> follows = followRepository.findByFollower(user);
         return follows.stream()
-                .map(Follow::getFollower)
+                .map(Follow::getFollowed)
                 .toList();
     }
 
@@ -106,11 +119,10 @@ public class FollowService {
         return followRepository.findByFollower(user, pageable);
     }
 
-
     public List<User> getFollowing(User user) {
-        List<Follow> follows = followRepository.findByFollower(user);
+        List<Follow> follows = followRepository.findByFollowed(user);
         return follows.stream()
-                .map(Follow::getFollowed)
+                .map(Follow::getFollower)
                 .toList();
     }
 }

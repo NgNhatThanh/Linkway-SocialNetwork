@@ -15,6 +15,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+
 public class User {
 
     @Id
@@ -46,12 +47,13 @@ public class User {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "role_id")
-    @JsonIgnore
     private Role role;
 
-    @ManyToMany
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_tags", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    @JsonIgnore
     private List<Tag> followingTags;
 
 }

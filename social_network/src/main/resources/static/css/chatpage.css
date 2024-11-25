@@ -1,0 +1,354 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+}
+.chat-container {
+    width: 100%;
+    display: flex;
+    height: 100vh;
+    background-color: #f0f2f5;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.users-list {
+    width: 23%;
+    background-color: white;
+    border-right: 1px solid #e4e6eb;
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    padding: 15px;
+    border-radius: 20px;
+}
+.users-list-container{
+
+    height: 96%;
+}
+.users-list h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #65676b;
+    margin-top: 0;
+}
+
+.users-list ul {
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+.users-list li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.users-list li p{
+    margin: 0px;
+}
+.users-list li:hover {
+    background-color: #e4e6eb;
+}
+
+.users-list li img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    object-fit: cover;
+}
+.back-to-home {
+    display: inline-block;
+    margin-top: auto;
+    padding: 3px 3px;
+    font-size: 27px;
+    background-color: #1877f2;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+}
+
+.chat-area {
+    margin: 20px;
+    margin-left: 0;
+    background: white;
+    border-radius: 20px;
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 5px 10px;
+    padding-left: 20px;
+    box-sizing: border-box;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+#chat-messages {
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    overflow-y: auto;
+    /* Optional: Add margin between messages and the input area */
+}
+
+#chat-with-user {
+    position: fixed;
+    /* Fixes the header at the top */
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: #f0f0f0;
+    /* Optional: Customize the background color */
+    padding: 10px;
+    /* Optional: Adds padding for aesthetics */
+    z-index: 1;
+    /* Keeps the header on top of other elements */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    /* Optional: Adds a shadow */
+}
+
+.chat-with-usernameh3{
+    border-bottom: 0.5px solid gray;
+    padding-bottom: 10px;
+}
+
+#notification-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+.notification {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation: fadeInOut 5s forwards;
+}
+
+.notification.info {
+    background-color: #2196F3;
+}
+
+.notification.error {
+    background-color: #f44336;
+}
+
+.notification.success {
+    background-color: #4CAF50;
+}
+
+.highlight {
+    /* Yellow color for notification */
+    font-weight: bold;
+}
+.Recent-item.selected {
+    background-color: #e0e0e0; /* or any darker color you prefer */
+}
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+
+.message {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    max-width: 70%;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.sent {
+    background-color: #1877f2;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 12px;
+    align-self: flex-end;
+    margin-left: auto;
+    max-width: 70%;
+}
+
+.received {
+    background-color: #ecf0f1;
+    color: #333;
+    padding: 8px 15px;
+    border-radius: 12px;
+    align-self: flex-start;
+    max-width: 70%;
+}
+
+.message p {
+    margin: 0;
+    padding: 0 12px;
+    border-radius: 15px;
+    line-height: 1.6;
+}
+
+.message-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #e4e6eb;
+    padding-left: 0px;
+    font-size: 20px;
+}
+.message-input .icon-img{
+    font-size: 18px;
+}
+.message-input input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #e4e6eb;
+    border-radius: 20px;
+    outline: none;
+}
+
+.message-input button {
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Optional: styling for logout and additional elements */
+a.logout {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .chat-container {
+        flex-direction: column;
+        height: auto;
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .users-list {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ccc;
+        border-top-left-radius: 0;
+        border-top-right-radius: 12px;
+    }
+
+    .chat-area {
+        width: 100%;
+        border-radius: 0;
+    }
+}
+
+.message-preview-img-container{
+    position: relative;
+    max-width: 15%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    margin: 5px;
+}
+
+.message-preview-img{
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+}
+
+.message-preview-img-container .delete-preview-icon{
+    background-color: white;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 2;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.message-img{
+    max-width: 200px;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+.popup-image{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgb(0, 0, 0, .9);
+    height: 100%;
+    width: 100%;
+    z-index: 100;
+    /*display: none;*/
+}
+
+.popup-image span{
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.popup-image img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid #fff;
+    border-radius: 5px;
+    max-height: 100%;
+    max-width: 70%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}
+
