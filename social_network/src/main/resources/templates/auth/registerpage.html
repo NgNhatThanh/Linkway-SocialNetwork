@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th = "https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="../static/css/register-style.css" th:href="@{/css/register-style.css}" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="wrapper">
+        <form th:action="@{/register}" th:object="${registerUser}" method="POST" class="register-box">
+            <a th:href="@{/}" class="backhome"><img src="https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/468354173_1134903034887278_6137360109493261194_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=C553lviiEawQ7kNvgHJkPKf&_nc_zt=23&_nc_ht=scontent.fhan18-1.fna&_nc_gid=A_7NR-vMYcIAsWpo3eFnXH6&oh=00_AYB6x19IWQzQi4sMMpz2sBBIjlwNjw_CWpYZGp4rz88SFw&oe=6749DCA5"></a>
+
+            <h2 class="register-header"> Đăng ký </h2>
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('username')}"
+                 th:errors="*{username}"></div>
+
+            <div class="input-box">
+                <input type="text" th:field="*{username}" class="input-field" id="user" required>
+                <label class="label" for="user">Username</label>
+                <i class="bx bx-user icon"></i>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('email')}"
+                 th:errors="*{email}"></div>
+            <div class="input-box">
+                <input type="text" th:field="*{email}" id="email" class="input-field" required>
+                <label for="email" class="label">Email</label>
+                <i class='bx bx-envelope icon' ></i>
+            </div>
+
+            <div class="input-box">
+                <input th:field="*{displayName}" id="name" class="input-field" required>
+                <label for="name" class="label">Tên hiển thị</label>
+                <i class='bx bx-edit-alt icon' ></i>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('password')}"
+                 th:errors="*{password}"></div>
+            <div class="input-box">
+                <input type="password" th:field="*{password}" id="pass" class="input-field" required>
+                <label for="pass" class="label">Mật khẩu</label>
+                <i class="bx bx-lock-alt icon"></i>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 th:if="${#fields.hasErrors('confirmPassword')}"
+                 th:errors="*{confirmPassword}"></div>
+            <div class="input-box">
+                <input type="password" th:field="*{confirmPassword}" id="pass-again" class="input-field" required>
+                <label for="pass-again" class="label">Nhập lại mật khẩu</label>
+                <i class="bx bx-lock-alt icon"></i>
+            </div>
+
+
+            <div class="input-box">
+                <button type="submit" class="input-submit"> Đăng ký </button>
+            </div>
+
+            <div class="register">
+                <p>Đã có tài khoản ? <a th:href="@{/login}">Đăng nhập ngay </a></p>
+            </div>
+
+        </form>
+
+
+    </div>
+</body>
+</html>

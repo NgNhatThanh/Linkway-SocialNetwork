@@ -1,0 +1,113 @@
+/* Container for tags */
+
+#tag-search{
+    padding: 20px;
+    display: flex;
+    align-item: center;
+}
+#tag-search label{
+    margin-right: 10px;
+    padding: 3px;
+    font-size: 22px;
+    display: flex;
+    align-item: center;
+    justify-content: center;
+}
+#tag-search input{
+    padding: 8px 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    background-color: #F6F7F8;
+    width: 450px;
+    font-size: 12px;
+    height: 100%;
+}
+#tag-search input:focus {
+    outline: none;
+    background-color: white;
+    border-color: #0079D3;
+}
+
+#tags-container {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các phần tử xuống dòng nếu không đủ không gian */
+    gap: 20px;       /* Khoảng cách giữa các phần tử */
+    padding: 20px;
+    justify-content: flex-start; /* Sắp xếp các phần tử bắt đầu từ trái sang phải */
+}
+
+/* Each tag card */
+.tag-card {
+    width: 240px;
+    background-color: #f9f9f9;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Tag title styling */
+.tag-title {
+    width: 220px; /* Đảm bảo kích thước tối đa không vượt quá 250px */
+    background-color: #ddd;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    display: inline-block;
+    color: #333;
+    margin-bottom: 10px;
+    text-decoration: none;
+}
+
+/* Tag info */
+.tag-info {
+    font-size: 0.85em;
+    color: #666;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.tag-description{
+    width: 100%;
+    margin-bottom: 8px;
+}
+.pagination {
+    display: flex;
+    padding: 0;
+    margin: 20px 0;
+    justify-content: center;
+}
+.pagination ul{
+    list-style: none;
+}
+.pagination li {
+    margin: 0 5px;
+}
+.pagination a {
+    display: inline-block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #333;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination .active a {
+    color: #fff;
+    background-color: #007bff;
+    cursor: default;
+}
+.pagination .disabled a {
+    color: #ccc;
+    cursor: not-allowed;
+    background-color: #f2f2f2;
+}
+
+
+

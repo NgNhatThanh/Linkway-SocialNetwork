@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main class="create-post-zone">
+        <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+        <link rel="stylesheet" th:href="@{/css/editpost.css}">
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+
+        <form th:action="@{/post/update}"
+            method="post"
+            th:object="${postDTO}">
+
+            <input type="hidden" th:field="*{id}" th:value="*{id}">
+
+            <div class="header">
+                <div id="post-title-container">
+                    <textarea class="title-input" id="post-title" th:field="*{title}" placeholder="Tiêu đề" th:value="*{title}"></textarea>
+                </div>
+            </div>
+
+
+            <div id="tag-input-container">
+                <textarea id="tag-input" placeholder="Thêm tối đa 5 thẻ vào bài viết"></textarea>
+                <div id="tags-display"></div>
+                <div id="tag-suggestions" class="suggestions"></div>
+            </div>
+
+            <div id="hidden-tags">
+                <input type="hidden" th:each="tag : *{tagNames}" th:name="tagNames" th:value="${tag}">
+            </div>
+
+            <div id="post-content-container">
+                <textarea id="post-content" th:field="*{content}" th:value="*{content}"></textarea>
+            </div>
+
+            <div class="post-thumbnail-edit" style="display: flex; position: relative">
+                <input id="post-thumbnail-input" type="hidden" th:field="*{thumbnailUrl}" th:value="*{thumbnailUrl}">
+                <div>
+                    <input type="file" class="imageInput" accept="image/*" style="display: none;"
+                           onchange="uploadImage(this)">
+                    <button type="button" class="post-button"
+                            onclick="this.closest('div').querySelector('.imageInput').click()">
+                        Đổi ảnh đại diện (tùy chọn)
+                    </button>
+                </div>
+                <img th:src="*{thumbnailUrl}" id="post-thumbnail">
+            </div>
+
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <button id="submit-button" type="submit" class="post-button">
+                    Đăng bài
+                </button>
+            </div>
+
+        </form>
+
+        <script th:src="@{/js/editpost.js}"></script>
+    </main>
+</body>
+</html>

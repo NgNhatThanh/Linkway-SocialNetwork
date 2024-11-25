@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    <main class="searchpage">
+        <link rel="stylesheet" th:href="@{/css/searchresult.css}">
+
+        <div id="search-type">
+            <h2>Tìm kiếm theo: </h2>
+            <button>
+                <a th:href="${'?query=' + query + '&type=post'}"> Bài viết </a>
+            </button>
+
+            <button>
+                <a th:href="${'?query=' + query + '&type=user'}"> Người dùng </a>
+            </button>
+        </div>
+
+        <form th:if="${param.type} == null or ${#strings.toString(param.type)} == 'post'" id="search-filter">
+            <input type="hidden" name="query" th:value="${param.query}">
+
+            <input type="hidden" name="type" th:value="${param.type == null ? 'post' : param.type}">
+
+            <select name="sortBy">
+                <option value="relevance"
+                    th:selected="${param.sortBy} == null or ${#strings.toString(param.sortBy) == 'relevance'}"> Liên
+                    quan </option>
+                <option value="newest" th:selected="${#strings.toString(param.sortBy) == 'newest'}"> Mới nhất </option>
+                <option value="hot" th:selected="${#strings.toString(param.sortBy) == 'hot'}"> Phổ biến </option>
+            </select>
+
+            <select name="date">
+                <option value="everytime"
+                    th:selected="${param.date} == null or ${#strings.toString(param.date) == 'everytime'}"> Mọi lúc
+                </option>
+                <option value="today" th:selected="${#strings.toString(param.date) == 'today'}"> Hôm nay </option>
+                <option value="this_week" th:selected="${#strings.toString(param.date) == 'this_week'}"> Tuần này
+                </option>
+                <option value="this_month" th:selected="${#strings.toString(param.date) == 'this_month'}"> Tháng này
+                </option>
+                <option value="this_year" th:selected="${#strings.toString(param.date) == 'this_year'}"> Năm nay
+                </option>
+            </select>
+            <button type="submit" onclick="filter()">
+                Lọc
+            </button>
+            <div style="width: 100%;">
+                <textarea id="filter-tag-input" placeholder="Lọc bởi thẻ"></textarea>
+                <div id="filter-tags-display"></div>
+                <div id="filter-tag-suggestions" class="filter-tags-suggestions"></div>
+            </div>
+
+            <div id="filter-hidden-tags">
+                <input type="hidden" th:each="tag : ${tagNames}" th:name="tagName" th:value="${tag}">
+            </div>
+
+
+        </form>
+
+        <div th:if="${userList != null}" class="search-user-list">
+
+            <p th:if="${userList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
+            </p>
+
+            <div th:each="user : ${userList}" class="user-card">
+                <a th:href="@{*{'/profile/' + user.username}}">
+                    <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
+                </a>
+                <div>
+                    <div style="display: flex; align-item: center; width: 100%;">
+                        <a th:href="@{/profile/{username}(username=${user.username})}"
+                            th:text="${user.displayName}"></a>
+                    </div>
+                    <div style="display: flex; margin-bottom: 7px; width: 100%;">
+                        <p th:text="${user.followersCount + ' người theo dõi'}"></p>
+                        <p th:text="${user.postsCount + ' bài viết'}"></p>
+                    </div>
+                    <p th:text="${user.introduction}" class="user-introduction"></p>
+                </div>
+            </div>
+
+        </div>
+
+        <div th:if="${postList != null}" class="search-post-list">
+
+            <p th:if="${postList.isEmpty()}" th:text="${'Không tìm thấy kết quả nào: ' + query}">
+            </p>
+
+            <div th:replace="~{home/postlist.html :: post-section}">
+            </div>
+
+        </div>
+
+        <script th:src="@{/js/searchresult.js}"></script>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.displayName} + ' - Profile'">User Profile</title>
+</head>
+
+<body>
+    <main class="profile">
+        <link rel="stylesheet" th:href="@{/css/profile.css}">
+        <div class="user-sub-profile">
+            <div>
+                <img th:src="${user.avatarImagePath}" th:alt="'Avatar of ' + ${user.displayName}" alt="User Avatar"
+                    width="150" height="150" />
+            </div>
+
+            <!-- Display Username and Email -->
+            <h1 th:text="${user.displayName}"></h1>
+            <h2 th:text="${user.email}"></h2>
+
+            <!-- Follower and Following Counts -->
+            <div>
+                <p>Người theo dõi: <a th:href="@{/followers/{username}(username=${user.username})}"
+                        th:text="${followersCount}">0</a>
+                </p>
+                <p>Đang theo dõi: <a th:href="@{/followings/{username}(username=${user.username})}"
+                        th:text="${followingsCount}">0</a>
+                </p>
+            </div>
+
+            <div>
+                <br/>
+                <p th:text="${user.introduction}"></p>
+            </div>
+            <!-- Conditionally Display "Edit Profile" or "Follow/Unfollow" -->
+            <div>
+                <!-- Edit Profile Button for Current User -->
+                <a th:if="${isCurrentUser}" th:href="@{/updateProfile}" class="btn">Chỉnh sửa hồ sơ</a>
+
+                <!-- Follow/Unfollow Button for Other Users -->
+                <form th:if="${not isCurrentUser}" th:action="@{/profile/{username}/follow(username=${user.username})}"
+                    method="post">
+                    <input type="hidden" name="username" th:value="${user.username}" />
+                    <button type="submit" th:text="${isFollowing ? 'Hủy theo dõi' : 'Theo dõi'}"></button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Chat Button Here -->
+        <div th:if="${not isCurrentUser}" class="chat-button">
+            <a th:href="@{/chat/{recipientId}(recipientId=${user.username})}" class="btn">Nhắn tin</a>
+        </div>
+
+
+
+        <div class="user-main">
+            <div class="user-post-list">
+                <!-- Display User's Posts -->
+                <div th:if="${!postList.isEmpty()}">
+                    <div th:replace="~{home/postlist.html :: post-section}"></div>
+                </div>
+
+
+                <h2 th:if="${postList.isEmpty()}">No posts to display.</h2>
+
+                <!-- Error Message Display -->
+                <div th:if="${error}" th:text="${error}" style="color: red;"></div>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>

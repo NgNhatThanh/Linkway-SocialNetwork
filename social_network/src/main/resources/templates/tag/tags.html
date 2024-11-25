@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{home/layout.html :: layout(~{::main})}" xmlns:th="https://www.thymeleaf.org/">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <link rel="stylesheet" th:href="@{/css/tags.css}">
+
+        <form action="/tags" id="tag-search" method="get">
+            <label>
+                <i class='bx bx-search'></i>
+            </label>
+            <input name="query" placeholder="Tìm kiếm tag" required>
+        </form>
+
+        <div id="tags-container">
+            <div th:each="tag : ${tagList}" class="tag-card">
+                <a th:href="@{${'/tag/' + tag.name}}" th:text="${tag.name}" class="tag-title"></a>
+                <p th:text="${tag.shortDescription}" class="tag-description"></p>
+                <div class="tag-info">
+                    <p th:text="${tag.posts.size() + ' bài viết'}"></p>
+                    <p th:text="${tag.followingUsers.size() + ' người theo dõi'}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pagination">
+            <ul th:each="i : ${#numbers.sequence(1, T(java.lang.Math).max(tagList.totalPages,1))}">
+                <li th:classappend="${tagList.number + 1 == i ? 'active' : ''}">
+                    <a th:href="@{'?page='+${i} + ${query != null ? '&query=' + query : ''}}" th:text="${i}"></a>
+                </li>
+            </ul>
+        </div>
+    </main>
+</body>
+</html>

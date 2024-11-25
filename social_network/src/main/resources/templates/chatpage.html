@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/chatpage.css">
+    <title>Linkway Chat</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+
+<body>
+
+<!--    <h2>Chat Box</h2>-->
+
+    <!-- User Form for entering the chat -->
+    <div class="user-form" id="username-page">
+        <h3>Vào kênh chat</h3>
+        <form id="usernameForm">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id="csrf-token" />
+            <p id="loading-text">Tải thông tin người dùng...</p>
+            <p id="error-message" style="color: red; display: none;">Failed to retrieve user information.</p>
+        </form>
+    </div>
+
+    <!-- Chatroom UI -->
+    <div class="chat-container hidden" id="chat-page" th:data-recipient-id="${recipientId}">
+        <div class="users-list">
+            <div id="notification-area" class="notification-area"></div>
+            <div class="users-list-container">
+                <h3 class="userlist-title">Gần đây</h3>
+                <ul id="RecentUsers"></ul> <!-- Following list -->
+            </div>
+            <div style="width: 100%;">
+                <p id="connected-user-displayname"></p>
+                <a href="/" class="back-to-home"><i class='bx bx-exit bx-rotate-180' ></i></a>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <!-- Display the name of the person you are chatting with -->
+<!--            <div id="chat-with-user" class="chat-with-user">-->
+                <h3 class="chat-with-usernameh3"><span id="chat-with-username"></span></h3>
+<!--            </div>-->
+
+            <div id="chat-messages" class="chat-messages"></div> <!-- Messages will be added here -->
+            <div style="display: flex; overflow-x: auto" id="images-container">
+            </div>
+            <form id="messageForm" name="messageForm" style="display: none">
+                <div class="message-input">
+                    <input autocomplete="off" type="text" id="message" placeholder="Nhập tin nhắn...">
+                    <input type="file" class="imageInput" accept="image/*" style="display: none;"
+                           onchange="uploadImage(this)">
+                    <button type="button" onclick="this.closest('div').querySelector('.imageInput').click()">
+                        <i class='bx bx-image-alt icon-img' ></i>
+                    </button>
+                    <button type="submit"><i class='bx bx-send icon-img'></i></button>
+                </div>
+            </form>
+        </div>
+
+        <div class="popup-image" style="display: none">
+            <span>&times;</span>
+            <img>
+        </div>
+    </div>
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script src="/js/general.js"></script>
+    <script src="/js/chatpage.js"></script>
+
+</body>
+
+</html>

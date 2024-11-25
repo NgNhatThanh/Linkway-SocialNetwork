@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+    <div th:fragment="sidebar (followingTags)" class="side-bar">
+        <link rel="stylesheet" th:href="@{/css/sidebar.css}">
+        <div class="options">
+            <form th:action="@{/}">
+                <button type="submit">
+                    <i class='bx bx-home' ></i>
+                    <span>Trang chủ</span>
+                </button>
+            </form>
+
+            <!--        Hiện các post có nhiều upvote-->
+            <form th:action="@{/}">
+                <button type="submit">
+                    <i class='bx bx-right-top-arrow-circle'></i>
+                    <span>Phổ biến</span>
+                </button>
+            </form>
+
+            <!--        Hiện tất cả tag (phân trang) -->
+            <form th:action="@{/tags}">
+                <button type="submit">
+                    <i class='bx bx-purchase-tag-alt' ></i>
+                    <span>Thẻ</span>
+                </button>
+            </form>
+        </div>
+
+
+        <!--        Hiện các tag đang follow-->
+        <div class="following">
+            <!-- Hiện các tag đang follow-->
+            <div th:if="${session.username != null}">
+                <h3> Thẻ đang theo dõi </h3>
+                <ul th:each="tag : ${followingTags}" class="optiontags">
+                    <li>
+                        <a th:href="@{${'/tag/' + tag.name}}" th:text="*{tag.getName()}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
