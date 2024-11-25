@@ -68,12 +68,13 @@
             </p>
 
             <div th:each="user : ${userList}" class="user-card">
-                <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
+                <a th:href="@{*{'/profile/' + user.username}}">
+                    <img th:src="@{${user.avatarImagePath}}" class="user-avatar">
+                </a>
                 <div>
                     <div style="display: flex; align-item: center; width: 100%;">
                         <a th:href="@{/profile/{username}(username=${user.username})}"
                             th:text="${user.displayName}"></a>
-                        <a th:href="@{/profile/{username}(username=${user.username})}" th:text="${user.username}"></a>
                     </div>
                     <div style="display: flex; margin-bottom: 7px; width: 100%;">
                         <p th:text="${user.followersCount + ' người theo dõi'}"></p>
