@@ -35,7 +35,7 @@ public interface TagRepository extends JpaRepository<Tag, Integer> {
                         "then 'true' else 'false' end")
         boolean isFollowing(int userId, int tagId);
 
-        @Query(nativeQuery = true, value = "insert into users_tags " +
+        @Query(nativeQuery = true, value = "insert into users_tags (user_id, tag_id) " +
                         "values(?1, ?2)")
         @Modifying
         void follow(int userId, int tagId);

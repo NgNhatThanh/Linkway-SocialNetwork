@@ -266,7 +266,6 @@ function sendMessage(event) {
         }
         imagesContainer.innerHTML = '';
     }
-    fetchRecentUserChatWith();
 }
 
 function addMessageToChat(messageData, isSent, prepend = false) {

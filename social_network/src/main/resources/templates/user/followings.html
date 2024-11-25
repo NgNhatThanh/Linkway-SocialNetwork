@@ -13,6 +13,9 @@
         <h2>Followings:</h2>
         <ul>
             <li th:each="following : ${followings.content}">
+                <a th:href="@{${'/profile/' + following.followed.username}}">
+                    <img th:src="@{${following.followed.avatarImagePath}}" class="following-avatar">
+                </a>
                 <a class="link-item" th:href="@{/profile/{username}(username=${following.followed.username})}"
                     th:text="${following.followed.displayName}">User Name</a>
             </li>

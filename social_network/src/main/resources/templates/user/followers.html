@@ -15,6 +15,9 @@
         <ul>
             <!-- Iterate over the followers content -->
             <li th:each="follow : ${followers.content}">
+                <a th:href="@{${'/profile/' + follow.follower.username}}">
+                    <img th:src="@{${follow.follower.avatarImagePath}}" class="follower-avatar">
+                </a>
                 <!-- Access the 'follower' user details -->
                 <a class="link-item" th:href="@{/profile/{username}(username=${follow.follower.username})}"
                     th:text="${follow.follower.displayName}">Follower Name</a>
