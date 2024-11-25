@@ -30,6 +30,7 @@ public class ChatController {
         @MessageMapping("/chat.sendMessage")
         public void processMessage(@Payload ChatMessage chatMessage) {
                 chatMessage.setSentAt(Date.from(Instant.now()));
+                chatMessageService.save(chatMessage);
 
                 chatNotificationService.sendNotification(
                                 chatMessage.getSenderId(),
