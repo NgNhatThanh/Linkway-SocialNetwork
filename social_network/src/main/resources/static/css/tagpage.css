@@ -15,17 +15,30 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 8px;
 }
 
 .tag-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
 }
-
+.tagpage-state{
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 12px 0;
+    line-height: 1.6;
+    display: flex;
+}
+.tagpage-state p{
+    margin-right: 10px;
+}
+.tagpage-descrip{
+    margin-bottom: 15px;
+}
 .follow-button {
-    padding: 8px 16px;
+    padding: 5px 16px;
+    font-size: 15px;
     background: #28a745;
     color: white;
     border: none;

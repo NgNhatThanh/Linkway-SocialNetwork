@@ -88,9 +88,9 @@
                 </div>
             </div>
 
-            <div th:if="${session.username == null}">
-                <a th:href="@{/login}"> Đăng nhập </a>
-                <a th:href="@{/register}"> Đăng ký </a>
+            <div th:if="${session.username == null}" class="nav-login-bar">
+                <a th:href="@{/login}" class="auth-button login"> Đăng nhập </a>
+                <a th:href="@{/register}" class="auth-button register"> Đăng ký </a>
             </div>
         </div>
 
