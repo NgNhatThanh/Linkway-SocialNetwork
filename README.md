@@ -1,7 +1,7 @@
 # Linkway - Social network for developers
 
 ## 1. Project introduction
-Linkway is a social network that developers can come here and learn from other's knowledge through posts, 
+Linkway is a social network where developers can come here and learn from other's knowledge through posts, 
 and also share things they know about IT.
 
 ## 2. Main functions
