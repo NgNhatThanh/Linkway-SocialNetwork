@@ -90,6 +90,8 @@
 
 .following ul li a:hover {
     color: #007bff;
+}
+
 .optiontags{
     list-style: inside;
     list-style-type: none;

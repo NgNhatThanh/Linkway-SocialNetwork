@@ -42,7 +42,6 @@ ul li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     display: flex;
-    justify-content: space-between;
     align-items: center;
 }
 /* Empty message */
@@ -84,7 +83,6 @@ p {
 /* Back to Profile Link and Follower name link */
 .link-item {
     display: inline-block;
-    margin-top: 30px;
     text-decoration: none;
     color: #007bff;
     font-size: 1rem;
@@ -94,4 +92,11 @@ p {
 .link-item:hover {
     color: #0056b3;
     text-decoration: underline;
+}
+
+.following-avatar{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 15px;
 }

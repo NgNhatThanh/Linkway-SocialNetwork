@@ -29,7 +29,7 @@
                     <div style="width: 85%;">
                         <h2 th:text="${post.getTitle()}" class="postpage-title"></h2>
                     </div>
-                    <div style="width: 15%;">
+                    <div th:if="${post.author.username == session.username}"  style="width: 15%;">
                         <a th:href="@{${'/post/edit/' + post.id}}" class="postpage-edit-btn">
                             Chỉnh Sửa
                         </a>
@@ -174,7 +174,7 @@
                     </div>
 
                     <div class="pagination">
-                        <ul th:each="i : ${#numbers.sequence(1, rootComments.getTotalPages())}">
+                        <ul th:each="i : ${#numbers.sequence(1, T(java.lang.Math).max(rootComments.totalPages,1))}">
                             <li th:classappend="${currentPage == i ? 'active' : ''}">
                                 <a th:href="@{'?page='+${i} + '#post-comments'}" th:text="${i}"></a>
                             </li>

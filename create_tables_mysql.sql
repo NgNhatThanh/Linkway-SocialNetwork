@@ -1,5 +1,3 @@
-use social_network;
-
 create table roles
 (
     id   int auto_increment

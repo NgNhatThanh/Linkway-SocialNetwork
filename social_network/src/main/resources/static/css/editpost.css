@@ -168,6 +168,7 @@
 .suggestion-item:hover{
     color: #551A8B;
     text-decoration: underline;
+    cursor: pointer;
 }
 #tags-display{
     margin-top: 10px;
