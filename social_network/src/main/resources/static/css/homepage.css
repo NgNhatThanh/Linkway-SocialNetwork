@@ -16,7 +16,7 @@ textarea{
     height: 10%;
     border: 1px gray solid;
     padding: 5px;
-    z-index: 100;
+    z-index: 1;
 }
 
 .main-content{

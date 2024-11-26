@@ -29,7 +29,7 @@
                     <div style="width: 85%;">
                         <h2 th:text="${post.getTitle()}" class="postpage-title"></h2>
                     </div>
-                    <div style="width: 15%;">
+                    <div th:if="${post.author.username == session.username}"  style="width: 15%;">
                         <a th:href="@{${'/post/edit/' + post.id}}" class="postpage-edit-btn">
                             Chỉnh Sửa
                         </a>
